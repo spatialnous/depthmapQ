@@ -1,18 +1,6 @@
-// depthmapX - spatial network analysis platform
-// Copyright (C) 2017, Petros Koutsolampros
-
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-
-// You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+// SPDX-FileCopyrightText: 2017 Petros Koutsolampros
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "gldynamicrect.h"
 
@@ -27,7 +15,8 @@ static const char *vertexShaderSourceCore = // auto-format hack
     "void main() {\n"
     "   idxx = int(mod(vertexIndex,2.0));\n"
     "   idxy = int(vertexIndex/2.0);\n"
-    "   gl_Position = projMatrix * mvMatrix * vec4(diagVertices2D[0][idxx],diagVertices2D[1][idxy],0,1);\n"
+    "   gl_Position = projMatrix * mvMatrix * "
+    "vec4(diagVertices2D[0][idxx],diagVertices2D[1][idxy],0,1);\n"
     "}\n";
 
 static const char *fragmentShaderSourceCore = // auto-format hack
@@ -48,7 +37,8 @@ static const char *vertexShaderSource = // auto-format hack
     "void main() {\n"
     "   idxx = int(mod(vertexIndex,2.0));\n"
     "   idxy = int(vertexIndex/2.0);\n"
-    "   gl_Position = projMatrix * mvMatrix * vec4(diagVertices2D[0][idxx],diagVertices2D[1][idxy],0,1);\n"
+    "   gl_Position = projMatrix * mvMatrix * "
+    "vec4(diagVertices2D[0][idxx],diagVertices2D[1][idxy],0,1);\n"
     "}\n";
 
 static const char *fragmentShaderSource = // auto-format hack
@@ -79,7 +69,8 @@ void GLDynamicRect::setupVertexAttribs() {
     m_vbo.bind();
     QOpenGLFunctions *f = QOpenGLContext::currentContext()->functions();
     f->glEnableVertexAttribArray(0);
-    f->glVertexAttribPointer(0, DATA_DIMENSIONS, GL_FLOAT, GL_FALSE, DATA_DIMENSIONS * sizeof(GLfloat), 0);
+    f->glVertexAttribPointer(0, DATA_DIMENSIONS, GL_FLOAT, GL_FALSE,
+                             DATA_DIMENSIONS * sizeof(GLfloat), 0);
     m_vbo.release();
 }
 
@@ -87,7 +78,8 @@ void GLDynamicRect::initializeGL(bool m_core) {
     if (m_data.size() == 0)
         return;
     m_program = new QOpenGLShaderProgram;
-    m_program->addShaderFromSourceCode(QOpenGLShader::Vertex, m_core ? vertexShaderSourceCore : vertexShaderSource);
+    m_program->addShaderFromSourceCode(QOpenGLShader::Vertex,
+                                       m_core ? vertexShaderSourceCore : vertexShaderSource);
     m_program->addShaderFromSourceCode(QOpenGLShader::Fragment,
                                        m_core ? fragmentShaderSourceCore : fragmentShaderSource);
     m_program->bindAttributeLocation("vertexIndex", 0);
@@ -141,8 +133,8 @@ void GLDynamicRect::cleanup() {
     m_program = 0;
 }
 
-void GLDynamicRect::paintGL(const QMatrix4x4 &m_mProj, const QMatrix4x4 &m_mView, const QMatrix4x4 &m_mModel,
-                            const QMatrix2x2 &m_selectionBounds) {
+void GLDynamicRect::paintGL(const QMatrix4x4 &m_mProj, const QMatrix4x4 &m_mView,
+                            const QMatrix4x4 &m_mModel, const QMatrix2x2 &m_selectionBounds) {
     if (!m_built)
         return;
     QOpenGLVertexArrayObject::Binder vaoBinder(&m_vao);

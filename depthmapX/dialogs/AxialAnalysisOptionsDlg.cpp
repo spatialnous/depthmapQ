@@ -1,24 +1,14 @@
-// Copyright (C) 2011-2012, Tasos Varoudis
-// Copyright (C) 2018, Petros Koutsolampros
-
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-
-// You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+// SPDX-FileCopyrightText: 2011-2012 Tasos Varoudis
+// SPDX-FileCopyrightText: 2018 Petros Koutsolampros
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "AxialAnalysisOptionsDlg.h"
 #include "mainwindow.h"
 #include <QMessageBox>
 
-CAxialAnalysisOptionsDlg::CAxialAnalysisOptionsDlg(MetaGraph *graph, QWidget *parent) : QDialog(parent) {
+CAxialAnalysisOptionsDlg::CAxialAnalysisOptionsDlg(MetaGraph *graph, QWidget *parent)
+    : QDialog(parent) {
     setupUi(this);
     m_radius = QString(tr(""));
     m_choice = false;
@@ -76,11 +66,13 @@ CAxialAnalysisOptionsDlg::CAxialAnalysisOptionsDlg(MetaGraph *graph, QWidget *pa
 void CAxialAnalysisOptionsDlg::OnUpdateRadius() {
     QString text;
     text = c_radius->text();
-    if (!text.isEmpty() && text.indexOf("n") == -1 && text.indexOf("N") == -1 && text.indexOf("1") == -1 &&
-        text.indexOf("2") == -1 && text.indexOf("3") == -1 && text.indexOf("4") == -1 && text.indexOf("5") == -1 &&
-        text.indexOf("6") == -1 && text.indexOf("7") == -1 && text.indexOf("8") == -1 && text.indexOf("9") == -1) {
+    if (!text.isEmpty() && text.indexOf("n") == -1 && text.indexOf("N") == -1 &&
+        text.indexOf("1") == -1 && text.indexOf("2") == -1 && text.indexOf("3") == -1 &&
+        text.indexOf("4") == -1 && text.indexOf("5") == -1 && text.indexOf("6") == -1 &&
+        text.indexOf("7") == -1 && text.indexOf("8") == -1 && text.indexOf("9") == -1) {
         QMessageBox::warning(this, tr("Warning"),
-                             tr("The radius must either be numeric or 'n'\n Alternatively, for multiple radii, type a "
+                             tr("The radius must either be numeric or 'n'\n Alternatively, for "
+                                "multiple radii, type a "
                                 "list of comma separated numeric radii (you can include 'n')"),
                              QMessageBox::Ok, QMessageBox::Ok);
         c_radius->setText(tr("n"));
@@ -105,13 +97,15 @@ void CAxialAnalysisOptionsDlg::OnWeighted() {
 void CAxialAnalysisOptionsDlg::OnOK() {
     UpdateData(true);
 
-    if (m_radius.isEmpty() ||
-        (m_radius.indexOf("n") == -1 && m_radius.indexOf("N") == -1 && m_radius.indexOf("1") == -1 &&
-         m_radius.indexOf("2") == -1 && m_radius.indexOf("3") == -1 && m_radius.indexOf("4") == -1 &&
-         m_radius.indexOf("5") == -1 && m_radius.indexOf("6") == -1 && m_radius.indexOf("7") == -1 &&
-         m_radius.indexOf("8") == -1 && m_radius.indexOf("9") == -1)) {
+    if (m_radius.isEmpty() || (m_radius.indexOf("n") == -1 && m_radius.indexOf("N") == -1 &&
+                               m_radius.indexOf("1") == -1 && m_radius.indexOf("2") == -1 &&
+                               m_radius.indexOf("3") == -1 && m_radius.indexOf("4") == -1 &&
+                               m_radius.indexOf("5") == -1 && m_radius.indexOf("6") == -1 &&
+                               m_radius.indexOf("7") == -1 && m_radius.indexOf("8") == -1 &&
+                               m_radius.indexOf("9") == -1)) {
         QMessageBox::warning(this, tr("Warning"),
-                             tr("The radius must either be numeric or 'n'\n Alternatively, for multiple radii, type a "
+                             tr("The radius must either be numeric or 'n'\n Alternatively, for "
+                                "multiple radii, type a "
                                 "list of comma separated numeric radii (you can include 'n')"),
                              QMessageBox::Ok, QMessageBox::Ok);
         m_radius = tr("n");
@@ -141,10 +135,10 @@ void CAxialAnalysisOptionsDlg::OnOK() {
                     } else {
                         int radius = curr_radius.toInt();
                         if (radius <= 0) {
-                            QMessageBox::warning(
-                                this, tr("Warning"),
-                                tr("Each radius in the list must either be 'n' or a number in the range 1-99"),
-                                QMessageBox::Ok, QMessageBox::Ok);
+                            QMessageBox::warning(this, tr("Warning"),
+                                                 tr("Each radius in the list must either be 'n' or "
+                                                    "a number in the range 1-99"),
+                                                 QMessageBox::Ok, QMessageBox::Ok);
                             c_radius->setFocus(Qt::OtherFocusReason);
                             return;
                         }

@@ -1,17 +1,6 @@
-// Copyright (C) 2017 Petros Koutsolampros
-
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-
-// You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+// SPDX-FileCopyrightText: 2017 Petros Koutsolampros
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "coreapplication.h"
 
@@ -51,21 +40,21 @@ int CoreApplication::exec() {
     int versionMinor = 0;
 
     qmlRegisterType<AGLMapViewport>("acanthis", versionMajor, versionMinor, "AGLMapViewport");
-//    qmlRegisterType<GraphViewModel>("acanthis", versionMajor, versionMinor, "GraphViewModel");
+    //    qmlRegisterType<GraphViewModel>("acanthis", versionMajor, versionMinor, "GraphViewModel");
     qmlRegisterType<AQMapViewModel>("acanthis", versionMajor, versionMinor, "AQMapViewModel");
-    qmlRegisterSingletonType<DocumentManager>(
-                "acanthis", versionMajor, versionMinor, "DocumentManager",
-                [&](QQmlEngine *, QJSEngine *) -> QObject * {
-        return new DocumentManager;
-        // the QML engine takes ownership of the singleton
-    });
+    qmlRegisterSingletonType<DocumentManager>("acanthis", versionMajor, versionMinor,
+                                              "DocumentManager",
+                                              [&](QQmlEngine *, QJSEngine *) -> QObject * {
+                                                  return new DocumentManager;
+                                                  // the QML engine takes ownership of the singleton
+                                              });
 
     qmlRegisterUncreatableType<GraphModel>(
         "acanthis", versionMajor, versionMinor, "GraphModel",
         QLatin1String("Cannot create objects of type GraphModel"));
 
-    qmlRegisterSingletonType(QUrl("qrc:///scenegraph/Theme.qml"), "acanthis",
-                             versionMajor, versionMinor, "Theme");
+    qmlRegisterSingletonType(QUrl("qrc:///scenegraph/Theme.qml"), "acanthis", versionMajor,
+                             versionMinor, "Theme");
 
     QQmlApplicationEngine engine;
 
@@ -81,7 +70,6 @@ int CoreApplication::exec() {
     //    mMainWindow->setResizeMode(QQuickView::SizeRootObjectToView);
     //    mMainWindow->setSource(QUrl("qrc:///scenegraph/main.qml"));
     //    mMainWindow->show();
-
 
     QGuiApplication::setWindowIcon(QIcon(":/images/acanthis.svg"));
 

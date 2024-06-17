@@ -1,17 +1,6 @@
-// Copyright (C) 2021 Petros Koutsolampros
-
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-
-// You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+// SPDX-FileCopyrightText: 2021 Petros Koutsolampros
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 #pragma once
 
@@ -28,21 +17,15 @@ class AGLMapViewport : public QQuickFramebufferObject {
     Q_OBJECT
     QML_ELEMENT
     Q_PROPERTY(GraphViewModel *graphViewModel //
-               MEMBER m_graphViewModel
-               WRITE setGraphViewModel
-               NOTIFY graphViewModelChanged)
+                   MEMBER m_graphViewModel WRITE setGraphViewModel NOTIFY graphViewModelChanged)
     Q_PROPERTY(QColor foregroundColour //
-               MEMBER m_foregroundColour
-               NOTIFY foregroundColourChanged)
+                   MEMBER m_foregroundColour NOTIFY foregroundColourChanged)
     Q_PROPERTY(QColor backgroundColour //
-               MEMBER m_backgroundColour
-               NOTIFY backgroundColourChanged)
+                   MEMBER m_backgroundColour NOTIFY backgroundColourChanged)
     Q_PROPERTY(int antialiasingSamples //
-               MEMBER m_antialiasingSamples
-               NOTIFY antialiasingSamplesChanged)
+                   MEMBER m_antialiasingSamples NOTIFY antialiasingSamplesChanged)
     Q_PROPERTY(bool highlightOnHover //
-               MEMBER m_highlightOnHover
-               NOTIFY highlightOnHoverChanged)
+                   MEMBER m_highlightOnHover NOTIFY highlightOnHoverChanged)
 
     GraphViewModel *m_graphViewModel = nullptr;
     QQuickFramebufferObject::Renderer *createRenderer() const override {
@@ -55,9 +38,9 @@ class AGLMapViewport : public QQuickFramebufferObject {
         connect(this, &QQuickItem::heightChanged, this, &AGLMapViewport::forceUpdate,
                 Qt::DirectConnection);
 
-        return new AGLMapViewRenderer(this, m_graphViewModel,
-                                      m_foregroundColour, m_backgroundColour,
-                                      m_antialiasingSamples, m_highlightOnHover);
+        return new AGLMapViewRenderer(this, m_graphViewModel, m_foregroundColour,
+                                      m_backgroundColour, m_antialiasingSamples,
+                                      m_highlightOnHover);
     }
 
   public:

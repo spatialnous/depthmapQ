@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2018 Petros Koutsolampros
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+
 #!/bin/sh
 timestamp=$(date +%Y.%m.%d.%H.%M.%S)
 

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2017 Petros Koutsolampros
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 #pragma once
 
 #include "genlib/p2dpoly.h"

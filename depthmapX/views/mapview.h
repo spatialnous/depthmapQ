@@ -1,22 +1,23 @@
+// SPDX-FileCopyrightText: 2017 Petros Koutsolampros
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 #pragma once
 
-#include <QOpenGLWidget>
 #include "depthmapX/GraphDoc.h"
 #include "depthmapX/settings.h"
+#include <QOpenGLWidget>
 
-class MapView : public QOpenGLWidget
-{
+class MapView : public QOpenGLWidget {
     Q_OBJECT
 
-protected:
+  protected:
     QGraphDoc &m_pDoc;
     Settings &m_settings;
     QString m_currentFile;
 
-public:
-    MapView(QGraphDoc &pDoc,
-            Settings &settings,
-            QWidget* parent = Q_NULLPTR);
+  public:
+    MapView(QGraphDoc &pDoc, Settings &settings, QWidget *parent = Q_NULLPTR);
 
     virtual void OnModeJoin() = 0;
     virtual void OnModeUnjoin() = 0;

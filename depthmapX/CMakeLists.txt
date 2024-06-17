@@ -1,3 +1,8 @@
+# SPDX-FileCopyrightText: 2017 Christian Sailer
+# SPDX-FileCopyrightText: 2017 Petros Koutsolampros
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+
 set(depthmapX depthmapX)
 
 # Find includes in corresponding build directories
@@ -24,22 +29,23 @@ set(depthmapX_SRCS
     treeWindow.cpp
     mainwindowfactory.cpp
     settingsimpl.cpp
-	compatibilitydefines.h
-	mainwindow.h
-        settings.h
-	GraphDoc.h
-	mainwindowfactory.h
-	settingsimpl.h
-	indexWidget.h
-	mdichild.h
-	treeWindow.h
-	main.cpp
-	coreapplication.cpp
-        coreapplication.h
-        mainwindowhelpers.cpp
-        mainwindowmoduleregistry.cpp
-        imainwindowmodulefactory.h
-        interfaceversion.h
+    mainwindowmoduleregistry.hpp
+    compatibilitydefines.h
+    mainwindow.h
+    settings.h
+    GraphDoc.h
+    mainwindowfactory.h
+    settingsimpl.h
+    indexWidget.h
+    mdichild.h
+    treeWindow.h
+    main.cpp
+    coreapplication.cpp
+    coreapplication.h
+    mainwindowhelpers.cpp
+    mainwindowmoduleregistry.cpp
+    imainwindowmodulefactory.h
+    interfaceversion.h
 )
 
 qt_wrap_ui(UI_HDRS

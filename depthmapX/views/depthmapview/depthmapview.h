@@ -1,17 +1,6 @@
-// Copyright (C) 2011-2012, Tasos Varoudis
-
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-
-// You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+// SPDX-FileCopyrightText: 2011-2012 Tasos Varoudis
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "depthmapX/views/mapview.h"
 #include <QPoint>
@@ -196,24 +185,30 @@ class QDepthmapView : public MapView {
     int GetSpacer(QGraphDoc *pDoc);
     void PrintBaby(QPainter *pDC, QGraphDoc *pDoc);
     bool Output(QPainter *pDC, QGraphDoc *pDoc, bool screendraw);
-    bool DrawPoints(QPainter *pDC, QGraphDoc *pDoc, int spacer, unsigned long ticks, bool screendraw);
-    bool DrawAxial(QPainter *pDC, QGraphDoc *pDoc, int spacer, unsigned long ticks, bool screendraw);
-    bool DrawShapes(QPainter *pDC, ShapeMap &map, bool muted, int spacer, unsigned long ticks, bool screendraw);
+    bool DrawPoints(QPainter *pDC, QGraphDoc *pDoc, int spacer, unsigned long ticks,
+                    bool screendraw);
+    bool DrawAxial(QPainter *pDC, QGraphDoc *pDoc, int spacer, unsigned long ticks,
+                   bool screendraw);
+    bool DrawShapes(QPainter *pDC, ShapeMap &map, bool muted, int spacer, unsigned long ticks,
+                    bool screendraw);
 
     void DrawLink(QPainter *pDC, int spacer, const Line &logical);
     void DrawPointHandle(QPainter *pDC, QPoint pt);
 
     //
     void OutputEPS(std::ofstream &stream, QGraphDoc *pDoc, bool includeScale = true);
-    void OutputEPSMap(std::ofstream &stream, ShapeMap &map, QtRegion &logicalviewport, QRect &rect, float spacer);
-    void OutputEPSLine(std::ofstream &stream, Line &line, int spacer, QtRegion &logicalviewport, QRect &rect);
-    void OutputEPSPoly(std::ofstream &stream, const SalaShape &shape, int spacer, QtRegion &logicalviewport,
+    void OutputEPSMap(std::ofstream &stream, ShapeMap &map, QtRegion &logicalviewport, QRect &rect,
+                      float spacer);
+    void OutputEPSLine(std::ofstream &stream, Line &line, int spacer, QtRegion &logicalviewport,
                        QRect &rect);
+    void OutputEPSPoly(std::ofstream &stream, const SalaShape &shape, int spacer,
+                       QtRegion &logicalviewport, QRect &rect);
 
     void OutputSVG(std::ofstream &stream, QGraphDoc *pDoc);
     void OutputSVGMap(std::ofstream &stream, ShapeMap &map, QtRegion &logicalviewport, int h);
     void OutputSVGLine(std::ofstream &stream, Line &line, QtRegion &logicalviewport, int h);
-    void OutputSVGPoly(std::ofstream &stream, const SalaShape &shape, QtRegion &logicalviewport, int h);
+    void OutputSVGPoly(std::ofstream &stream, const SalaShape &shape, QtRegion &logicalviewport,
+                       int h);
 
     void FillLocation(QPainter *pDC, QPoint &p, int spacer, unsigned int blocked, QRgb color);
     void DrawLine(QPainter *pDC, QRect &line, bool drawit);

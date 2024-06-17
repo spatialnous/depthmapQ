@@ -1,18 +1,6 @@
-// depthmapX - spatial network analysis platform
-// Copyright (C) 2017, Petros Koutsolampros
-
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-
-// You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+// SPDX-FileCopyrightText: 2017 Petros Koutsolampros
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "glpointmap.h"
 #include "salalib/geometrygenerators.h"
@@ -20,7 +8,8 @@
 
 void GLPixelMap::loadGLObjects(PointMap &pointMap) {
     QtRegion region = pointMap.getRegion();
-    m_pointMap.loadRegionData(region.bottom_left.x, region.bottom_left.y, region.top_right.x, region.top_right.y);
+    m_pointMap.loadRegionData(region.bottom_left.x, region.bottom_left.y, region.top_right.x,
+                              region.top_right.y);
 
     if (m_showGrid) {
         std::vector<SimpleLine> gridData;
@@ -28,17 +17,18 @@ void GLPixelMap::loadGLObjects(PointMap &pointMap) {
         double offsetX = region.bottom_left.x;
         double offsetY = region.bottom_left.y;
         for (int x = 1; x < pointMap.getCols(); x++) {
-            gridData.push_back(
-                SimpleLine(offsetX + x * spacing, region.bottom_left.y, offsetX + x * spacing, region.top_right.y));
+            gridData.push_back(SimpleLine(offsetX + x * spacing, region.bottom_left.y,
+                                          offsetX + x * spacing, region.top_right.y));
         }
         for (int y = 1; y < pointMap.getRows(); y++) {
-            gridData.push_back(
-                SimpleLine(region.bottom_left.x, offsetY + y * spacing, region.top_right.x, offsetY + y * spacing));
+            gridData.push_back(SimpleLine(region.bottom_left.x, offsetY + y * spacing,
+                                          region.top_right.x, offsetY + y * spacing));
         }
         m_grid.loadLineData(gridData, m_gridColour);
     }
     if (m_showLinks) {
-        const std::vector<SimpleLine> &mergedPixelLines = depthmapX::getMergedPixelsAsLines(pointMap);
+        const std::vector<SimpleLine> &mergedPixelLines =
+            depthmapX::getMergedPixelsAsLines(pointMap);
         std::vector<Point2f> mergedPixelLocations;
         for (auto &mergeLine : mergedPixelLines) {
             mergedPixelLocations.push_back(mergeLine.start());
@@ -46,12 +36,15 @@ void GLPixelMap::loadGLObjects(PointMap &pointMap) {
         }
 
         const std::vector<Point2f> &linkFillTriangles =
-            GeometryGenerators::generateMultipleDiskTriangles(32, pointMap.getSpacing() * 0.25, mergedPixelLocations);
+            GeometryGenerators::generateMultipleDiskTriangles(32, pointMap.getSpacing() * 0.25,
+                                                              mergedPixelLocations);
         m_linkFills.loadTriangleData(linkFillTriangles, qRgb(0, 0, 0));
 
         std::vector<SimpleLine> linkFillPerimeters =
-            GeometryGenerators::generateMultipleCircleLines(32, pointMap.getSpacing() * 0.25, mergedPixelLocations);
-        linkFillPerimeters.insert(linkFillPerimeters.end(), mergedPixelLines.begin(), mergedPixelLines.end());
+            GeometryGenerators::generateMultipleCircleLines(32, pointMap.getSpacing() * 0.25,
+                                                            mergedPixelLocations);
+        linkFillPerimeters.insert(linkFillPerimeters.end(), mergedPixelLines.begin(),
+                                  mergedPixelLines.end());
         m_linkLines.loadLineData(linkFillPerimeters, qRgb(0, 255, 0));
     }
 }

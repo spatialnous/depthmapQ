@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2021 Petros Koutsolampros
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+
 set(projectName acanthis)
 
 # Find includes in corresponding build directories

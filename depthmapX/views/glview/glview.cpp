@@ -1,18 +1,6 @@
-// depthmapX - spatial network analysis platform
-// Copyright (C) 2017, Petros Koutsolampros
-
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-
-// You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+// SPDX-FileCopyrightText: 2017 Petros Koutsolampros
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "glview.h"
 #include "depthmapX/views/depthmapview/depthmapview.h"
@@ -20,7 +8,9 @@
 #include <QCoreApplication>
 #include <QMouseEvent>
 
-static QRgb colorMerge(QRgb color, QRgb mergecolor) { return (color & 0x006f6f6f) | (mergecolor & 0x00a0a0a0); }
+static QRgb colorMerge(QRgb color, QRgb mergecolor) {
+    return (color & 0x006f6f6f) | (mergecolor & 0x00a0a0a0);
+}
 
 GLView::GLView(QGraphDoc &pDoc, Settings &settings, QWidget *parent)
     : MapView(pDoc, settings, parent), m_eyePosX(0), m_eyePosY(0) {
@@ -28,13 +18,15 @@ GLView::GLView(QGraphDoc &pDoc, Settings &settings, QWidget *parent)
 
     m_foreground = settings.readSetting(SettingTag::foregroundColour, qRgb(128, 255, 128)).toInt();
     m_background = settings.readSetting(SettingTag::backgroundColour, qRgb(0, 0, 0)).toInt();
-    m_initialSize = m_settings.readSetting(SettingTag::depthmapViewSize, QSize(2000, 2000)).toSize();
+    m_initialSize =
+        m_settings.readSetting(SettingTag::depthmapViewSize, QSize(2000, 2000)).toSize();
     m_antialiasingSamples = settings.readSetting(SettingTag::antialiasingSamples, 0).toInt();
     m_highlightOnHover = settings.readSetting(SettingTag::highlightOnHover, true).toBool();
 
     if (m_antialiasingSamples) {
         QSurfaceFormat format;
-        format.setSamples(m_antialiasingSamples); // Set the number of samples used for multisampling
+        format.setSamples(
+            m_antialiasingSamples); // Set the number of samples used for multisampling
         setFormat(format);
     }
 
@@ -84,7 +76,8 @@ QSize GLView::sizeHint() const { return m_initialSize; }
 
 void GLView::initializeGL() {
     initializeOpenGLFunctions();
-    glClearColor(qRed(m_background) / 255.0f, qGreen(m_background) / 255.0f, qBlue(m_background) / 255.0f, 1);
+    glClearColor(qRed(m_background) / 255.0f, qGreen(m_background) / 255.0f,
+                 qBlue(m_background) / 255.0f, 1);
 
     m_selectionRect.initializeGL(m_core);
     m_dragLine.initializeGL(m_core);
@@ -97,7 +90,8 @@ void GLView::initializeGL() {
     m_hoveredPixels.initializeGL(m_core);
 
     if (m_pDoc.m_meta_graph->getViewClass() & MetaGraph::VIEWVGA) {
-        m_visiblePointMap.loadGLObjectsRequiringGLContext(m_pDoc.m_meta_graph->getDisplayedPointMap());
+        m_visiblePointMap.loadGLObjectsRequiringGLContext(
+            m_pDoc.m_meta_graph->getDisplayedPointMap());
     }
 
     m_mModel.setToIdentity();
@@ -132,7 +126,8 @@ void GLView::paintGL() {
         if (m_pDoc.m_meta_graph->getViewClass() & MetaGraph::VIEWVGA) {
             m_visiblePointMap.loadGLObjects(m_pDoc.m_meta_graph->getDisplayedPointMap());
             m_visiblePointMap.updateGL(m_core);
-            m_visiblePointMap.loadGLObjectsRequiringGLContext(m_pDoc.m_meta_graph->getDisplayedPointMap());
+            m_visiblePointMap.loadGLObjectsRequiringGLContext(
+                m_pDoc.m_meta_graph->getDisplayedPointMap());
         }
 
         m_datasetChanged = false;
@@ -176,15 +171,16 @@ void GLView::paintGL() {
         glLineWidth(1);
     }
 
-    float pos[] = {float(std::min(m_mouseDragRect.bottomRight().x(), m_mouseDragRect.topLeft().x())),
-                   float(std::min(m_mouseDragRect.bottomRight().y(), m_mouseDragRect.topLeft().y())),
-                   float(std::max(m_mouseDragRect.bottomRight().x(), m_mouseDragRect.topLeft().x())),
-                   float(std::max(m_mouseDragRect.bottomRight().y(), m_mouseDragRect.topLeft().y()))};
+    float pos[] = {
+        float(std::min(m_mouseDragRect.bottomRight().x(), m_mouseDragRect.topLeft().x())),
+        float(std::min(m_mouseDragRect.bottomRight().y(), m_mouseDragRect.topLeft().y())),
+        float(std::max(m_mouseDragRect.bottomRight().x(), m_mouseDragRect.topLeft().x())),
+        float(std::max(m_mouseDragRect.bottomRight().y(), m_mouseDragRect.topLeft().y()))};
     m_selectionRect.paintGL(m_mProj, m_mView, m_mModel, QMatrix2x2(pos));
 
     if ((m_mouseMode & MOUSE_MODE_SECOND_POINT) == MOUSE_MODE_SECOND_POINT) {
-        float pos[] = {float(m_tempFirstPoint.x), float(m_tempFirstPoint.y), float(m_tempSecondPoint.x),
-                       float(m_tempSecondPoint.y)};
+        float pos[] = {float(m_tempFirstPoint.x), float(m_tempFirstPoint.y),
+                       float(m_tempSecondPoint.x), float(m_tempSecondPoint.y)};
         m_dragLine.paintGL(m_mProj, m_mView, m_mModel, QMatrix2x2(pos));
     }
 }
@@ -221,10 +217,14 @@ void GLView::mouseReleaseEvent(QMouseEvent *event) {
             r.bottom_left = worldPoint;
             r.top_right = worldPoint;
         } else {
-            r.bottom_left.x = std::min(m_mouseDragRect.bottomRight().x(), m_mouseDragRect.topLeft().x());
-            r.bottom_left.y = std::min(m_mouseDragRect.bottomRight().y(), m_mouseDragRect.topLeft().y());
-            r.top_right.x = std::max(m_mouseDragRect.bottomRight().x(), m_mouseDragRect.topLeft().x());
-            r.top_right.y = std::max(m_mouseDragRect.bottomRight().y(), m_mouseDragRect.topLeft().y());
+            r.bottom_left.x =
+                std::min(m_mouseDragRect.bottomRight().x(), m_mouseDragRect.topLeft().x());
+            r.bottom_left.y =
+                std::min(m_mouseDragRect.bottomRight().y(), m_mouseDragRect.topLeft().y());
+            r.top_right.x =
+                std::max(m_mouseDragRect.bottomRight().x(), m_mouseDragRect.topLeft().x());
+            r.top_right.y =
+                std::max(m_mouseDragRect.bottomRight().y(), m_mouseDragRect.topLeft().y());
         }
         bool selected = false;
         switch (m_mouseMode) {
@@ -259,7 +259,8 @@ void GLView::mouseReleaseEvent(QMouseEvent *event) {
             break;
         }
         case MOUSE_MODE_PENCIL: {
-            m_pDoc.m_meta_graph->getDisplayedPointMap().fillPoint(worldPoint, event->button() == Qt::LeftButton);
+            m_pDoc.m_meta_graph->getDisplayedPointMap().fillPoint(worldPoint, event->button() ==
+                                                                                  Qt::LeftButton);
             break;
         }
         case MOUSE_MODE_SEED_ISOVIST: {
@@ -293,7 +294,8 @@ void GLView::mouseReleaseEvent(QMouseEvent *event) {
         case MOUSE_MODE_LINE_TOOL | MOUSE_MODE_SECOND_POINT: {
             if (m_pDoc.m_meta_graph->makeShape(Line(m_tempFirstPoint, worldPoint))) {
                 m_pDoc.modifiedFlag = true;
-                m_pDoc.SetRedrawFlag(QGraphDoc::VIEW_ALL, QGraphDoc::REDRAW_GRAPH, QGraphDoc::NEW_DATA);
+                m_pDoc.SetRedrawFlag(QGraphDoc::VIEW_ALL, QGraphDoc::REDRAW_GRAPH,
+                                     QGraphDoc::NEW_DATA);
             }
             m_tempFirstPoint = worldPoint;
             m_tempSecondPoint = worldPoint;
@@ -310,7 +312,8 @@ void GLView::mouseReleaseEvent(QMouseEvent *event) {
         }
         case MOUSE_MODE_POLYGON_TOOL | MOUSE_MODE_SECOND_POINT: {
             if (m_polyPoints == 0) {
-                m_currentlyEditingShapeRef = m_pDoc.m_meta_graph->polyBegin(Line(m_tempFirstPoint, worldPoint));
+                m_currentlyEditingShapeRef =
+                    m_pDoc.m_meta_graph->polyBegin(Line(m_tempFirstPoint, worldPoint));
                 m_polyStart = m_tempFirstPoint;
                 m_tempFirstPoint = m_tempSecondPoint;
                 m_polyPoints += 2;
@@ -344,7 +347,8 @@ void GLView::mouseReleaseEvent(QMouseEvent *event) {
                 } else {
                     const std::set<int> &selectedSet = m_pDoc.m_meta_graph->getSelSet();
                     if (m_pDoc.m_meta_graph->getViewClass() & MetaGraph::VIEWVGA) {
-                        selectionCentre = m_pDoc.m_meta_graph->getDisplayedPointMap().depixelate(*selectedSet.begin());
+                        selectionCentre = m_pDoc.m_meta_graph->getDisplayedPointMap().depixelate(
+                            *selectedSet.begin());
                     } else if (m_pDoc.m_meta_graph->getViewClass() & MetaGraph::VIEWAXIAL) {
                         selectionCentre = m_pDoc.m_meta_graph->getDisplayedShapeGraph()
                                               .getAllShapes()[*selectedSet.begin()]
@@ -362,7 +366,8 @@ void GLView::mouseReleaseEvent(QMouseEvent *event) {
             if (selectedCount > 0) {
                 if (m_pDoc.m_meta_graph->getViewClass() & MetaGraph::VIEWVGA) {
                     m_pDoc.m_meta_graph->getDisplayedPointMap().mergePoints(worldPoint);
-                } else if (m_pDoc.m_meta_graph->getViewClass() & MetaGraph::VIEWAXIAL && selectedCount == 1) {
+                } else if (m_pDoc.m_meta_graph->getViewClass() & MetaGraph::VIEWAXIAL &&
+                           selectedCount == 1) {
                     m_pDoc.m_meta_graph->setCurSel(r, true); // add the new one to the selection set
                     const auto &selectedSet = m_pDoc.m_meta_graph->getSelSet();
                     if (selectedSet.size() == 2) {
@@ -372,7 +377,8 @@ void GLView::mouseReleaseEvent(QMouseEvent *event) {
                         int axRef2 = *it;
                         // axial is only joined one-by-one
                         m_pDoc.modifiedFlag = true;
-                        m_pDoc.m_meta_graph->getDisplayedShapeGraph().linkShapesFromRefs(axRef1, axRef2, true);
+                        m_pDoc.m_meta_graph->getDisplayedShapeGraph().linkShapesFromRefs(
+                            axRef1, axRef2, true);
                         m_pDoc.m_meta_graph->clearSel();
                     }
                 }
@@ -388,7 +394,8 @@ void GLView::mouseReleaseEvent(QMouseEvent *event) {
                 if (m_pDoc.m_meta_graph->getViewClass() & MetaGraph::VIEWVGA) {
                     if (m_pDoc.m_meta_graph->getDisplayedPointMap().unmergePoints()) {
                         m_pDoc.modifiedFlag = true;
-                        m_pDoc.SetRedrawFlag(QGraphDoc::VIEW_ALL, QGraphDoc::REDRAW_GRAPH, QGraphDoc::NEW_DATA);
+                        m_pDoc.SetRedrawFlag(QGraphDoc::VIEW_ALL, QGraphDoc::REDRAW_GRAPH,
+                                             QGraphDoc::NEW_DATA);
                     }
                 } else if (m_pDoc.m_meta_graph->getViewClass() & MetaGraph::VIEWAXIAL) {
                     const auto &selectedSet = m_pDoc.m_meta_graph->getSelSet();
@@ -405,7 +412,8 @@ void GLView::mouseReleaseEvent(QMouseEvent *event) {
         case MOUSE_MODE_UNJOIN | MOUSE_MODE_SECOND_POINT: {
             int selectedCount = m_pDoc.m_meta_graph->getSelCount();
             if (selectedCount > 0) {
-                if (m_pDoc.m_meta_graph->getViewClass() & MetaGraph::VIEWAXIAL && selectedCount == 1) {
+                if (m_pDoc.m_meta_graph->getViewClass() & MetaGraph::VIEWAXIAL &&
+                    selectedCount == 1) {
                     m_pDoc.m_meta_graph->setCurSel(r, true); // add the new one to the selection set
                     const auto &selectedSet = m_pDoc.m_meta_graph->getSelSet();
                     if (selectedSet.size() == 2) {
@@ -415,7 +423,8 @@ void GLView::mouseReleaseEvent(QMouseEvent *event) {
                         int axRef2 = *it;
                         // axial is only joined one-by-one
                         m_pDoc.modifiedFlag = true;
-                        m_pDoc.m_meta_graph->getDisplayedShapeGraph().unlinkShapesFromRefs(axRef1, axRef2, true);
+                        m_pDoc.m_meta_graph->getDisplayedShapeGraph().unlinkShapesFromRefs(
+                            axRef1, axRef2, true);
                         m_pDoc.m_meta_graph->clearSel();
                     }
                 }
@@ -426,7 +435,8 @@ void GLView::mouseReleaseEvent(QMouseEvent *event) {
         }
         }
 
-        m_pDoc.SetRedrawFlag(QGraphDoc::VIEW_ALL, QGraphDoc::REDRAW_POINTS, QGraphDoc::NEW_SELECTION);
+        m_pDoc.SetRedrawFlag(QGraphDoc::VIEW_ALL, QGraphDoc::REDRAW_POINTS,
+                             QGraphDoc::NEW_SELECTION);
     }
     m_mouseDragRect.setWidth(0);
     m_mouseDragRect.setHeight(0);
@@ -440,12 +450,14 @@ void GLView::mouseMoveEvent(QMouseEvent *event) {
 
     Point2f worldPoint = getWorldPoint(event->pos());
 
-    if (m_mouseDragRect.isNull() && !((m_mouseMode & MOUSE_MODE_SECOND_POINT) == MOUSE_MODE_SECOND_POINT &&
-                                      m_pDoc.m_meta_graph->getViewClass() & MetaGraph::VIEWVGA)) {
+    if (m_mouseDragRect.isNull() &&
+        !((m_mouseMode & MOUSE_MODE_SECOND_POINT) == MOUSE_MODE_SECOND_POINT &&
+          m_pDoc.m_meta_graph->getViewClass() & MetaGraph::VIEWVGA)) {
         highlightHoveredItems(QtRegion(worldPoint, worldPoint));
     }
 
-    if (event->buttons() & Qt::RightButton || (event->buttons() & Qt::LeftButton && m_mouseMode == MOUSE_MODE_PAN)) {
+    if (event->buttons() & Qt::RightButton ||
+        (event->buttons() & Qt::LeftButton && m_mouseMode == MOUSE_MODE_PAN)) {
         panBy(dx, dy);
         m_wasPanning = true;
     } else if (event->buttons() & Qt::LeftButton) {
@@ -460,10 +472,14 @@ void GLView::mouseMoveEvent(QMouseEvent *event) {
         m_mouseDragRect.setHeight(worldPoint.y - m_mouseDragRect.y());
 
         QtRegion hoverRegion;
-        hoverRegion.bottom_left.x = std::min(m_mouseDragRect.bottomRight().x(), m_mouseDragRect.topLeft().x());
-        hoverRegion.bottom_left.y = std::min(m_mouseDragRect.bottomRight().y(), m_mouseDragRect.topLeft().y());
-        hoverRegion.top_right.x = std::max(m_mouseDragRect.bottomRight().x(), m_mouseDragRect.topLeft().x());
-        hoverRegion.top_right.y = std::max(m_mouseDragRect.bottomRight().y(), m_mouseDragRect.topLeft().y());
+        hoverRegion.bottom_left.x =
+            std::min(m_mouseDragRect.bottomRight().x(), m_mouseDragRect.topLeft().x());
+        hoverRegion.bottom_left.y =
+            std::min(m_mouseDragRect.bottomRight().y(), m_mouseDragRect.topLeft().y());
+        hoverRegion.top_right.x =
+            std::max(m_mouseDragRect.bottomRight().x(), m_mouseDragRect.topLeft().x());
+        hoverRegion.top_right.y =
+            std::max(m_mouseDragRect.bottomRight().y(), m_mouseDragRect.topLeft().y());
         highlightHoveredItems(hoverRegion);
         update();
     }
@@ -473,8 +489,8 @@ void GLView::mouseMoveEvent(QMouseEvent *event) {
             PointMap &map = m_pDoc.m_meta_graph->getDisplayedPointMap();
             QtRegion selectionBounds = map.getSelBounds();
             PixelRef worldPixel = map.pixelate(worldPoint, true);
-            PixelRef boundsPixel =
-                map.pixelate(Point2f(selectionBounds.top_right.x, selectionBounds.bottom_left.y), true);
+            PixelRef boundsPixel = map.pixelate(
+                Point2f(selectionBounds.top_right.x, selectionBounds.bottom_left.y), true);
             std::set<int> &selection = map.getSelSet();
             std::set<PixelRef> offsetSelection;
             for (int ref : selection) {
@@ -505,20 +521,23 @@ bool GLView::eventFilter(QObject *object, QEvent *e) {
     if (e->type() == QEvent::ToolTip) {
         if (!m_pDoc.m_communicator) {
             if (m_pDoc.m_meta_graph) {
-                if (m_pDoc.m_meta_graph->viewingProcessed() && m_pDoc.m_meta_graph->getSelCount() > 1) {
+                if (m_pDoc.m_meta_graph->viewingProcessed() &&
+                    m_pDoc.m_meta_graph->getSelCount() > 1) {
                     float val = m_pDoc.m_meta_graph->getSelAvg();
                     int count = m_pDoc.m_meta_graph->getSelCount();
                     if (val == -1.0f)
                         setToolTip("Null selection");
                     else if (val != -2.0f)
-                        setToolTip(QString("Selection\nAverage: %1\nCount: %2").arg(val).arg(count));
+                        setToolTip(
+                            QString("Selection\nAverage: %1\nCount: %2").arg(val).arg(count));
                     else
                         setToolTip("");
                 } else if (m_pDoc.m_meta_graph->viewingProcessed()) {
                     // and that it has an appropriate state to display a hover wnd
                     QHelpEvent *helpEvent =
                         static_cast<QHelpEvent *>(e); // Tool tip events come as the type QHelpEvent
-                    float val = m_pDoc.m_meta_graph->getLocationValue(getWorldPoint(helpEvent->pos()));
+                    float val =
+                        m_pDoc.m_meta_graph->getLocationValue(getWorldPoint(helpEvent->pos()));
                     if (val == -1.0f)
                         setToolTip("No value");
                     else if (val != -2.0f) {
@@ -576,14 +595,18 @@ void GLView::highlightHoveredPixels(const PointMap &map, const QtRegion &region)
         int i = 0;
         for (Point point : points) {
             const Point2f &loc = point.getLocation();
-            lines.push_back(SimpleLine(loc.x - map.getSpacing() * 0.5, loc.y - map.getSpacing() * 0.5,
-                                       loc.x - map.getSpacing() * 0.5, loc.y + map.getSpacing() * 0.5));
-            lines.push_back(SimpleLine(loc.x - map.getSpacing() * 0.5, loc.y + map.getSpacing() * 0.5,
-                                       loc.x + map.getSpacing() * 0.5, loc.y + map.getSpacing() * 0.5));
-            lines.push_back(SimpleLine(loc.x + map.getSpacing() * 0.5, loc.y + map.getSpacing() * 0.5,
-                                       loc.x + map.getSpacing() * 0.5, loc.y - map.getSpacing() * 0.5));
-            lines.push_back(SimpleLine(loc.x + map.getSpacing() * 0.5, loc.y - map.getSpacing() * 0.5,
-                                       loc.x - map.getSpacing() * 0.5, loc.y - map.getSpacing() * 0.5));
+            lines.push_back(
+                SimpleLine(loc.x - map.getSpacing() * 0.5, loc.y - map.getSpacing() * 0.5,
+                           loc.x - map.getSpacing() * 0.5, loc.y + map.getSpacing() * 0.5));
+            lines.push_back(
+                SimpleLine(loc.x - map.getSpacing() * 0.5, loc.y + map.getSpacing() * 0.5,
+                           loc.x + map.getSpacing() * 0.5, loc.y + map.getSpacing() * 0.5));
+            lines.push_back(
+                SimpleLine(loc.x + map.getSpacing() * 0.5, loc.y + map.getSpacing() * 0.5,
+                           loc.x + map.getSpacing() * 0.5, loc.y - map.getSpacing() * 0.5));
+            lines.push_back(
+                SimpleLine(loc.x + map.getSpacing() * 0.5, loc.y - map.getSpacing() * 0.5,
+                           loc.x - map.getSpacing() * 0.5, loc.y - map.getSpacing() * 0.5));
             i++;
         }
         m_hoveredPixels.loadLineData(lines, qRgb(255, 255, 0));
@@ -622,14 +645,18 @@ void GLView::highlightHoveredPixels(const PointMap &map, const std::set<PixelRef
         int i = 0;
         for (Point point : points) {
             const Point2f &loc = point.getLocation();
-            lines.push_back(SimpleLine(loc.x - map.getSpacing() * 0.5, loc.y - map.getSpacing() * 0.5,
-                                       loc.x - map.getSpacing() * 0.5, loc.y + map.getSpacing() * 0.5));
-            lines.push_back(SimpleLine(loc.x - map.getSpacing() * 0.5, loc.y + map.getSpacing() * 0.5,
-                                       loc.x + map.getSpacing() * 0.5, loc.y + map.getSpacing() * 0.5));
-            lines.push_back(SimpleLine(loc.x + map.getSpacing() * 0.5, loc.y + map.getSpacing() * 0.5,
-                                       loc.x + map.getSpacing() * 0.5, loc.y - map.getSpacing() * 0.5));
-            lines.push_back(SimpleLine(loc.x + map.getSpacing() * 0.5, loc.y - map.getSpacing() * 0.5,
-                                       loc.x - map.getSpacing() * 0.5, loc.y - map.getSpacing() * 0.5));
+            lines.push_back(
+                SimpleLine(loc.x - map.getSpacing() * 0.5, loc.y - map.getSpacing() * 0.5,
+                           loc.x - map.getSpacing() * 0.5, loc.y + map.getSpacing() * 0.5));
+            lines.push_back(
+                SimpleLine(loc.x - map.getSpacing() * 0.5, loc.y + map.getSpacing() * 0.5,
+                           loc.x + map.getSpacing() * 0.5, loc.y + map.getSpacing() * 0.5));
+            lines.push_back(
+                SimpleLine(loc.x + map.getSpacing() * 0.5, loc.y + map.getSpacing() * 0.5,
+                           loc.x + map.getSpacing() * 0.5, loc.y - map.getSpacing() * 0.5));
+            lines.push_back(
+                SimpleLine(loc.x + map.getSpacing() * 0.5, loc.y - map.getSpacing() * 0.5,
+                           loc.x - map.getSpacing() * 0.5, loc.y - map.getSpacing() * 0.5));
             i++;
         }
         m_hoveredPixels.loadLineData(lines, qRgb(255, 255, 0));
@@ -658,35 +685,39 @@ void GLView::highlightHoveredShapes(const ShapeMap &map, const QtRegion &region)
             const SalaShape &shape = keyShape.second;
 
             const AttributeRow &row = map.getAttributeTable().getRow(key);
-            PafColor colour = dXreimpl::getDisplayColor(key, row, map.getAttributeTableHandle(), true);
+            PafColor colour =
+                dXreimpl::getDisplayColor(key, row, map.getAttributeTableHandle(), true);
 
             if (shape.isLine()) {
                 colouredLines.push_back(std::make_pair(SimpleLine(shape.getLine()), colour));
             } else if (shape.isPolyLine()) {
                 for (size_t n = 0; n < shape.m_points.size() - 1; n++) {
-                    colouredLines.push_back(
-                        std::make_pair(SimpleLine(shape.m_points[n], shape.m_points[n + 1]), colour));
+                    colouredLines.push_back(std::make_pair(
+                        SimpleLine(shape.m_points[n], shape.m_points[n + 1]), colour));
                 }
             } else if (shape.isPolygon()) {
                 for (size_t n = 0; n < shape.m_points.size() - 1; n++) {
-                    colouredLines.push_back(
-                        std::make_pair(SimpleLine(shape.m_points[n], shape.m_points[n + 1]), PafColor(1, 1, 0)));
+                    colouredLines.push_back(std::make_pair(
+                        SimpleLine(shape.m_points[n], shape.m_points[n + 1]), PafColor(1, 1, 0)));
                 }
-                colouredLines.push_back(
-                    std::make_pair(SimpleLine(shape.m_points.back(), shape.m_points.front()), PafColor(1, 1, 0)));
+                colouredLines.push_back(std::make_pair(
+                    SimpleLine(shape.m_points.back(), shape.m_points.front()), PafColor(1, 1, 0)));
             } else {
                 if (shape.isPoint()) {
-                    colouredPoints.push_back(std::make_pair(shape.getCentroid(), PafColor(1, 0, 0)));
+                    colouredPoints.push_back(
+                        std::make_pair(shape.getCentroid(), PafColor(1, 0, 0)));
                 }
             }
         }
-        m_hoveredShapes.loadGLObjects(colouredLines, colouredPolygons, colouredPoints, 8, map.getSpacing() * 0.1);
+        m_hoveredShapes.loadGLObjects(colouredLines, colouredPolygons, colouredPoints, 8,
+                                      map.getSpacing() * 0.1);
         m_hoverStoreInvalid = true;
         m_hoverHasShapes = true;
     } else if (m_hoverHasShapes) {
         m_hoveredShapes.loadGLObjects(std::vector<std::pair<SimpleLine, PafColor>>(),
                                       std::vector<std::pair<std::vector<Point2f>, PafColor>>(),
-                                      std::vector<std::pair<Point2f, PafColor>>(), 8, map.getSpacing() * 0.1);
+                                      std::vector<std::pair<Point2f, PafColor>>(), 8,
+                                      map.getSpacing() * 0.1);
         m_hoverStoreInvalid = true;
         m_hoverHasShapes = false;
     }
@@ -703,9 +734,10 @@ void GLView::zoomBy(float dzf, int mouseX, int mouseY) {
         m_zoomFactor = m_minZoomFactor;
     else if (m_zoomFactor > m_maxZoomFactor)
         m_zoomFactor = m_maxZoomFactor;
-    m_eyePosX +=
-        (m_zoomFactor - pzf) * m_screenRatio * GLfloat(mouseX - m_screenWidth * 0.5f) / GLfloat(m_screenWidth);
-    m_eyePosY -= (m_zoomFactor - pzf) * GLfloat(mouseY - m_screenHeight * 0.5f) / GLfloat(m_screenHeight);
+    m_eyePosX += (m_zoomFactor - pzf) * m_screenRatio * GLfloat(mouseX - m_screenWidth * 0.5f) /
+                 GLfloat(m_screenWidth);
+    m_eyePosY -=
+        (m_zoomFactor - pzf) * GLfloat(mouseY - m_screenHeight * 0.5f) / GLfloat(m_screenHeight);
     recalcView();
 }
 void GLView::panBy(int dx, int dy) {
@@ -721,21 +753,23 @@ void GLView::recalcView() {
         m_mProj.perspective(45.0f, m_screenRatio, 0.01f, 100.0f);
         m_mProj.scale(1.0f, 1.0f, m_zoomFactor);
     } else {
-        m_mProj.ortho(-m_zoomFactor * 0.5f * m_screenRatio, m_zoomFactor * 0.5f * m_screenRatio, -m_zoomFactor * 0.5f,
-                      m_zoomFactor * 0.5f, 0, 10);
+        m_mProj.ortho(-m_zoomFactor * 0.5f * m_screenRatio, m_zoomFactor * 0.5f * m_screenRatio,
+                      -m_zoomFactor * 0.5f, m_zoomFactor * 0.5f, 0, 10);
     }
     m_mProj.translate(m_eyePosX, m_eyePosY, 0.0f);
     update();
 }
 
 Point2f GLView::getWorldPoint(const QPoint &screenPoint) {
-    return Point2f(+m_zoomFactor * float(screenPoint.x() - m_screenWidth * 0.5) / m_screenHeight - m_eyePosX,
-                   -m_zoomFactor * float(screenPoint.y() - m_screenHeight * 0.5) / m_screenHeight - m_eyePosY);
+    return Point2f(
+        +m_zoomFactor * float(screenPoint.x() - m_screenWidth * 0.5) / m_screenHeight - m_eyePosX,
+        -m_zoomFactor * float(screenPoint.y() - m_screenHeight * 0.5) / m_screenHeight - m_eyePosY);
 }
 
 QPoint GLView::getScreenPoint(const Point2f &worldPoint) {
     return QPoint((worldPoint.x + m_eyePosX) * m_screenHeight / m_zoomFactor + m_screenWidth * 0.5,
-                  -(worldPoint.y + m_eyePosY) * m_screenHeight / m_zoomFactor + m_screenHeight * 0.5);
+                  -(worldPoint.y + m_eyePosY) * m_screenHeight / m_zoomFactor +
+                      m_screenHeight * 0.5);
 }
 
 void GLView::matchViewToCurrentMetaGraph() {

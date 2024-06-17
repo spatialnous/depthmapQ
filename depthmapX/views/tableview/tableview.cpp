@@ -1,18 +1,7 @@
-// Copyright (C) 2011-2012, Tasos Varoudis
-// Copyright (C) 2019, Petros Koutsolampros
-
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-
-// You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+// SPDX-FileCopyrightText: 2011-2012 Tasos Varoudis
+// SPDX-FileCopyrightText: 2019 Petros Koutsolampros
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "tableview.h"
 
@@ -36,9 +25,11 @@ TableView::TableView(Settings &settings, QWidget *parent, QGraphDoc *p) : QTable
     pDoc = p;
     m_from = m_curr_row = 0;
 
-    connect(this, SIGNAL(itemChanged(QTableWidgetItem *)), this, SLOT(itemChanged(QTableWidgetItem *)));
+    connect(this, SIGNAL(itemChanged(QTableWidgetItem *)), this,
+            SLOT(itemChanged(QTableWidgetItem *)));
 
-    connect(this, SIGNAL(itemDoubleClicked(QTableWidgetItem *)), this, SLOT(itemEditChanged(QTableWidgetItem *)));
+    connect(this, SIGNAL(itemDoubleClicked(QTableWidgetItem *)), this,
+            SLOT(itemEditChanged(QTableWidgetItem *)));
 
     RedoTable();
     setWindowIcon(QIcon(tr(":/images/cur/icon-1-5.png")));
@@ -73,7 +64,8 @@ void TableView::RedoTable() {
         setHorizontalHeaderItem(0, Item);
 
         for (int i = 0; i < m_column_count; i++) {
-            QTableWidgetItem *Item = new QTableWidgetItem(QString("%1").arg(table.getColumnName(i).c_str()));
+            QTableWidgetItem *Item =
+                new QTableWidgetItem(QString("%1").arg(table.getColumnName(i).c_str()));
             Item->setTextAlignment(Qt::AlignLeft);
             setHorizontalHeaderItem(i + 1, Item);
         }
@@ -97,7 +89,7 @@ QSize TableView::sizeHint() const { return m_initialSize; }
 void TableView::PrepareCache(int to) {
     m_updating = true;
     QTableWidgetItem *Item;
-    const AttributeTableHandle &tableHandle = pDoc->m_meta_graph->getAttributeTableHandle();
+    const AttributeTableHandle &tableHandle = pDoc->getAttributeTableHandle();
     auto &index = tableHandle.getTableIndex();
 
     int diff = PG_COUNT;
@@ -141,21 +133,22 @@ void TableView::itemChanged(QTableWidgetItem *item) {
     int col = item->column();
     MetaGraph *graph = pDoc->m_meta_graph;
     AttributeTable &table = graph->getAttributeTable();
-    AttributeTableHandle &tableHandle = graph->getAttributeTableHandle();
+    AttributeTableHandle &tableHandle = pDoc->getAttributeTableHandle();
     auto &index = tableHandle.getTableIndex();
     if (col == 0) {
         std::vector<int> x;
         x.push_back(index[row].key.value);
         pDoc->m_meta_graph->setSelSet(x);
-        pDoc->SetRedrawFlag(QGraphDoc::VIEW_ALL, QGraphDoc::REDRAW_POINTS, QGraphDoc::NEW_SELECTION, this);
+        pDoc->SetRedrawFlag(QGraphDoc::VIEW_ALL, QGraphDoc::REDRAW_POINTS, QGraphDoc::NEW_SELECTION,
+                            this);
         PrepareCache(m_curr_row);
     } else {
         double value = -1;
         try {
             value = std::stod(item->text().toStdString());
         } catch (std::invalid_argument) {
-            QMessageBox::warning(this, tr("Warning"), tr("Cannot convert text to number"), QMessageBox::Ok,
-                                 QMessageBox::Ok);
+            QMessageBox::warning(this, tr("Warning"), tr("Cannot convert text to number"),
+                                 QMessageBox::Ok, QMessageBox::Ok);
             return;
         }
 
@@ -170,7 +163,8 @@ void TableView::itemChanged(QTableWidgetItem *item) {
             RedoTable();
             // note: this as caller will prevent us from redrawing ourself:
             // could be either new data or new selection, just go for a big redraw:
-            pDoc->SetRedrawFlag(QGraphDoc::VIEW_ALL, QGraphDoc::REDRAW_GRAPH, QGraphDoc::NEW_DATA, this);
+            pDoc->SetRedrawFlag(QGraphDoc::VIEW_ALL, QGraphDoc::REDRAW_GRAPH, QGraphDoc::NEW_DATA,
+                                this);
         }
     }
 }
@@ -194,8 +188,9 @@ void TableView::itemEditChanged(QTableWidgetItem *item) {
     if (col > 0 && col < pDoc->m_meta_graph->getAttributeTable().getNumColumns() + 1) {
         // don't let them edit a locked attribute
         if (pDoc->m_meta_graph->getAttributeTable().getColumn(col - 1).isLocked()) {
-            QMessageBox::warning(this, tr("Warning"), tr("This column is locked and cannot be edited"),
-                                 QMessageBox::Ok, QMessageBox::Ok);
+            QMessageBox::warning(this, tr("Warning"),
+                                 tr("This column is locked and cannot be edited"), QMessageBox::Ok,
+                                 QMessageBox::Ok);
         }
     }
 }

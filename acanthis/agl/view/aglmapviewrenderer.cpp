@@ -1,21 +1,10 @@
-// Copyright (C) 2021 Petros Koutsolampros
-
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-
-// You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+// SPDX-FileCopyrightText: 2021 Petros Koutsolampros
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "aglmapviewrenderer.h"
-#include "aglmapviewport.h"
 #include "agl/viewmodel/aglmapviewmodel.h"
+#include "aglmapviewport.h"
 
 #include <QQuickOpenGLUtils>
 
@@ -31,17 +20,18 @@ void AGLMapViewRenderer::synchronize(QQuickFramebufferObject *item) {
     recalcView();
 }
 
-
 AGLMapViewRenderer::AGLMapViewRenderer(const QQuickFramebufferObject *item,
                                        const GraphViewModel *graphViewModel,
-                                       const QColor &foregrounColour, const QColor &backgroundColour,
-                                       int antialiasingSamples, bool highlightOnHover)
-    : m_item(static_cast<const AGLMapViewport *>(item)), m_model(new AGLMapViewModel(graphViewModel)),
-      m_foregroundColour(foregrounColour),
+                                       const QColor &foregrounColour,
+                                       const QColor &backgroundColour, int antialiasingSamples,
+                                       bool highlightOnHover)
+    : m_item(static_cast<const AGLMapViewport *>(item)),
+      m_model(new AGLMapViewModel(graphViewModel)), m_foregroundColour(foregrounColour),
       m_backgroundColour(backgroundColour), m_antialiasingSamples(antialiasingSamples),
       m_highlightOnHover(highlightOnHover) {
 
-    if (!m_model->hasGraphViewModel()) return;
+    if (!m_model->hasGraphViewModel())
+        return;
 
     m_core = QCoreApplication::arguments().contains(QStringLiteral("--coreprofile"));
     if (m_antialiasingSamples) {
@@ -92,10 +82,8 @@ void AGLMapViewRenderer::render() {
         // TODO: This should be happening in the ctor, however
         // this particular qt opengl implementation does not
         // work in that way, so we have to do it here
-        glClearColor(m_backgroundColour.redF(),
-                     m_backgroundColour.greenF(),
-                     m_backgroundColour.blueF(),
-                     1);
+        glClearColor(m_backgroundColour.redF(), m_backgroundColour.greenF(),
+                     m_backgroundColour.blueF(), 1);
         m_backgroundColourChanged = false;
     }
 
@@ -150,5 +138,3 @@ void AGLMapViewRenderer::loadAxes() {
     axesData.push_back(std::pair<SimpleLine, PafColor>(SimpleLine(0, 0, 0, 1), PafColor(0, 1, 0)));
     m_axes.loadLineData(axesData);
 }
-
-

@@ -1,41 +1,29 @@
-// Copyright (C) 2011-2012, Tasos Varoudis
-// Copyright (C) 2017 Christian Sailer
+// SPDX-FileCopyrightText: 2011-2012 Tasos Varoudis
+// SPDX-FileCopyrightText: 2017 Christian Sailer
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
 
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
+#include "depthmapview.h"
 
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
+#include "compatibilitydefines.h"
+#include "depthmapX/views/viewhelpers.h"
+#include "interfaceversion.h"
+#include "mainwindow.h"
 
-// You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+#include <QActionGroup>
+#include <QApplication>
+#include <QClipboard>
+#include <QDebug>
 #include <QEvent>
+#include <QFileDialog>
+#include <QMenu>
+#include <QPainter>
+#include <QSettings>
 #include <QToolBar>
 #include <QtGui>
 #include <QtWidgets/QMessageBox>
 
-#include <qactiongroup.h>
-#include <qapplication.h>
-#include <qclipboard.h>
-#include <qdebug.h>
-#include <qevent.h>
-#include <qfiledialog.h>
-#include <qmenu.h>
-#include <qpainter.h>
-#include <qsettings.h>
-
-#include "depthmapX/views/viewhelpers.h"
-#include "depthmapview.h"
-#include "mainwindow.h"
-
 class QToolBar;
-
-#include "compatibilitydefines.h"
 
 #define DMP_TIMER_SPLASH 1
 #define DMP_TIMER_REDRAW 2
@@ -56,7 +44,8 @@ class QToolBar;
 // version 8.00 dll has significant upgrades to the naming conventions,
 // the ability to perform whole graph analyses and adding shapes
 // version 10.04 dll has further upgrades to naming conventions,
-// also, extra functions for the sala.dll build: includes graph opening, closing and so on
+// also, extra functions for the sala.dll build: includes graph opening, closing
+// and so on
 
 // QT_BEGIN_NAMESPACE
 // Palette entries...
@@ -66,7 +55,7 @@ static int pressed_nFlags;
 
 inline Point2f QDepthmapView::LogicalUnits(const QPoint &p) {
     return m_centre + Point2f(m_unit * double(p.x() - m_physical_centre.width()),
-                              m_unit *double(m_physical_centre.height() - p.y()));
+                              m_unit * double(m_physical_centre.height() - p.y()));
 }
 
 inline QPoint QDepthmapView::PhysicalUnits(const Point2f &p) {
@@ -78,9 +67,12 @@ inline int PixelDist(QPoint a, QPoint b) {
     return (int)sqrt(double((b.x() - a.x()) * (b.x() - a.x()) + (b.y() - a.y()) * (b.y() - a.y())));
 }
 
-static QRgb colorMerge(QRgb color, QRgb mergecolor) { return (color & 0x006f6f6f) | (mergecolor & 0x00a0a0a0); }
+static QRgb colorMerge(QRgb color, QRgb mergecolor) {
+    return (color & 0x006f6f6f) | (mergecolor & 0x00a0a0a0);
+}
 
-QDepthmapView::QDepthmapView(QGraphDoc &pDoc, Settings &settings, QWidget *parent) : MapView(pDoc, settings, parent) {
+QDepthmapView::QDepthmapView(QGraphDoc &pDoc, Settings &settings, QWidget *parent)
+    : MapView(pDoc, settings, parent) {
     m_drag_rect_a.setRect(0, 0, 0, 0);
     m_drag_rect_b.setRect(0, 0, 0, 0);
 
@@ -116,7 +108,8 @@ QDepthmapView::QDepthmapView(QGraphDoc &pDoc, Settings &settings, QWidget *paren
 
     m_selected_color = qRgb(selcol.redb(), selcol.greenb(), selcol.blueb());
 
-    m_initialSize = m_settings.readSetting(SettingTag::depthmapViewSize, QSize(2000, 2000)).toSize();
+    m_initialSize =
+        m_settings.readSetting(SettingTag::depthmapViewSize, QSize(2000, 2000)).toSize();
 
     installEventFilter(this);
 
@@ -131,7 +124,8 @@ int QDepthmapView::OnRedraw(int wParam, int lParam) {
     if (m_pDoc.GetRemenuFlag(QGraphDoc::VIEW_MAP)) {
         m_pDoc.SetRemenuFlag(QGraphDoc::VIEW_MAP, false);
         // redo the menus for this *view* directly:
-        //((CChildFrame*) GetParentFrame())->m_view_selector.RedoMenu( *m_pDoc.m_meta_graph );
+        //((CChildFrame*) GetParentFrame())->m_view_selector.RedoMenu(
+        //*m_pDoc.m_meta_graph );
     }
     if (m_pDoc.GetRedrawFlag(QGraphDoc::VIEW_MAP) != QGraphDoc::REDRAW_DONE) {
         if (!m_pDoc.m_communicator) {
@@ -173,9 +167,10 @@ bool QDepthmapView::eventFilter(QObject *object, QEvent *e) {
     case QEvent::MouseButtonDblClick:
     case QEvent::MouseMove: {
         Qt::KeyboardModifiers keyMods = QApplication::keyboardModifiers();
-        pressed_nFlags = (keyMods & Qt::ShiftModifier) ? pressed_nFlags |= MK_SHIFT : pressed_nFlags &= ~MK_SHIFT;
-        pressed_nFlags =
-            (keyMods & Qt::ControlModifier) ? pressed_nFlags |= MK_CONTROL : pressed_nFlags &= ~MK_CONTROL;
+        pressed_nFlags = (keyMods & Qt::ShiftModifier) ? pressed_nFlags |= MK_SHIFT
+                                                       : pressed_nFlags &= ~MK_SHIFT;
+        pressed_nFlags = (keyMods & Qt::ControlModifier) ? pressed_nFlags |= MK_CONTROL
+                                                         : pressed_nFlags &= ~MK_CONTROL;
         break;
     }
     default:
@@ -185,13 +180,15 @@ bool QDepthmapView::eventFilter(QObject *object, QEvent *e) {
     if (e->type() == QEvent::ToolTip) {
         if (!m_pDoc.m_communicator) {
             if (m_pDoc.m_meta_graph) {
-                if (m_pDoc.m_meta_graph->viewingProcessed() && m_pDoc.m_meta_graph->getSelCount() > 1) {
+                if (m_pDoc.m_meta_graph->viewingProcessed() &&
+                    m_pDoc.m_meta_graph->getSelCount() > 1) {
                     float val = m_pDoc.m_meta_graph->getSelAvg();
                     int count = m_pDoc.m_meta_graph->getSelCount();
                     if (val == -1.0f)
                         setToolTip("Null selection");
                     else if (val != -2.0f)
-                        setToolTip(QString("Selection\nAverage: %1\nCount: %2").arg(val).arg(count));
+                        setToolTip(
+                            QString("Selection\nAverage: %1\nCount: %2").arg(val).arg(count));
                     else
                         setToolTip("");
                 } else if (m_pDoc.m_meta_graph->viewingProcessed()) {
@@ -227,7 +224,8 @@ void QDepthmapView::timerEvent(QTimerEvent *event) {
 
 void QDepthmapView::InitViewport(const QRect &phys_bounds, QGraphDoc *pDoc) {
     QtRegion bounds = pDoc->m_meta_graph->getBoundingBox();
-    m_unit = __max(bounds.width() / double(phys_bounds.width()), bounds.height() / double(phys_bounds.height()));
+    m_unit = __max(bounds.width() / double(phys_bounds.width()),
+                   bounds.height() / double(phys_bounds.height()));
     m_centre = bounds.getCentre();
     m_physical_centre = QSize(phys_bounds.width() / 2, phys_bounds.height() / 2);
 
@@ -323,7 +321,8 @@ void QDepthmapView::paintEvent(QPaintEvent *) {
         pDC.setPen(QPen(QBrush(QColor(m_selected_color)), 1, Qt::DotLine, Qt::RoundCap));
 
         if (m_invalidate & DRAWLINE) {
-            if ((m_repaint_tag & DRAWLINE) && (m_invalidate == DRAWLINE || m_invalidate == LINEOFF)) {
+            if ((m_repaint_tag & DRAWLINE) &&
+                (m_invalidate == DRAWLINE || m_invalidate == LINEOFF)) {
                 QRect tmpRect(PhysicalUnits(m_old_line.start()), PhysicalUnits(m_old_line.end()));
                 DrawLine(&pDC, tmpRect, 0);
                 m_repaint_tag &= ~DRAWLINE;
@@ -359,11 +358,13 @@ void QDepthmapView::paintEvent(QPaintEvent *) {
             m_invalidate = 0;
         }
     } else if (m_redraw_all || m_redraw_no_clear) {
-        m_repaint_tag = 0; // <- for things that remember pixels in last paint colour (e.g., DrawCross and DrawLine
+        m_repaint_tag = 0; // <- for things that remember pixels in last paint
+                           // colour (e.g., DrawCross and DrawLine
         rect = QRect(0, 0, width(), height());
         m_redraw = true;
 
-        if (!m_viewport_set && state & (MetaGraph::LINEDATA | MetaGraph::SHAPEGRAPHS | MetaGraph::DATAMAPS)) {
+        if (!m_viewport_set &&
+            state & (MetaGraph::LINEDATA | MetaGraph::SHAPEGRAPHS | MetaGraph::DATAMAPS)) {
             InitViewport(rect, &m_pDoc);
         }
         if (m_redraw_all) {
@@ -383,26 +384,33 @@ void QDepthmapView::paintEvent(QPaintEvent *) {
     m_internal_redraw = false;
 
     // if redraw signalled:
-    if (m_redraw && (state & (MetaGraph::LINEDATA | MetaGraph::SHAPEGRAPHS | MetaGraph::DATAMAPS)) && m_viewport_set) {
+    if (m_redraw &&
+        (state & (MetaGraph::LINEDATA | MetaGraph::SHAPEGRAPHS | MetaGraph::DATAMAPS)) &&
+        m_viewport_set) {
 
         // note that the redraw rect is dependent on the cleared portion above
-        // note you *must* check *state* before drawing, you cannot rely on view_class as it can be set up before the
-        // layer is ready to draw:
+        // note you *must* check *state* before drawing, you cannot rely on
+        // view_class as it can be set up before the layer is ready to draw:
         if (state & MetaGraph::POINTMAPS &&
             (!m_pDoc.m_meta_graph->getDisplayedPointMap().isProcessed() ||
              m_pDoc.m_meta_graph->getViewClass() & (MetaGraph::VIEWVGA | MetaGraph::VIEWBACKVGA)) &&
-            !m_pDoc.m_communicator) // <- m_communicator because I'm having thread locking problems
+            !m_pDoc.m_communicator) // <- m_communicator because I'm having thread
+                                    // locking problems
         {
-            m_pDoc.m_meta_graph->getDisplayedPointMap().setScreenPixel(m_unit); // only used by points (at the moment!)
-            m_pDoc.m_meta_graph->getDisplayedPointMap().makeViewportPoints(LogicalViewport(rect, &m_pDoc));
+            m_pDoc.m_meta_graph->getDisplayedPointMap().setScreenPixel(
+                m_unit); // only used by points (at the moment!)
+            m_pDoc.m_meta_graph->getDisplayedPointMap().makeViewportPoints(
+                LogicalViewport(rect, &m_pDoc));
         }
-        if (state & MetaGraph::SHAPEGRAPHS &&
-            (m_pDoc.m_meta_graph->getViewClass() & (MetaGraph::VIEWAXIAL | MetaGraph::VIEWBACKAXIAL))) {
-            m_pDoc.m_meta_graph->getDisplayedShapeGraph().makeViewportShapes(LogicalViewport(rect, &m_pDoc));
+        if (state & MetaGraph::SHAPEGRAPHS && (m_pDoc.m_meta_graph->getViewClass() &
+                                               (MetaGraph::VIEWAXIAL | MetaGraph::VIEWBACKAXIAL))) {
+            m_pDoc.m_meta_graph->getDisplayedShapeGraph().makeViewportShapes(
+                LogicalViewport(rect, &m_pDoc));
         }
-        if (state & MetaGraph::DATAMAPS &&
-            (m_pDoc.m_meta_graph->getViewClass() & (MetaGraph::VIEWBACKDATA | MetaGraph::VIEWDATA))) {
-            m_pDoc.m_meta_graph->getDisplayedDataMap().makeViewportShapes(LogicalViewport(rect, &m_pDoc));
+        if (state & MetaGraph::DATAMAPS && (m_pDoc.m_meta_graph->getViewClass() &
+                                            (MetaGraph::VIEWBACKDATA | MetaGraph::VIEWDATA))) {
+            m_pDoc.m_meta_graph->getDisplayedDataMap().makeViewportShapes(
+                LogicalViewport(rect, &m_pDoc));
         }
         if (state & MetaGraph::LINEDATA) {
             m_pDoc.m_meta_graph->makeViewportShapes(LogicalViewport(rect, &m_pDoc));
@@ -418,7 +426,8 @@ void QDepthmapView::paintEvent(QPaintEvent *) {
     }
 
     // If the meta graph (at least) contains a DXF, draw it:
-    if (m_continue_drawing && (state & (MetaGraph::LINEDATA | MetaGraph::SHAPEGRAPHS | MetaGraph::DATAMAPS)) &&
+    if (m_continue_drawing &&
+        (state & (MetaGraph::LINEDATA | MetaGraph::SHAPEGRAPHS | MetaGraph::DATAMAPS)) &&
         m_viewport_set) {
         if (Output(&pDC, &m_pDoc, true)) {
             Tid_redraw = startTimer(100);
@@ -482,7 +491,8 @@ void QDepthmapView::mouseMoveEvent(QMouseEvent *e) {
     if (pressed_nFlags & MK_CONTROL) {
         if (pressed_nFlags & MK_SHIFT) {
             // CTRL and SHIFT key down together, snap to displayed drawing layers
-            // (note, don't use SHIFT on it's own, because that's already used for multiple select)
+            // (note, don't use SHIFT on it's own, because that's already used for
+            // multiple select)
             MetaGraph *graph = m_pDoc.m_meta_graph;
             Point2f p = LogicalUnits(point);
             double d = -1.0;
@@ -512,7 +522,8 @@ void QDepthmapView::mouseMoveEvent(QMouseEvent *e) {
             }
         } else {
             // If only CTRL key down, snap to grid
-            if (m_pDoc.m_meta_graph->getViewClass() & (MetaGraph::VIEWVGA | MetaGraph::VIEWBACKVGA)) {
+            if (m_pDoc.m_meta_graph->getViewClass() &
+                (MetaGraph::VIEWVGA | MetaGraph::VIEWBACKVGA)) {
                 PointMap &map = m_pDoc.m_meta_graph->getDisplayedPointMap();
                 if (m_pDoc.m_meta_graph->getDisplayedPointMap().getSpacing() / m_unit > 20) {
                     // hi-res snap when zoomed in
@@ -550,8 +561,8 @@ void QDepthmapView::mouseMoveEvent(QMouseEvent *e) {
 
             m_invalidate = DRAG;
             update();
-        } else if (m_current_mode == SELECT || m_current_mode == ZOOM_IN || m_current_mode == JOIN ||
-                   m_current_mode == UNJOIN) {
+        } else if (m_current_mode == SELECT || m_current_mode == ZOOM_IN ||
+                   m_current_mode == JOIN || m_current_mode == UNJOIN) {
             int x1, y1, x2, y2;
             if (m_mouse_point.x() > point.x()) {
                 x1 = point.x();
@@ -575,8 +586,8 @@ void QDepthmapView::mouseMoveEvent(QMouseEvent *e) {
         }
         // NB. deliberatle mouse mode not current mode
         else if (m_mouse_mode == (SELECT | OVERHANDLE)) {
-            // ideally, I would enforce click once, move to location, and click again, but this
-            // at least allows novices to use it easily:
+            // ideally, I would enforce click once, move to location, and click again,
+            // but this at least allows novices to use it easily:
             if (abs(point.x() - m_mouse_point.x()) + abs(point.y() - m_mouse_point.y()) > 3) {
                 BeginDrag(m_mouse_point);
                 m_current_mode = SELECT | DRAWLINE;
@@ -584,8 +595,8 @@ void QDepthmapView::mouseMoveEvent(QMouseEvent *e) {
         }
         // NB. deliberatle mouse mode not current mode
         else if (m_mouse_mode == LINETOOL) {
-            // ideally, I would enforce click once, move to location, and click again, but this
-            // at least allows novices to use it easily:
+            // ideally, I would enforce click once, move to location, and click again,
+            // but this at least allows novices to use it easily:
             if (PixelDist(point, m_mouse_point) > 6) {
                 m_mouse_mode |= DRAWLINE;
                 m_current_mode = m_mouse_mode;
@@ -596,7 +607,8 @@ void QDepthmapView::mouseMoveEvent(QMouseEvent *e) {
         } else if (m_current_mode == PENCIL) {
             if (m_mouse_point != point &&
                 m_pDoc.m_meta_graph->getDisplayedPointMap().pixelate(LogicalUnits(point)) !=
-                    m_pDoc.m_meta_graph->getDisplayedPointMap().pixelate(LogicalUnits(m_mouse_point))) {
+                    m_pDoc.m_meta_graph->getDisplayedPointMap().pixelate(
+                        LogicalUnits(m_mouse_point))) {
                 m_pDoc.m_meta_graph->getDisplayedPointMap().fillPoint(LogicalUnits(point), true);
                 m_redraw_no_clear = true;
                 m_mouse_point = point;
@@ -606,7 +618,8 @@ void QDepthmapView::mouseMoveEvent(QMouseEvent *e) {
         } else if (m_current_mode == ERASE) {
             if (m_mouse_point != point &&
                 m_pDoc.m_meta_graph->getDisplayedPointMap().pixelate(LogicalUnits(point)) !=
-                    m_pDoc.m_meta_graph->getDisplayedPointMap().pixelate(LogicalUnits(m_mouse_point))) {
+                    m_pDoc.m_meta_graph->getDisplayedPointMap().pixelate(
+                        LogicalUnits(m_mouse_point))) {
                 m_pDoc.m_meta_graph->getDisplayedPointMap().fillPoint(LogicalUnits(point), false);
                 m_redraw_no_clear = true;
                 m_mouse_point = point;
@@ -615,7 +628,8 @@ void QDepthmapView::mouseMoveEvent(QMouseEvent *e) {
             }
         }
     } else if (pressed_nFlags & MK_RBUTTON) {
-        if (!m_right_mouse_drag && abs(point.x() - m_mouse_point.x()) + abs(point.y() - m_mouse_point.y()) > 3) {
+        if (!m_right_mouse_drag &&
+            abs(point.x() - m_mouse_point.x()) + abs(point.y() - m_mouse_point.y()) > 3) {
             // begin right mouse drag:
             SetCursor(DRAG);
             m_mouse_point = point;
@@ -759,9 +773,11 @@ void QDepthmapView::BeginJoin() {
         QtRegion r = m_pDoc.m_meta_graph->getDisplayedPointMap().getSelBounds();
         QRect rect(PhysicalUnits(Point2f(r.bottom_left.x, r.top_right.y)),
                    PhysicalUnits(Point2f(r.top_right.x, r.bottom_left.y)));
-        int spacer = int(ceil(5.0 * m_pDoc.m_meta_graph->getDisplayedPointMap().getSpacing() / (m_unit * 10.0)));
+        int spacer = int(
+            ceil(5.0 * m_pDoc.m_meta_graph->getDisplayedPointMap().getSpacing() / (m_unit * 10.0)));
         m_mouse_point = this->rect().center();
-        m_drag_rect_a = QRect(-rect.width() - spacer / 2, -rect.height() - spacer / 2, spacer / 2, spacer / 2);
+        m_drag_rect_a =
+            QRect(-rect.width() - spacer / 2, -rect.height() - spacer / 2, spacer / 2, spacer / 2);
         m_drag_rect_a.translate(m_mouse_point);
     } else {
         m_drag_rect_a = QRect(0, 0, 0, 0);
@@ -830,7 +846,8 @@ void QDepthmapView::mouseReleaseEvent(QMouseEvent *e) {
                     m_pDoc.m_meta_graph->setCurSel(r, false); // <- reset current sel
                 }
                 // Redraw scene
-                m_pDoc.SetRedrawFlag(QGraphDoc::VIEW_ALL, QGraphDoc::REDRAW_POINTS, QGraphDoc::NEW_SELECTION);
+                m_pDoc.SetRedrawFlag(QGraphDoc::VIEW_ALL, QGraphDoc::REDRAW_POINTS,
+                                     QGraphDoc::NEW_SELECTION);
             }
         } break;
         case JOIN | JOINB: {
@@ -842,7 +859,8 @@ void QDepthmapView::mouseReleaseEvent(QMouseEvent *e) {
                 ok = m_pDoc.m_meta_graph->getDisplayedPointMap().mergePoints(LogicalUnits(point));
             } else if (m_pDoc.m_meta_graph->getViewClass() & MetaGraph::VIEWAXIAL) {
                 if (m_pDoc.m_meta_graph->getSelCount() == 1) {
-                    ok = m_pDoc.m_meta_graph->getDisplayedShapeGraph().linkShapes(LogicalUnits(point));
+                    ok = m_pDoc.m_meta_graph->getDisplayedShapeGraph().linkShapes(
+                        LogicalUnits(point));
                 } else {
                     // oops: you are only allowed to join lines one to one:
                     m_pDoc.m_meta_graph->clearSel();
@@ -855,7 +873,8 @@ void QDepthmapView::mouseReleaseEvent(QMouseEvent *e) {
                 m_drag_rect_a = QRect(0, 0, 0, 0);
                 if (ok) {
                     m_pDoc.modifiedFlag = true;
-                    m_pDoc.SetRedrawFlag(QGraphDoc::VIEW_ALL, QGraphDoc::REDRAW_GRAPH, QGraphDoc::NEW_DATA);
+                    m_pDoc.SetRedrawFlag(QGraphDoc::VIEW_ALL, QGraphDoc::REDRAW_GRAPH,
+                                         QGraphDoc::NEW_DATA);
                 } else {
                     m_redraw_all = true;
                     update();
@@ -869,7 +888,8 @@ void QDepthmapView::mouseReleaseEvent(QMouseEvent *e) {
             bool clearcursor = false;
             if (m_pDoc.m_meta_graph->getViewClass() & MetaGraph::VIEWAXIAL) {
                 if (m_pDoc.m_meta_graph->getSelCount() == 1) {
-                    ok = m_pDoc.m_meta_graph->getDisplayedShapeGraph().unlinkShapes(LogicalUnits(point));
+                    ok = m_pDoc.m_meta_graph->getDisplayedShapeGraph().unlinkShapes(
+                        LogicalUnits(point));
                 } else {
                     // oops: you are only allowed to join lines one to one:
                     m_pDoc.m_meta_graph->clearSel();
@@ -882,7 +902,8 @@ void QDepthmapView::mouseReleaseEvent(QMouseEvent *e) {
                 m_drag_rect_a = QRect(0, 0, 0, 0);
                 if (ok) {
                     m_pDoc.modifiedFlag = true;
-                    m_pDoc.SetRedrawFlag(QGraphDoc::VIEW_ALL, QGraphDoc::REDRAW_GRAPH, QGraphDoc::NEW_DATA);
+                    m_pDoc.SetRedrawFlag(QGraphDoc::VIEW_ALL, QGraphDoc::REDRAW_GRAPH,
+                                         QGraphDoc::NEW_DATA);
                 } else {
                     m_redraw_all = true;
                     update();
@@ -897,7 +918,8 @@ void QDepthmapView::mouseReleaseEvent(QMouseEvent *e) {
             update();
             if (m_pDoc.m_meta_graph->moveSelShape(Line(m_line.t_start(), location))) {
                 m_pDoc.modifiedFlag = true;
-                m_pDoc.SetRedrawFlag(QGraphDoc::VIEW_ALL, QGraphDoc::REDRAW_GRAPH, QGraphDoc::NEW_DATA);
+                m_pDoc.SetRedrawFlag(QGraphDoc::VIEW_ALL, QGraphDoc::REDRAW_GRAPH,
+                                     QGraphDoc::NEW_DATA);
             }
         } break;
         case SELECT | OVERHANDLE:
@@ -920,7 +942,8 @@ void QDepthmapView::mouseReleaseEvent(QMouseEvent *e) {
             update();
             if (m_pDoc.m_meta_graph->makeShape(Line(m_line.t_start(), location))) {
                 m_pDoc.modifiedFlag = true;
-                m_pDoc.SetRedrawFlag(QGraphDoc::VIEW_ALL, QGraphDoc::REDRAW_GRAPH, QGraphDoc::NEW_DATA);
+                m_pDoc.SetRedrawFlag(QGraphDoc::VIEW_ALL, QGraphDoc::REDRAW_GRAPH,
+                                     QGraphDoc::NEW_DATA);
             }
         } break;
         case POLYGONTOOL | DRAWLINE: {
@@ -930,7 +953,8 @@ void QDepthmapView::mouseReleaseEvent(QMouseEvent *e) {
             update();
             // if it's the first part, just make it a line:
             if (m_poly_points == 0) {
-                m_currentlyEditingShapeRef = m_pDoc.m_meta_graph->polyBegin(Line(m_line.t_start(), location));
+                m_currentlyEditingShapeRef =
+                    m_pDoc.m_meta_graph->polyBegin(Line(m_line.t_start(), location));
                 m_poly_start = m_line.t_start();
                 m_poly_points += 2;
                 m_mouse_mode |= DRAWLINE;
@@ -938,7 +962,8 @@ void QDepthmapView::mouseReleaseEvent(QMouseEvent *e) {
                 m_invalidate = LINEON;
                 update();
             } else if (m_poly_points > 2 && PixelDist(point, PhysicalUnits(m_poly_start)) < 6) {
-                // check to see if it's back to the original start point, if so, close off
+                // check to see if it's back to the original start point, if so, close
+                // off
                 m_pDoc.m_meta_graph->polyClose(m_currentlyEditingShapeRef);
                 m_poly_points = 0;
                 m_currentlyEditingShapeRef = -1;
@@ -992,7 +1017,8 @@ void QDepthmapView::mouseReleaseEvent(QMouseEvent *e) {
                 if (m_pDoc.m_meta_graph->viewingProcessedPoints()) {
                     if (m_pDoc.m_meta_graph->getDisplayedPointMap().unmergePoints()) {
                         m_pDoc.modifiedFlag = true;
-                        m_pDoc.SetRedrawFlag(QGraphDoc::VIEW_ALL, QGraphDoc::REDRAW_GRAPH, QGraphDoc::NEW_DATA);
+                        m_pDoc.SetRedrawFlag(QGraphDoc::VIEW_ALL, QGraphDoc::REDRAW_GRAPH,
+                                             QGraphDoc::NEW_DATA);
                     }
                 } else {
                     m_mouse_mode |= JOINB;
@@ -1016,7 +1042,8 @@ void QDepthmapView::mouseReleaseEvent(QMouseEvent *e) {
                     m_poly_points = 0;
                     m_currentlyEditingShapeRef = -1;
                     m_pDoc.m_meta_graph->polyCancel(m_currentlyEditingShapeRef);
-                    m_pDoc.SetRedrawFlag(QGraphDoc::VIEW_ALL, QGraphDoc::REDRAW_GRAPH, QGraphDoc::NEW_DATA);
+                    m_pDoc.SetRedrawFlag(QGraphDoc::VIEW_ALL, QGraphDoc::REDRAW_GRAPH,
+                                         QGraphDoc::NEW_DATA);
                 } else {
                     m_invalidate = LINEOFF;
                     update();
@@ -1129,12 +1156,12 @@ bool QDepthmapView::Output(QPainter *pDC, QGraphDoc *pDoc, bool screendraw) {
         int viewclass = pDoc->m_meta_graph->getViewClass();
         if (viewclass & MetaGraph::VIEWVGA) {
             if (!b_continue && viewclass & MetaGraph::VIEWBACKAXIAL) {
-                b_continue =
-                    DrawShapes(pDC, pDoc->m_meta_graph->getDisplayedShapeGraph(), true, spacer, ticks, screendraw);
+                b_continue = DrawShapes(pDC, pDoc->m_meta_graph->getDisplayedShapeGraph(), true,
+                                        spacer, ticks, screendraw);
             }
             if (!b_continue && viewclass & MetaGraph::VIEWBACKDATA) {
-                b_continue =
-                    DrawShapes(pDC, pDoc->m_meta_graph->getDisplayedDataMap(), true, spacer, ticks, screendraw);
+                b_continue = DrawShapes(pDC, pDoc->m_meta_graph->getDisplayedDataMap(), true,
+                                        spacer, ticks, screendraw);
             }
             if (!b_continue) {
                 b_continue = DrawPoints(pDC, pDoc, spacer, ticks, screendraw);
@@ -1144,31 +1171,32 @@ bool QDepthmapView::Output(QPainter *pDC, QGraphDoc *pDoc, bool screendraw) {
                 b_continue = DrawPoints(pDC, pDoc, spacer, ticks, screendraw);
             }
             if (!b_continue && viewclass & MetaGraph::VIEWBACKDATA) {
-                b_continue =
-                    DrawShapes(pDC, pDoc->m_meta_graph->getDisplayedDataMap(), true, spacer, ticks, screendraw);
+                b_continue = DrawShapes(pDC, pDoc->m_meta_graph->getDisplayedDataMap(), true,
+                                        spacer, ticks, screendraw);
             }
             if (!b_continue) {
-                b_continue =
-                    DrawShapes(pDC, pDoc->m_meta_graph->getDisplayedShapeGraph(), false, spacer, ticks, screendraw);
+                b_continue = DrawShapes(pDC, pDoc->m_meta_graph->getDisplayedShapeGraph(), false,
+                                        spacer, ticks, screendraw);
             }
         } else if (!b_continue && pDoc->m_meta_graph->getViewClass() & MetaGraph::VIEWDATA) {
             if (viewclass & MetaGraph::VIEWBACKAXIAL) {
-                b_continue =
-                    DrawShapes(pDC, pDoc->m_meta_graph->getDisplayedShapeGraph(), true, spacer, ticks, screendraw);
+                b_continue = DrawShapes(pDC, pDoc->m_meta_graph->getDisplayedShapeGraph(), true,
+                                        spacer, ticks, screendraw);
             }
             if (!b_continue && viewclass & MetaGraph::VIEWBACKVGA) {
                 b_continue = DrawPoints(pDC, pDoc, spacer, ticks, screendraw);
             }
             if (!b_continue) {
-                b_continue =
-                    DrawShapes(pDC, pDoc->m_meta_graph->getDisplayedDataMap(), false, spacer, ticks, screendraw);
+                b_continue = DrawShapes(pDC, pDoc->m_meta_graph->getDisplayedDataMap(), false,
+                                        spacer, ticks, screendraw);
             }
         }
     }
 
     if (!b_continue && state & MetaGraph::LINEDATA) {
         bool nextlayer = false, first = true;
-        pDC->setPen(QPen(QBrush(QColor(m_foreground)), spacer / 20 + 1, Qt::SolidLine, Qt::RoundCap));
+        pDC->setPen(
+            QPen(QBrush(QColor(m_foreground)), spacer / 20 + 1, Qt::SolidLine, Qt::RoundCap));
         while ((b_continue = pDoc->m_meta_graph->findNextShape(nextlayer))) {
             /*       Line l = pDoc->m_meta_graph->SuperSpacePixel::getNextLine();
                      if (nextlayer || first) {
@@ -1180,7 +1208,8 @@ bool QDepthmapView::Output(QPainter *pDC, QGraphDoc *pDoc, bool screendraw) {
                            pen.CreatePen( PS_SOLID, spacer/20+1, color );
                         }
                         else {
-                           pen.CreatePen( PS_SOLID, spacer/20+1, GetApp()->m_foreground );
+                           pen.CreatePen( PS_SOLID, spacer/20+1,
+               GetApp()->m_foreground );
                         }
                         pDC->SelectObject(&pen);
                         first = false;
@@ -1201,18 +1230,22 @@ bool QDepthmapView::Output(QPainter *pDC, QGraphDoc *pDoc, bool screendraw) {
             } else {
                 size_t i;
                 for (i = 1; i < shape.m_points.size(); i++) {
-                    pDC->drawLine(PhysicalUnits(shape.m_points[i - 1]), PhysicalUnits(shape.m_points[i]));
+                    pDC->drawLine(PhysicalUnits(shape.m_points[i - 1]),
+                                  PhysicalUnits(shape.m_points[i]));
                 }
                 if (shape.isClosed()) {
-                    pDC->drawLine(PhysicalUnits(shape.m_points[i - 1]), PhysicalUnits(shape.m_points[0]));
+                    pDC->drawLine(PhysicalUnits(shape.m_points[i - 1]),
+                                  PhysicalUnits(shape.m_points[0]));
                 }
             }
         }
     }
 
-    if (!b_continue && spacer > 1 && pDoc->m_meta_graph->viewingProcessedShapes() && pDoc->m_meta_graph->m_showtext) {
+    if (!b_continue && spacer > 1 && pDoc->m_meta_graph->viewingProcessedShapes() &&
+        pDoc->m_meta_graph->m_showtext) {
         /*      setFont(QFont("Arial", 10, 10));
-              pDC->setPen(QPen(QBrush(QColor(m_foreground)), 1, Qt::SolidLine, Qt::FlatCap));
+              pDC->setPen(QPen(QBrush(QColor(m_foreground)), 1, Qt::SolidLine,
+           Qt::FlatCap));
 
               // display the layer attribute data:
               // THIS NEEDS SORTING OUT
@@ -1238,7 +1271,8 @@ bool QDepthmapView::Output(QPainter *pDC, QGraphDoc *pDoc, bool screendraw) {
                 Line line = map.getNextMergeLine();
                 DrawLink(pDC, spacer, line);
             }
-        } else if ((state & MetaGraph::SHAPEGRAPHS) && (pDoc->m_meta_graph->getViewClass() & MetaGraph::VIEWAXIAL)) {
+        } else if ((state & MetaGraph::SHAPEGRAPHS) &&
+                   (pDoc->m_meta_graph->getViewClass() & MetaGraph::VIEWAXIAL)) {
             // link lines
             pDC->setPen(QPen(QBrush(QColor(00, 255, 0)), spacer / 10 + 1, Qt::SolidLine));
             while ((b_continue = pDoc->m_meta_graph->getDisplayedShapeGraph().findNextLinkLine())) {
@@ -1248,8 +1282,10 @@ bool QDepthmapView::Output(QPainter *pDC, QGraphDoc *pDoc, bool screendraw) {
             pDC->setPen(QPen(QBrush(QColor(255, 00, 00)), spacer / 10 + 1, Qt::SolidLine));
             pDC->setBrush(QBrush(QColor(m_background), Qt::SolidPattern));
 
-            while ((b_continue = pDoc->m_meta_graph->getDisplayedShapeGraph().findNextUnlinkPoint())) {
-                QPoint p = PhysicalUnits(pDoc->m_meta_graph->getDisplayedShapeGraph().getNextUnlinkPoint());
+            while (
+                (b_continue = pDoc->m_meta_graph->getDisplayedShapeGraph().findNextUnlinkPoint())) {
+                QPoint p = PhysicalUnits(
+                    pDoc->m_meta_graph->getDisplayedShapeGraph().getNextUnlinkPoint());
                 p -= QPoint(2 + spacer / 2, 2 + spacer / 2);
                 QRect rect(p, QSize(spacer + 4, spacer + 4));
                 pDC->drawEllipse(rect);
@@ -1260,7 +1296,8 @@ bool QDepthmapView::Output(QPainter *pDC, QGraphDoc *pDoc, bool screendraw) {
     return b_continue;
 }
 
-bool QDepthmapView::DrawPoints(QPainter *pDC, QGraphDoc *pDoc, int spacer, unsigned long ticks, bool screendraw) {
+bool QDepthmapView::DrawPoints(QPainter *pDC, QGraphDoc *pDoc, int spacer, unsigned long ticks,
+                               bool screendraw) {
     unsigned long c_tick = 0;
     bool b_continue = false;
 
@@ -1279,7 +1316,8 @@ bool QDepthmapView::DrawPoints(QPainter *pDC, QGraphDoc *pDoc, int spacer, unsig
         spacer /= 2; // allow see through to axial lines
     }
 
-    bool monochrome = (map.isProcessed() && map.getDisplayParams().colorscale == DisplayParams::MONOCHROME);
+    bool monochrome =
+        (map.isProcessed() && map.getDisplayParams().colorscale == DisplayParams::MONOCHROME);
 
     // if (monochrome) {
     //      standardbrush = new QBrush( GetApp()->m_foreground );
@@ -1297,7 +1335,8 @@ bool QDepthmapView::DrawPoints(QPainter *pDC, QGraphDoc *pDoc, int spacer, unsig
                 QPoint p = PhysicalUnits(logical);
                 int subspacer = (3 * color.blueb() * spacer) / 255;
                 if (subspacer >= 1) {
-                    pDC->drawEllipse(p.x() - subspacer, p.y() + subspacer, subspacer * 2, subspacer * 2);
+                    pDC->drawEllipse(p.x() - subspacer, p.y() + subspacer, subspacer * 2,
+                                     subspacer * 2);
                 } else {
                     pDC->drawPoint(p);
                 }
@@ -1310,7 +1349,8 @@ bool QDepthmapView::DrawPoints(QPainter *pDC, QGraphDoc *pDoc, int spacer, unsig
                 if (spacer > 1) {
                     // Standard code
                     pDC->setBrush(QBrush(QColor(rgb), Qt::SolidPattern));
-                    pDC->fillRect(QRect(p.x() - spacer, p.y() - spacer, spacer * 2, spacer * 2), QBrush(QColor(rgb)));
+                    pDC->fillRect(QRect(p.x() - spacer, p.y() - spacer, spacer * 2, spacer * 2),
+                                  QBrush(QColor(rgb)));
                 } else {
                     pDC->drawPoint(p);
                 }
@@ -1348,8 +1388,8 @@ bool QDepthmapView::DrawPoints(QPainter *pDC, QGraphDoc *pDoc, int spacer, unsig
     return b_continue;
 }
 
-bool QDepthmapView::DrawShapes(QPainter *pDC, ShapeMap &map, bool muted, int spacer, unsigned long ticks,
-                               bool screendraw) {
+bool QDepthmapView::DrawShapes(QPainter *pDC, ShapeMap &map, bool muted, int spacer,
+                               unsigned long ticks, bool screendraw) {
     unsigned long c_tick = 0;
     bool b_continue = false;
 
@@ -1364,8 +1404,8 @@ bool QDepthmapView::DrawShapes(QPainter *pDC, ShapeMap &map, bool muted, int spa
     bool monochrome = (map.getDisplayParams().colorscale == DisplayParams::MONOCHROME);
 
     if (screendraw && !muted) {
-        // i.e., at the front... implies can select... allow this draw to overwrite any existing point handle
-        // locations:
+        // i.e., at the front... implies can select... allow this draw to overwrite
+        // any existing point handle locations:
         m_point_handles.clear();
     }
 
@@ -1379,7 +1419,8 @@ bool QDepthmapView::DrawShapes(QPainter *pDC, ShapeMap &map, bool muted, int spa
         color = map.getShapeColor();
         bool selected = map.getShapeSelected();
 
-        // n.b., getNextShape clears polygon ready for next, so get polygon color and selected attribute before this:
+        // n.b., getNextShape clears polygon ready for next, so get polygon color
+        // and selected attribute before this:
         const SalaShape &poly = map.getNextShape();
         QPoint *points = NULL;
         int drawable = 0;
@@ -1452,7 +1493,8 @@ bool QDepthmapView::DrawShapes(QPainter *pDC, ShapeMap &map, bool muted, int spa
                     pDC->setPen(QColor(rgb));
                     pDC->drawPoint(point);
                 } else {
-                    QRect rect(point.x() - tempspacer / 2, point.y() - tempspacer / 2, tempspacer, tempspacer);
+                    QRect rect(point.x() - tempspacer / 2, point.y() - tempspacer / 2, tempspacer,
+                               tempspacer);
                     if (tempspacer < 4) {
                         pDC->setBrush(QBrush(QColor(rgb), Qt::SolidPattern));
                         pDC->drawRect(rect);
@@ -1470,7 +1512,8 @@ bool QDepthmapView::DrawShapes(QPainter *pDC, ShapeMap &map, bool muted, int spa
                 if (start != end) {
                     pDC->drawLine(start, end);
                 }
-                if (selected && screendraw && !muted && map.getSelCount() == 1 && map.isEditable()) {
+                if (selected && screendraw && !muted && map.getSelCount() == 1 &&
+                    map.isEditable()) {
                     m_point_handles.push_back(l.start());
                     m_point_handles.push_back(l.end());
                 }
@@ -1492,7 +1535,8 @@ bool QDepthmapView::DrawShapes(QPainter *pDC, ShapeMap &map, bool muted, int spa
     }
 
     if (screendraw && !muted) {
-        // i.e., at the front... implies can select... allow this draw to overwrite to draw point handle locations:
+        // i.e., at the front... implies can select... allow this draw to overwrite
+        // to draw point handle locations:
         for (size_t i = 0; i < m_point_handles.size(); i++) {
             DrawPointHandle(pDC, PhysicalUnits(m_point_handles[i]));
         }
@@ -1527,13 +1571,14 @@ void QDepthmapView::DrawPointHandle(QPainter *pDC, QPoint pt) {
 }
 
 void QDepthmapView::OutputEPS(std::ofstream &stream, QGraphDoc *pDoc, bool includeScale) {
-    // This output EPS is a copy of the standard output... obviously, if you change
-    // standard output, remember to change this one too!
+    // This output EPS is a copy of the standard output... obviously, if you
+    // change standard output, remember to change this one too!
 
     // now the two are a little out of synch
 
     if (!m_viewport_set) {
-        QMessageBox::warning(this, tr("Warning"), tr("Can't save screen as the Depthmap window is not initialised"),
+        QMessageBox::warning(this, tr("Warning"),
+                             tr("Can't save screen as the Depthmap window is not initialised"),
                              QMessageBox::Ok, QMessageBox::Ok);
         return;
     }
@@ -1582,7 +1627,8 @@ void QDepthmapView::OutputEPS(std::ofstream &stream, QGraphDoc *pDoc, bool inclu
     QtRegion logicalviewport = LogicalViewport(rect, pDoc);
 
     if (state & MetaGraph::POINTMAPS) {
-        pDoc->m_meta_graph->getDisplayedPointMap().setScreenPixel(m_unit); // only used by points (at the moment!)
+        pDoc->m_meta_graph->getDisplayedPointMap().setScreenPixel(
+            m_unit); // only used by points (at the moment!)
         pDoc->m_meta_graph->getDisplayedPointMap().makeViewportPoints(logicalviewport);
     }
     if (state & MetaGraph::SHAPEGRAPHS) {
@@ -1625,14 +1671,16 @@ void QDepthmapView::OutputEPS(std::ofstream &stream, QGraphDoc *pDoc, bool inclu
                 QPoint p = PhysicalUnits(logical);
 
                 // Now do EPS box... remember the coordinate system is the right way up!
-                stream << p.x() / 10.0 - spacer << " " << (rect.height() - p.y()) / 10.0 - spacer << " bx"
+                stream << p.x() / 10.0 - spacer << " " << (rect.height() - p.y()) / 10.0 - spacer
+                       << " bx" << std::endl;
+                stream << color.redf() << " " << color.greenf() << " " << color.bluef() << " fbx"
                        << std::endl;
-                stream << color.redf() << " " << color.greenf() << " " << color.bluef() << " fbx" << std::endl;
             }
         }
     }
 
-    if (state & MetaGraph::SHAPEGRAPHS && pDoc->m_meta_graph->getViewClass() & MetaGraph::VIEWAXIAL) {
+    if (state & MetaGraph::SHAPEGRAPHS &&
+        pDoc->m_meta_graph->getViewClass() & MetaGraph::VIEWAXIAL) {
 
         ShapeMap &map = pDoc->m_meta_graph->getDisplayedShapeGraph();
 
@@ -1694,8 +1742,8 @@ void QDepthmapView::OutputEPS(std::ofstream &stream, QGraphDoc *pDoc, bool inclu
             if (path.size() > 1) {
 
                 QPoint last = PhysicalUnits(path[0]);
-                stream << (last.x() - spacer / 40) / 10.0 << " " << (rect.height() - last.y() + spacer / 40) / 10.0
-                       << " M\n"
+                stream << (last.x() - spacer / 40) / 10.0 << " "
+                       << (rect.height() - last.y() + spacer / 40) / 10.0 << " M\n"
                        << std::endl;
 
                 for (size_t j = 1; j < path.size(); j++) {
@@ -1720,23 +1768,26 @@ void QDepthmapView::OutputEPS(std::ofstream &stream, QGraphDoc *pDoc, bool inclu
              for (int i = 0; i < eco.arts().size(); i++)
              {
                 PixelRef pos = eco.arts()[i].getPos();
-                Point2f logical = pDoc->m_meta_graph->getDisplayedPointMap().depixelate(pos);
-                // this is in units of logical is unit based so this actually works okay:
-                QPoint p = PhysicalUnits(Point2f(logical.x, logical.y));
-                QPoint bottomleft = PhysicalUnits(Point2f(logical.x - 0.5, logical.y - 0.5));
-                // Now do EPS box... remember the coordinate system is the right way up!
-                stream << (p.x - spacer) / 10.0 << " " << (rect.Height() - p.y - spacer) / 10.0 << " bx" << std::endl;
-                stream << bgr << " " << bgg << " " << bgb << " fbx" << std::endl;
+                Point2f logical =
+       pDoc->m_meta_graph->getDisplayedPointMap().depixelate(pos);
+                // this is in units of logical is unit based so this actually
+       works okay: QPoint p = PhysicalUnits(Point2f(logical.x, logical.y)); QPoint
+       bottomleft = PhysicalUnits(Point2f(logical.x - 0.5, logical.y - 0.5));
+                // Now do EPS box... remember the coordinate system is the right
+       way up! stream << (p.x - spacer) / 10.0 << " " << (rect.Height() - p.y -
+       spacer) / 10.0 << " bx" << std::endl; stream << bgr << " " << bgg << " " <<
+       bgb << " fbx" << std::endl;
                 // And cover with line:
-                stream << (bottomleft.x - spacer/20) / 10.0 << " " << (rect.Height() - bottomleft.y + spacer/20) / 10.0
+                stream << (bottomleft.x - spacer/20) / 10.0 << " " <<
+       (rect.Height() - bottomleft.y + spacer/20) / 10.0
        << " M\n"
                        << (spacer * 2 - spacer/20) / 10.0 << " " << 0 << " L\n"
                        << 0 << " " << (spacer * 2 - spacer/20) / 10.0 << " L\n"
                        << (-spacer * 2 + spacer/20) / 10.0 << " " << 0 << " L\n"
-                       << 0 << " " << (-spacer * 2 + spacer/20) / 10.0 << " L" << std::endl;
-                stream << fgr << " " << fgg << " " << fgb << " setrgbcolor" << std::endl;
-                stream << spacer/10+1 << " setlinewidth" << std::endl;
-                stream << "stroke" << std::endl;
+                       << 0 << " " << (-spacer * 2 + spacer/20) / 10.0 << " L" <<
+       std::endl; stream << fgr << " " << fgg << " " << fgb << " setrgbcolor" <<
+       std::endl; stream << spacer/10+1 << " setlinewidth" << std::endl; stream <<
+       "stroke" << std::endl;
              }
           }
        }
@@ -1747,7 +1798,8 @@ void QDepthmapView::OutputEPS(std::ofstream &stream, QGraphDoc *pDoc, bool inclu
         double logicalwidth = m_unit * rect.width();
         if (logicalwidth > 10) {
             int workingwidth = floor(log10(logicalwidth / 2) * 2.0);
-            int barwidth = (int)pow(10.0, (double)(workingwidth / 2)) * ((workingwidth % 2 == 0) ? 1 : 5);
+            int barwidth =
+                (int)pow(10.0, (double)(workingwidth / 2)) * ((workingwidth % 2 == 0) ? 1 : 5);
             double physicalbar = double(barwidth) / m_unit;
             stream << "newpath" << std::endl;
             stream << "0 0 M 0 18 R" << std::endl;
@@ -1781,8 +1833,8 @@ void QDepthmapView::OutputEPS(std::ofstream &stream, QGraphDoc *pDoc, bool inclu
     m_physical_centre = QSize(oldcentre.x(), oldcentre.y());
 }
 
-void QDepthmapView::OutputEPSMap(std::ofstream &stream, ShapeMap &map, QtRegion &logicalviewport, QRect &rect,
-                                 float spacer) {
+void QDepthmapView::OutputEPSMap(std::ofstream &stream, ShapeMap &map, QtRegion &logicalviewport,
+                                 QRect &rect, float spacer) {
     bool monochrome = (map.getDisplayParams().colorscale == DisplayParams::MONOCHROME);
     double thickness = 1.0, oldthickness = 1.0;
     bool closed, oldclosed = false;
@@ -1816,7 +1868,8 @@ void QDepthmapView::OutputEPSMap(std::ofstream &stream, ShapeMap &map, QtRegion 
                 oldclosed = closed;
             }
         } else if (color != oldcolor || closed != oldclosed) {
-            stream << oldcolor.redf() << " " << oldcolor.greenf() << " " << oldcolor.bluef() << " C" << std::endl;
+            stream << oldcolor.redf() << " " << oldcolor.greenf() << " " << oldcolor.bluef() << " C"
+                   << std::endl;
             stream << (oldclosed ? "fill" : "stroke") << std::endl;
             oldcolor = color;
             oldclosed = closed;
@@ -1833,13 +1886,14 @@ void QDepthmapView::OutputEPSMap(std::ofstream &stream, ShapeMap &map, QtRegion 
     }
     stream << thickness << " W" << std::endl;
     if (!monochrome) {
-        stream << color.redf() << " " << color.greenf() << " " << color.bluef() << " C" << std::endl;
+        stream << color.redf() << " " << color.greenf() << " " << color.bluef() << " C"
+               << std::endl;
     }
     stream << (closed ? "fill" : "stroke") << std::endl;
 }
 
-void QDepthmapView::OutputEPSLine(std::ofstream &stream, Line &line, int spacer, QtRegion &logicalviewport,
-                                  QRect &rect) {
+void QDepthmapView::OutputEPSLine(std::ofstream &stream, Line &line, int spacer,
+                                  QtRegion &logicalviewport, QRect &rect) {
     bool drewit = false;
     if (line.crop(logicalviewport)) {
         QPoint start = PhysicalUnits(line.start());
@@ -1847,13 +1901,14 @@ void QDepthmapView::OutputEPSLine(std::ofstream &stream, Line &line, int spacer,
         // 10 units corresponds to 1 pixel on the screen
         if (sqrt(sqr(start.x() - end.x()) + sqr(start.y() - end.y())) > 5.0) {
             stream << (start.x() / 10.0) << " " << (rect.height() - start.y()) / 10.0 << " M ";
-            stream << (end.x() / 10.0) << " " << (rect.height() - end.y()) / 10.0 << " L" << std::endl;
+            stream << (end.x() / 10.0) << " " << (rect.height() - end.y()) / 10.0 << " L"
+                   << std::endl;
         }
     }
 }
 
-void QDepthmapView::OutputEPSPoly(std::ofstream &stream, const SalaShape &shape, int spacer, QtRegion &logicalviewport,
-                                  QRect &rect) {
+void QDepthmapView::OutputEPSPoly(std::ofstream &stream, const SalaShape &shape, int spacer,
+                                  QtRegion &logicalviewport, QRect &rect) {
     bool starter = true;
     Point2f lastpoint = shape.m_points[0];
     int count = shape.isClosed() ? shape.m_points.size() + 1 : shape.m_points.size();
@@ -1861,16 +1916,20 @@ void QDepthmapView::OutputEPSPoly(std::ofstream &stream, const SalaShape &shape,
     for (int i = 1; i < count; i++) {
         Line line(lastpoint, shape.m_points[i % size]);
         if (line.crop(logicalviewport)) {
-            // note: use t_start and t_end so that this line moves in the correct direction
+            // note: use t_start and t_end so that this line moves in the correct
+            // direction
             QPoint start = PhysicalUnits(line.t_start());
             QPoint end = PhysicalUnits(line.t_end());
             // 5.0 is about 1/2 pixel width
             if (sqrt(sqr(start.x() - end.x()) + sqr(start.y() - end.y())) > 5.0) {
                 if (starter) {
-                    stream << start.x() / 10.0 << " " << (rect.height() - start.y()) / 10.0 << " M ";
+                    stream << start.x() / 10.0 << " " << (rect.height() - start.y()) / 10.0
+                           << " M ";
                 }
-                stream << end.x() / 10.0 << " " << (rect.height() - end.y()) / 10.0 << " L" << std::endl;
-                // note: you must use t_end (true end) so that it takes the end point from the shape[i] end:
+                stream << end.x() / 10.0 << " " << (rect.height() - end.y()) / 10.0 << " L"
+                       << std::endl;
+                // note: you must use t_end (true end) so that it takes the end point
+                // from the shape[i] end:
                 lastpoint = line.t_end();
                 starter = false;
             }
@@ -1913,11 +1972,14 @@ int QDepthmapView::GetSpacer(QGraphDoc *pDoc) {
     int spacer = 1;
     int viewclass = pDoc->m_meta_graph->getViewClass();
     if (viewclass & (MetaGraph::VIEWVGA | MetaGraph::VIEWBACKVGA)) {
-        spacer = int(ceil(5.0 * pDoc->m_meta_graph->getDisplayedPointMap().getSpacing() / (m_unit * 10.0)));
+        spacer = int(
+            ceil(5.0 * pDoc->m_meta_graph->getDisplayedPointMap().getSpacing() / (m_unit * 10.0)));
     } else if (viewclass & MetaGraph::VIEWAXIAL) {
-        spacer = int(ceil(pDoc->m_meta_graph->getDisplayedShapeGraph().getSpacing() / (m_unit * 10.0)));
+        spacer =
+            int(ceil(pDoc->m_meta_graph->getDisplayedShapeGraph().getSpacing() / (m_unit * 10.0)));
     } else if (viewclass & MetaGraph::VIEWDATA) {
-        spacer = int(ceil(pDoc->m_meta_graph->getDisplayedDataMap().getSpacing() / (m_unit * 10.0)));
+        spacer =
+            int(ceil(pDoc->m_meta_graph->getDisplayedDataMap().getSpacing() / (m_unit * 10.0)));
     }
     return spacer;
 }
@@ -2062,7 +2124,8 @@ void QDepthmapView::OnEditSelect() {
     SetCursor(SELECT);
     if (m_showlinks) {
         m_showlinks = false;
-        m_pDoc.SetRedrawFlag(QGraphDoc::VIEW_MAP, QGraphDoc::REDRAW_POINTS, QGraphDoc::NEW_DEPTHMAPVIEW_SETUP, this);
+        m_pDoc.SetRedrawFlag(QGraphDoc::VIEW_MAP, QGraphDoc::REDRAW_POINTS,
+                             QGraphDoc::NEW_DEPTHMAPVIEW_SETUP, this);
     }
 }
 
@@ -2071,7 +2134,8 @@ void QDepthmapView::OnModeIsovist() {
     SetCursor(SEEDISOVIST);
     if (m_showlinks) {
         m_showlinks = false;
-        m_pDoc.SetRedrawFlag(QGraphDoc::VIEW_MAP, QGraphDoc::REDRAW_POINTS, QGraphDoc::NEW_DEPTHMAPVIEW_SETUP, this);
+        m_pDoc.SetRedrawFlag(QGraphDoc::VIEW_MAP, QGraphDoc::REDRAW_POINTS,
+                             QGraphDoc::NEW_DEPTHMAPVIEW_SETUP, this);
     }
 }
 
@@ -2080,7 +2144,8 @@ void QDepthmapView::OnModeTargetedIsovist() {
     SetCursor(SEEDHALFOVIST);
     if (m_showlinks) {
         m_showlinks = false;
-        m_pDoc.SetRedrawFlag(QGraphDoc::VIEW_MAP, QGraphDoc::REDRAW_POINTS, QGraphDoc::NEW_DEPTHMAPVIEW_SETUP, this);
+        m_pDoc.SetRedrawFlag(QGraphDoc::VIEW_MAP, QGraphDoc::REDRAW_POINTS,
+                             QGraphDoc::NEW_DEPTHMAPVIEW_SETUP, this);
     }
 }
 
@@ -2089,7 +2154,8 @@ void QDepthmapView::OnModeSeedAxial() {
     SetCursor(SEEDAXIAL);
     if (m_showlinks) {
         m_showlinks = false;
-        m_pDoc.SetRedrawFlag(QGraphDoc::VIEW_MAP, QGraphDoc::REDRAW_POINTS, QGraphDoc::NEW_DEPTHMAPVIEW_SETUP, this);
+        m_pDoc.SetRedrawFlag(QGraphDoc::VIEW_MAP, QGraphDoc::REDRAW_POINTS,
+                             QGraphDoc::NEW_DEPTHMAPVIEW_SETUP, this);
     }
 }
 
@@ -2127,7 +2193,8 @@ void QDepthmapView::OnEditLineTool() {
     SetCursor(LINETOOL);
     if (m_showlinks) {
         m_showlinks = false;
-        m_pDoc.SetRedrawFlag(QGraphDoc::VIEW_MAP, QGraphDoc::REDRAW_POINTS, QGraphDoc::NEW_DEPTHMAPVIEW_SETUP, this);
+        m_pDoc.SetRedrawFlag(QGraphDoc::VIEW_MAP, QGraphDoc::REDRAW_POINTS,
+                             QGraphDoc::NEW_DEPTHMAPVIEW_SETUP, this);
     }
 }
 
@@ -2136,7 +2203,8 @@ void QDepthmapView::OnEditPolygonTool() {
     SetCursor(POLYGONTOOL);
     if (m_showlinks) {
         m_showlinks = false;
-        m_pDoc.SetRedrawFlag(QGraphDoc::VIEW_MAP, QGraphDoc::REDRAW_POINTS, QGraphDoc::NEW_DEPTHMAPVIEW_SETUP, this);
+        m_pDoc.SetRedrawFlag(QGraphDoc::VIEW_MAP, QGraphDoc::REDRAW_POINTS,
+                             QGraphDoc::NEW_DEPTHMAPVIEW_SETUP, this);
     }
 }
 
@@ -2150,7 +2218,8 @@ void QDepthmapView::OnModeJoin() {
         }
         // Redraw scene
         m_showlinks = true;
-        m_pDoc.SetRedrawFlag(QGraphDoc::VIEW_MAP, QGraphDoc::REDRAW_POINTS, QGraphDoc::NEW_DEPTHMAPVIEW_SETUP, this);
+        m_pDoc.SetRedrawFlag(QGraphDoc::VIEW_MAP, QGraphDoc::REDRAW_POINTS,
+                             QGraphDoc::NEW_DEPTHMAPVIEW_SETUP, this);
     }
 }
 
@@ -2169,7 +2238,8 @@ void QDepthmapView::OnModeUnjoin() {
         }
         // Redraw scene
         m_showlinks = true;
-        m_pDoc.SetRedrawFlag(QGraphDoc::VIEW_MAP, QGraphDoc::REDRAW_POINTS, QGraphDoc::NEW_DEPTHMAPVIEW_SETUP, this);
+        m_pDoc.SetRedrawFlag(QGraphDoc::VIEW_MAP, QGraphDoc::REDRAW_POINTS,
+                             QGraphDoc::NEW_DEPTHMAPVIEW_SETUP, this);
     }
 }
 
@@ -2180,16 +2250,20 @@ void QDepthmapView::OnEditCopy() {
     if (state & MetaGraph::POINTMAPS &&
         (!m_pDoc.m_meta_graph->getDisplayedPointMap().isProcessed() ||
          m_pDoc.m_meta_graph->getViewClass() & (MetaGraph::VIEWVGA | MetaGraph::VIEWBACKVGA))) {
-        m_pDoc.m_meta_graph->getDisplayedPointMap().setScreenPixel(m_unit); // only used by points (at the moment!)
-        m_pDoc.m_meta_graph->getDisplayedPointMap().makeViewportPoints(LogicalViewport(rectin, &m_pDoc));
+        m_pDoc.m_meta_graph->getDisplayedPointMap().setScreenPixel(
+            m_unit); // only used by points (at the moment!)
+        m_pDoc.m_meta_graph->getDisplayedPointMap().makeViewportPoints(
+            LogicalViewport(rectin, &m_pDoc));
     }
     if (state & MetaGraph::SHAPEGRAPHS &&
         (m_pDoc.m_meta_graph->getViewClass() & (MetaGraph::VIEWBACKAXIAL | MetaGraph::VIEWAXIAL))) {
-        m_pDoc.m_meta_graph->getDisplayedShapeGraph().makeViewportShapes(LogicalViewport(rectin, &m_pDoc));
+        m_pDoc.m_meta_graph->getDisplayedShapeGraph().makeViewportShapes(
+            LogicalViewport(rectin, &m_pDoc));
     }
     if (state & MetaGraph::DATAMAPS &&
         (m_pDoc.m_meta_graph->getViewClass() & (MetaGraph::VIEWBACKDATA | MetaGraph::VIEWDATA))) {
-        m_pDoc.m_meta_graph->getDisplayedDataMap().makeViewportShapes(LogicalViewport(rectin, &m_pDoc));
+        m_pDoc.m_meta_graph->getDisplayedDataMap().makeViewportShapes(
+            LogicalViewport(rectin, &m_pDoc));
     }
     if (state & MetaGraph::LINEDATA) {
         m_pDoc.m_meta_graph->makeViewportShapes(LogicalViewport(rectin, &m_pDoc));
@@ -2211,22 +2285,25 @@ void QDepthmapView::OnEditSave() {
     // Very similar to copy to clipboard, only writes an EPS instead of a WMF
     if (m_pDoc.m_communicator) {
         QMessageBox::warning(this, tr("Warning"),
-                             tr("Another Depthmap process is running, please wait until it completes"),
+                             tr("Another Depthmap process is running, please wait "
+                                "until it completes"),
                              QMessageBox::Ok, QMessageBox::Ok);
         return;
     }
 
     QString saveas;
     QFilePath path(windowFilePath());
-    //   saveas = path.m_path + (path.m_name.isEmpty() ? windowTitle() : path.m_name);
+    //   saveas = path.m_path + (path.m_name.isEmpty() ? windowTitle() :
+    //   path.m_name);
     saveas = path.m_path + tr("*.eps");
 
-    QString template_string = tr("Encapsulated Postscript (*.eps)\nScalable Vector Graphics (*.svg)\nAll files (*.*)");
+    QString template_string = tr("Encapsulated Postscript (*.eps)\nScalable "
+                                 "Vector Graphics (*.svg)\nAll files (*.*)");
 
     QFileDialog::Options options;
     QString selectedFilter;
-    QString outfile =
-        QFileDialog::getSaveFileName(0, tr("Save Screen As"), saveas, template_string, &selectedFilter, options);
+    QString outfile = QFileDialog::getSaveFileName(0, tr("Save Screen As"), saveas, template_string,
+                                                   &selectedFilter, options);
 
     if (outfile.isEmpty())
         return;
@@ -2236,7 +2313,8 @@ void QDepthmapView::OnEditSave() {
 
     std::ofstream stream(outfile.toLatin1());
     if (stream.fail()) {
-        QMessageBox::warning(this, tr("Warning"), tr("Sorry, unable to open ") + outfile + tr(" for writing"),
+        QMessageBox::warning(this, tr("Warning"),
+                             tr("Sorry, unable to open ") + outfile + tr(" for writing"),
                              QMessageBox::Ok, QMessageBox::Ok);
         return;
     }
@@ -2248,8 +2326,8 @@ void QDepthmapView::OnEditSave() {
         OutputSVG(stream, &m_pDoc);
     } else {
         QMessageBox::StandardButton reply;
-        reply =
-            QMessageBox::question(this, "", "Would you like to include a scale?", QMessageBox::Yes | QMessageBox::No);
+        reply = QMessageBox::question(this, "", "Would you like to include a scale?",
+                                      QMessageBox::Yes | QMessageBox::No);
         bool includeScale = (reply == QMessageBox::Yes);
         // Set up complete... run the .eps outputter (copied from standard output!)
         OutputEPS(stream, &m_pDoc, includeScale);
@@ -2270,8 +2348,8 @@ static std::string SVGColor(PafColor color) {
     int r = color.redb();
     int g = color.greenb();
     int b = color.blueb();
-    text << std::setfill('0') << "#" << std::setw(2) << std::hex << r << std::setw(2) << std::hex << g << std::setw(2)
-         << std::hex << b;
+    text << std::setfill('0') << "#" << std::setw(2) << std::hex << r << std::setw(2) << std::hex
+         << g << std::setw(2) << std::hex << b;
     return text.str();
 }
 
@@ -2282,15 +2360,16 @@ static QPoint SVGPhysicalUnits(const Point2f &p, const QtRegion &r, int h) {
 }
 
 void QDepthmapView::OutputSVG(std::ofstream &stream, QGraphDoc *pDoc) {
-    // This output SVG is a copy of the standard output... obviously, if you change
-    // standard output, remember to change this one too!
+    // This output SVG is a copy of the standard output... obviously, if you
+    // change standard output, remember to change this one too!
 
     // also out of synch with EPS!
 
     // now the two are a little out of synch
 
     if (!m_viewport_set) {
-        QMessageBox::warning(this, tr("Depthmap"), tr("Can't save screen as the Depthmap window is not initialised"),
+        QMessageBox::warning(this, tr("Depthmap"),
+                             tr("Can't save screen as the Depthmap window is not initialised"),
                              QMessageBox::Ok, QMessageBox::Ok);
         return;
     }
@@ -2303,22 +2382,26 @@ void QDepthmapView::OutputSVG(std::ofstream &stream, QGraphDoc *pDoc) {
     stream << "<?xml version=\"1.0\" standalone=\"no\"?>" << std::endl;
     stream << "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\"" << std::endl;
     stream << "\"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">" << std::endl;
-    stream << "<svg width=\"24cm\" height=\"" << (h / 200) << "cm\" viewBox=\"0 0 4800 " << h << "\"" << std::endl;
-    stream << "xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" version=\"1.1\">"
+    stream << "<svg width=\"24cm\" height=\"" << (h / 200) << "cm\" viewBox=\"0 0 4800 " << h
+           << "\"" << std::endl;
+    stream << "xmlns=\"http://www.w3.org/2000/svg\" "
+              "xmlns:xlink=\"http://www.w3.org/1999/xlink\" version=\"1.1\">"
            << std::endl;
     stream << "<desc>" << TITLE_BASE << "</desc>" << std::endl;
 
-    // note, SVG draw completely overrides standard draw physical units to achieve hi-res output
-    // (EPS should probably follow this model too)
+    // note, SVG draw completely overrides standard draw physical units to achieve
+    // hi-res output (EPS should probably follow this model too)
     QtRegion logicalviewport = LogicalViewport(rect, pDoc);
 
     stream << "<rect x=\"0\" y=\"0\" width=\"4800\" height=\"" << h << "\" "
-           << "fill=\"" << SVGColor(m_background) << "\" stroke=\"none\" stroke-width=\"0\" />" << std::endl;
+           << "fill=\"" << SVGColor(m_background) << "\" stroke=\"none\" stroke-width=\"0\" />"
+           << std::endl;
 
     int state = pDoc->m_meta_graph->getState();
 
     if (state & MetaGraph::POINTMAPS) {
-        pDoc->m_meta_graph->getDisplayedPointMap().setScreenPixel(m_unit); // only used by points (at the moment!)
+        pDoc->m_meta_graph->getDisplayedPointMap().setScreenPixel(
+            m_unit); // only used by points (at the moment!)
         pDoc->m_meta_graph->getDisplayedPointMap().makeViewportPoints(logicalviewport);
     }
     if (state & MetaGraph::SHAPEGRAPHS) {
@@ -2340,8 +2423,8 @@ void QDepthmapView::OutputSVG(std::ofstream &stream, QGraphDoc *pDoc) {
 
         stream << "<g stroke=\"none\">" << std::endl;
 
-        stream << "<defs><rect id=\"a\" width=\"" << 2 * spacer << "\" height=\"" << 2 * spacer << "\" /></defs>"
-               << std::endl;
+        stream << "<defs><rect id=\"a\" width=\"" << 2 * spacer << "\" height=\"" << 2 * spacer
+               << "\" /></defs>" << std::endl;
 
         while (map.findNextPoint()) {
 
@@ -2352,14 +2435,15 @@ void QDepthmapView::OutputSVG(std::ofstream &stream, QGraphDoc *pDoc) {
 
                 QPoint p = SVGPhysicalUnits(logical, logicalviewport, h);
 
-                stream << "<use fill=\"" << SVGColor(color) << "\" x=\"" << p.x() - spacer << "\" y=\""
-                       << p.y() - spacer << "\" xlink:href=\"#a\" />" << std::endl;
+                stream << "<use fill=\"" << SVGColor(color) << "\" x=\"" << p.x() - spacer
+                       << "\" y=\"" << p.y() - spacer << "\" xlink:href=\"#a\" />" << std::endl;
             }
         }
         stream << "</g>" << std::endl;
     }
 
-    if (state & MetaGraph::SHAPEGRAPHS && pDoc->m_meta_graph->getViewClass() & MetaGraph::VIEWAXIAL) {
+    if (state & MetaGraph::SHAPEGRAPHS &&
+        pDoc->m_meta_graph->getViewClass() & MetaGraph::VIEWAXIAL) {
 
         ShapeMap &map = pDoc->m_meta_graph->getDisplayedShapeGraph();
 
@@ -2375,7 +2459,8 @@ void QDepthmapView::OutputSVG(std::ofstream &stream, QGraphDoc *pDoc) {
 
     if (state & MetaGraph::LINEDATA) {
         // arbitrary stroke width for now
-        stream << "<g stroke-width=\"4\" fill=\"none\" stroke=\"" << SVGColor(m_foreground) << "\">" << std::endl;
+        stream << "<g stroke-width=\"4\" fill=\"none\" stroke=\"" << SVGColor(m_foreground) << "\">"
+               << std::endl;
         bool nextlayer = false;
         while (pDoc->m_meta_graph->findNextShape(nextlayer)) {
             const SalaShape &shape = pDoc->m_meta_graph->getNextShape();
@@ -2394,14 +2479,17 @@ void QDepthmapView::OutputSVG(std::ofstream &stream, QGraphDoc *pDoc) {
     stream << "</svg>" << std::endl;
 }
 
-void QDepthmapView::OutputSVGMap(std::ofstream &stream, ShapeMap &map, QtRegion &logicalviewport, int h) {
+void QDepthmapView::OutputSVGMap(std::ofstream &stream, ShapeMap &map, QtRegion &logicalviewport,
+                                 int h) {
     bool monochrome = (map.getDisplayParams().colorscale == DisplayParams::MONOCHROME);
     // monochrome not implemented yet!
     if (monochrome) {
-        QMessageBox::warning(this, tr("Depthmap"),
-                             tr("This map is displaying in monochrome, which is not yet supported.  Please note your "
-                                "SVG file will be empty.  Sorry for the inconvenience."),
-                             QMessageBox::Ok, QMessageBox::Ok);
+        QMessageBox::warning(
+            this, tr("Depthmap"),
+            tr("This map is displaying in monochrome, which is not yet supported.  "
+               "Please note your "
+               "SVG file will be empty.  Sorry for the inconvenience."),
+            QMessageBox::Ok, QMessageBox::Ok);
         return;
     }
 
@@ -2432,8 +2520,8 @@ void QDepthmapView::OutputSVGMap(std::ofstream &stream, ShapeMap &map, QtRegion 
             }
             if (closed) {
                 if (showlines) {
-                    stream << "<g fill=\"" << SVGColor(color) << "\" stroke=\"" << SVGColor(m_foreground) << "\">"
-                           << std::endl;
+                    stream << "<g fill=\"" << SVGColor(color) << "\" stroke=\""
+                           << SVGColor(m_foreground) << "\">" << std::endl;
                 } else {
                     stream << "<g fill=\"" << SVGColor(color) << "\" stroke=\"none\">" << std::endl;
                 }
@@ -2460,7 +2548,8 @@ void QDepthmapView::OutputSVGMap(std::ofstream &stream, ShapeMap &map, QtRegion 
     stream << "</g>" << std::endl;
 }
 
-void QDepthmapView::OutputSVGLine(std::ofstream &stream, Line &line, QtRegion &logicalviewport, int h) {
+void QDepthmapView::OutputSVGLine(std::ofstream &stream, Line &line, QtRegion &logicalviewport,
+                                  int h) {
     bool drewit = false;
     if (line.crop(logicalviewport)) {
         QPoint start = SVGPhysicalUnits(line.start(), logicalviewport, h);
@@ -2473,12 +2562,13 @@ void QDepthmapView::OutputSVGLine(std::ofstream &stream, Line &line, QtRegion &l
     }
 }
 
-void QDepthmapView::OutputSVGPoly(std::ofstream &stream, const SalaShape &shape, QtRegion &logicalviewport, int h) {
+void QDepthmapView::OutputSVGPoly(std::ofstream &stream, const SalaShape &shape,
+                                  QtRegion &logicalviewport, int h) {
     QPoint bl = SVGPhysicalUnits(shape.getBoundingBox().bottom_left, logicalviewport, h);
     QPoint tr = SVGPhysicalUnits(shape.getBoundingBox().top_right, logicalviewport, h);
     if (dist(Point2f(bl.x(), bl.y()), Point2f(tr.x(), tr.y())) < 2.0f) {
-        // 2.0 is about 0.1mm in standard SVG output size -- if this is too small, we won't bother trying to draw it at
-        // all
+        // 2.0 is about 0.1mm in standard SVG output size -- if this is too small,
+        // we won't bother trying to draw it at all
         return;
     }
     if (shape.isOpen()) {
@@ -2491,10 +2581,12 @@ void QDepthmapView::OutputSVGPoly(std::ofstream &stream, const SalaShape &shape,
         for (; iter != shape.m_points.end(); iter++) {
             Line line(lastpoint, *iter);
             if (line.crop(logicalviewport)) {
-                // note: use t_start and t_end so that this line moves in the correct direction
+                // note: use t_start and t_end so that this line moves in the correct
+                // direction
                 QPoint start = SVGPhysicalUnits(line.t_start(), logicalviewport, h);
                 QPoint end = SVGPhysicalUnits(line.t_end(), logicalviewport, h);
-                // always draw either from the first point or whenever you enter the viewport:
+                // always draw either from the first point or whenever you enter the
+                // viewport:
                 if (starter) {
                     stream << start.x() << "," << start.y() << " ";
                     starter = false;
@@ -2517,8 +2609,8 @@ void QDepthmapView::OutputSVGPoly(std::ofstream &stream, const SalaShape &shape,
         }
         stream << "\" />" << std::endl;
     } else {
-        // polygons are hard... have to work out entry and exit points to the clipping frame
-        // and wind according to their direction
+        // polygons are hard... have to work out entry and exit points to the
+        // clipping frame and wind according to their direction
         stream << "<polygon points=\"";
         std::vector<SalaEdgeU> eus = shape.getClippingSet(logicalviewport);
         if (eus.size() == 0) {
@@ -2535,11 +2627,13 @@ void QDepthmapView::OutputSVGPoly(std::ofstream &stream, const SalaShape &shape,
                 }
             }
         } else if (eus.size() == 1) {
-            // dummy: getClippingSet deliberately adds a single empty EdgeU if the polygon is completely outside the
-            // frame (this can happen when a polygon wraps around the frame)
+            // dummy: getClippingSet deliberately adds a single empty EdgeU if the
+            // polygon is completely outside the frame (this can happen when a polygon
+            // wraps around the frame)
         } else if (eus.size() >= 2) {
             int entry = eus[0].entry ? 0 : 1;
-            // this can get very messy (sometimes have to split into separate polys)... here's hoping for the best
+            // this can get very messy (sometimes have to split into separate
+            // polys)... here's hoping for the best
             while (entry < (int)eus.size()) {
                 int exit = int((entry + 1) % eus.size());
                 Point2f pt = logicalviewport.getEdgeUPoint(eus[entry]);
@@ -2573,7 +2667,8 @@ void QDepthmapView::OutputSVGPoly(std::ofstream &stream, const SalaShape &shape,
                             if (edge > 3) {
                                 edge = 0;
                             }
-                            next = SVGPhysicalUnits(logicalviewport.getEdgeUPoint(EdgeU(edge, 0)), logicalviewport, h);
+                            next = SVGPhysicalUnits(logicalviewport.getEdgeUPoint(EdgeU(edge, 0)),
+                                                    logicalviewport, h);
                             stream << next.x() << "," << next.y() << " ";
                         } while (edge != nextentry.edge);
                     }
@@ -2585,13 +2680,15 @@ void QDepthmapView::OutputSVGPoly(std::ofstream &stream, const SalaShape &shape,
                             if (edge < 0) {
                                 edge = 3;
                             }
-                            next = SVGPhysicalUnits(logicalviewport.getEdgeUPoint(EdgeU(edge, 1)), logicalviewport, h);
+                            next = SVGPhysicalUnits(logicalviewport.getEdgeUPoint(EdgeU(edge, 1)),
+                                                    logicalviewport, h);
                             stream << next.x() << "," << next.y() << " ";
                         } while (edge != nextentry.edge);
                     }
                 }
                 if (breakup) {
-                    // if (entry + 2 < eus.size() && ccwEdgeU(eus[entry],eus[entry+1],eus[entry+2]) != shape.isCCW()) {
+                    // if (entry + 2 < eus.size() &&
+                    // ccwEdgeU(eus[entry],eus[entry+1],eus[entry+2]) != shape.isCCW()) {
                     stream << "\" />" << std::endl;
                     stream << "<polygon points=\"";
                 }

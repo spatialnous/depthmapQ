@@ -1,26 +1,14 @@
-// Copyright (C) 2017 Petros Koutsolampros
-
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-
-// You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+// SPDX-FileCopyrightText: 2017 Petros Koutsolampros
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 #include <QtWidgets>
 
-#include "settingsdialog.h"
 #include "generalpage.h"
 #include "interfacepage.h"
+#include "settingsdialog.h"
 
-SettingsDialog::SettingsDialog(Settings &settings) : m_settings(settings)
-{
+SettingsDialog::SettingsDialog(Settings &settings) : m_settings(settings) {
     contentsWidget = new QListWidget;
     contentsWidget->setIconSize(QSize(96, 84));
     contentsWidget->setMovement(QListView::Static);
@@ -33,8 +21,7 @@ SettingsDialog::SettingsDialog(Settings &settings) : m_settings(settings)
 
     std::vector<std::unique_ptr<SettingsPage>>::iterator iter = settingsPages.begin(),
                                                          end = settingsPages.end();
-    for ( ; iter != end; ++iter )
-    {
+    for (; iter != end; ++iter) {
         pagesWidget->addWidget((*iter).get());
     }
 
@@ -46,7 +33,6 @@ SettingsDialog::SettingsDialog(Settings &settings) : m_settings(settings)
 
     createIcons();
     contentsWidget->setCurrentRow(0);
-
 
     QHBoxLayout *horizontalLayout = new QHBoxLayout;
     horizontalLayout->addWidget(contentsWidget);
@@ -69,9 +55,8 @@ SettingsDialog::SettingsDialog(Settings &settings) : m_settings(settings)
 
 void SettingsDialog::saveChanges() {
     std::vector<std::unique_ptr<SettingsPage>>::iterator iter = settingsPages.begin(),
-                                        end = settingsPages.end();
-    for ( ; iter != end; ++iter )
-    {
+                                                         end = settingsPages.end();
+    for (; iter != end; ++iter) {
         (*iter)->writeSettings(m_settings);
     }
 }
@@ -81,8 +66,7 @@ void SettingsDialog::saveChangesAndClose() {
     QDialog::accept();
 }
 
-void SettingsDialog::createIcons()
-{
+void SettingsDialog::createIcons() {
     QListWidgetItem *generalButton = new QListWidgetItem(contentsWidget);
     generalButton->setIcon(QIcon(":/images/general.png"));
     generalButton->setText(tr("General"));
@@ -96,8 +80,7 @@ void SettingsDialog::createIcons()
     connect(contentsWidget, &QListWidget::currentItemChanged, this, &SettingsDialog::changePage);
 }
 
-void SettingsDialog::changePage(QListWidgetItem *current, QListWidgetItem *previous)
-{
+void SettingsDialog::changePage(QListWidgetItem *current, QListWidgetItem *previous) {
     if (!current)
         current = previous;
 

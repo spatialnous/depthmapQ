@@ -1,18 +1,6 @@
-// depthmapX - spatial network analysis platform
-// Copyright (C) 2011-2012, Tasos Varoudis
-
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-
-// You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+// SPDX-FileCopyrightText: 2011-2012 Tasos Varoudis
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "3dview.h"
 
@@ -20,11 +8,11 @@
 
 #include "genlib/xmlparse.h"
 
+#include <QMessageBox>
 #include <QTimer>
 #include <QtGui>
 #include <QtOpenGL>
 #include <QtWidgets/QFileDialog>
-#include <QMessageBox>
 
 #ifdef __APPLE__
 #include <OpenGL/gl.h>
@@ -163,7 +151,8 @@ void Q3DView::timerEvent(QTimerEvent *event) {
         }
     }
 
-    if (m_animating && !pDoc->m_communicator && pDoc->m_meta_graph && pDoc->m_meta_graph->viewingProcessedPoints()) {
+    if (m_animating && !pDoc->m_communicator && pDoc->m_meta_graph &&
+        pDoc->m_meta_graph->viewingProcessedPoints()) {
         PointMap &pointmap = pDoc->m_meta_graph->getDisplayedPointMap();
         m_animating = false;
         for (size_t i = 0; i < m_mannequins.size(); i++) {
@@ -172,16 +161,19 @@ void Q3DView::timerEvent(QTimerEvent *event) {
                 if (m_mannequins[i].m_playback) {
                     int j = m_mannequins[i].m_trace_id;
                     Trace &trace = m_traces[j];
-                    if (m_mannequins[i].m_time >= trace.starttime && m_mannequins[i].m_time <= trace.endtime) {
+                    if (m_mannequins[i].m_time >= trace.starttime &&
+                        m_mannequins[i].m_time <= trace.endtime) {
                         // active zone:
                         m_mannequins[i].m_active = true;
                         size_t k = 0;
-                        while (k < m_traces[j].events.size() && m_traces[j].events[k].t < m_mannequins[i].m_time) {
+                        while (k < m_traces[j].events.size() &&
+                               m_traces[j].events[k].t < m_mannequins[i].m_time) {
                             k++;
                         }
                         if (k < m_traces[j].events.size()) {
                             Point2f p = (Point2f)m_traces[j].events[k];
-                            PixelRef pix = pointmap.pixelate(p); // note, take the pix before you scale!
+                            PixelRef pix =
+                                pointmap.pixelate(p); // note, take the pix before you scale!
                             p.normalScale(m_region);
                             m_mannequins[i].advance(p);
                             auto iter = m_pixels.find(pix);
@@ -242,8 +234,8 @@ void Q3DView::DrawScene() {
     QRgb bg = qRgb(0, 0, 0);
     QRgb fg = qRgb(128, 128, 128);
 
-    glClearColor((GLfloat)GetRValue(bg) / 255.0f, (GLfloat)GetGValue(bg) / 255.0f, (GLfloat)GetBValue(bg) / 255.0f,
-                 1.0f);
+    glClearColor((GLfloat)GetRValue(bg) / 255.0f, (GLfloat)GetGValue(bg) / 255.0f,
+                 (GLfloat)GetBValue(bg) / 255.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glColor3f(1.0f, 0.0f, 0.0f);
@@ -305,7 +297,8 @@ void Q3DView::DrawScene() {
         }
     }
 
-    glColor3f((GLfloat)GetRValue(fg) / 255.0f, (GLfloat)GetGValue(fg) / 255.0f, (GLfloat)GetBValue(fg) / 255.0f);
+    glColor3f((GLfloat)GetRValue(fg) / 255.0f, (GLfloat)GetGValue(fg) / 255.0f,
+              (GLfloat)GetBValue(fg) / 255.0f);
     if (m_pointcount) {
         glVertexPointer(3, GL_FLOAT, 0, m_points);
         glDrawArrays(GL_LINES, 0, m_pointcount);
@@ -373,7 +366,8 @@ void Q3DView::ReloadLineData() {
                                 lines.push_back(Line(shape.m_points[n], shape.m_points[n + 1]));
                             }
                             if (shape.isPolygon()) {
-                                lines.push_back(Line(shape.m_points.back(), shape.m_points.front()));
+                                lines.push_back(
+                                    Line(shape.m_points.back(), shape.m_points.front()));
                             }
                         }
                     }
@@ -425,7 +419,8 @@ void Q3DView::ReloadPointData() {
     if (pDoc->m_meta_graph && pDoc->m_meta_graph->viewingProcessedPoints()) {
         //
         if (!m_region.atZero()) {
-            GLfloat unit = pDoc->m_meta_graph->getDisplayedPointMap().getSpacing() / m_region.width();
+            GLfloat unit =
+                pDoc->m_meta_graph->getDisplayedPointMap().getSpacing() / m_region.width();
             m_male_template.Init(unit, true);
             m_female_template.Init(unit, false);
             for (int i = 0; i < 4; i++) {
@@ -470,8 +465,8 @@ void Q3DView::OnToolsAgentLoadProgram() {
 
     QFileDialog::Options options;
     QString selectedFilter;
-    QStringList infiles =
-        QFileDialog::getOpenFileNames(0, tr("Import"), "", template_string, &selectedFilter, options);
+    QStringList infiles = QFileDialog::getOpenFileNames(0, tr("Import"), "", template_string,
+                                                        &selectedFilter, options);
 
     if (!infiles.size()) {
         return;
@@ -486,11 +481,12 @@ void Q3DView::OnToolsAgentLoadProgram() {
         m_agents.clear();
         m_mannequins.clear();
         if (!m_agent_program.open(filename)) {
-            QMessageBox::warning(this, tr("depthmapX"), tr("Unable to understand agent program"), QMessageBox::Ok,
-                                 QMessageBox::Ok);
+            QMessageBox::warning(this, tr("depthmapX"), tr("Unable to understand agent program"),
+                                 QMessageBox::Ok, QMessageBox::Ok);
         }
     } else {
-        QMessageBox::warning(this, tr("depthmapX"), tr("No file selected"), QMessageBox::Ok, QMessageBox::Ok);
+        QMessageBox::warning(this, tr("depthmapX"), tr("No file selected"), QMessageBox::Ok,
+                             QMessageBox::Ok);
     }
 }
 
@@ -677,10 +673,10 @@ void Q3DView::CreateAgent(QPoint point) {
 
     GLdouble wx1, wy1, wz1, wx2, wy2, wz2;
 
-    gluReimpl::gluUnProject((GLdouble)point.x(), (GLdouble)realy, 0.0, mvmatrix, projmatrix, viewport, &wx1, &wy1,
-                            &wz1);
-    gluReimpl::gluUnProject((GLdouble)point.x(), (GLdouble)realy, 1.0, mvmatrix, projmatrix, viewport, &wx2, &wy2,
-                            &wz2);
+    gluReimpl::gluUnProject((GLdouble)point.x(), (GLdouble)realy, 0.0, mvmatrix, projmatrix,
+                            viewport, &wx1, &wy1, &wz1);
+    gluReimpl::gluUnProject((GLdouble)point.x(), (GLdouble)realy, 1.0, mvmatrix, projmatrix,
+                            viewport, &wx2, &wy2, &wz2);
 
     // 0 plane has to lie between wz1 and wz2:
     if (std::isfinite(wz1) && std::isfinite(wz2) && wz1 > 0 && wz2 < 0) {
@@ -752,7 +748,8 @@ void CMannequinTemplate::Init(GLfloat unit, bool male) {
 
     for (int i = 0; i < 10; i++) {
         for (int j = 0; j < 3; j++) {
-            m_points[i][j] = m_unit * (male ? g_male_mannequin_points[i][j] : g_female_mannequin_points[i][j]);
+            m_points[i][j] =
+                m_unit * (male ? g_male_mannequin_points[i][j] : g_female_mannequin_points[i][j]);
         }
     }
 
@@ -793,7 +790,8 @@ QMannequin::QMannequin(const QMannequin &man) {
     m_nextloc = man.m_nextloc;
     m_pointcount = man.m_pointcount;
     m_pointstart = man.m_pointstart;
-    memcpy(m_points + m_pointstart, man.m_points + man.m_pointstart * 3, m_pointcount * sizeof(GLfloat) * 3);
+    memcpy(m_points + m_pointstart, man.m_points + man.m_pointstart * 3,
+           m_pointcount * sizeof(GLfloat) * 3);
     m_time = man.m_time;
     m_active = man.m_active;
     m_playback = man.m_playback;
@@ -812,7 +810,8 @@ QMannequin &QMannequin::operator=(const QMannequin &man) {
         m_nextloc = man.m_nextloc;
         m_pointcount = man.m_pointcount;
         m_pointstart = man.m_pointstart;
-        memcpy(m_points + m_pointstart, man.m_points + man.m_pointstart * 3, m_pointcount * sizeof(GLfloat) * 3);
+        memcpy(m_points + m_pointstart, man.m_points + man.m_pointstart * 3,
+               m_pointcount * sizeof(GLfloat) * 3);
         m_time = man.m_time;
         m_active = man.m_active;
         m_playback = man.m_playback;
@@ -847,7 +846,8 @@ void QMannequin::advance(const Point2f &nextloc) {
             m_pointstart++;
             m_pointcount = 25;
             if (m_pointstart > 25) {
-                memcpy(m_points, m_points + (m_pointstart - 1) * 3, (m_pointcount - 1) * sizeof(GLfloat) * 3);
+                memcpy(m_points, m_points + (m_pointstart - 1) * 3,
+                       (m_pointcount - 1) * sizeof(GLfloat) * 3);
                 m_pointstart = 0;
                 m_pointcount = 25;
             }
@@ -892,7 +892,8 @@ void QMannequin::draw(CMannequinTemplate &templ, bool drawtrails, bool highlight
     }
     GLfloat swing = framef * 30.0f * (m_left ? -1.0f : 1.0f);
 
-    GLfloat h = cos(M_PI * 0.16667f * framef) + 0.7f; // 2 * M_PI * 30.0f * framef / 360.0f = M_PI * 0.16667 * framef
+    GLfloat h = cos(M_PI * 0.16667f * framef) +
+                0.7f; // 2 * M_PI * 30.0f * framef / 360.0f = M_PI * 0.16667 * framef
 
     glTranslatef(0.0f, 0.0f, h * templ.m_unit);
 
@@ -1021,7 +1022,9 @@ void Q3DView::OnKeyDown(unsigned int nChar, unsigned int nRepCnt, unsigned int n
     }
 }
 
-void Q3DView::OnKeyUp(unsigned int nChar, unsigned int nRepCnt, unsigned int nFlags) { m_key_mode_on = 0; }
+void Q3DView::OnKeyUp(unsigned int nChar, unsigned int nRepCnt, unsigned int nFlags) {
+    m_key_mode_on = 0;
+}
 
 bool Q3DView::OnMouseWheel(unsigned int nFlags, short zDelta, QPointF pt) {
     QSize diff(0, -zDelta / 5);
@@ -1039,8 +1042,8 @@ void Q3DView::OnToolsImportTraces() {
 
     QFileDialog::Options options;
     QString selectedFilter;
-    QStringList infiles =
-        QFileDialog::getOpenFileNames(0, tr("Import Traces"), "", template_string, &selectedFilter, options);
+    QStringList infiles = QFileDialog::getOpenFileNames(0, tr("Import Traces"), "", template_string,
+                                                        &selectedFilter, options);
 
     if (!infiles.size()) {
         return;
@@ -1094,7 +1097,8 @@ void Q3DView::OnToolsImportTraces() {
             }
         }
     } else {
-        QMessageBox::warning(this, tr("depthmapX"), tr("No file selected"), QMessageBox::Ok, QMessageBox::Ok);
+        QMessageBox::warning(this, tr("depthmapX"), tr("No file selected"), QMessageBox::Ok,
+                             QMessageBox::Ok);
     }
 }
 
@@ -1176,6 +1180,8 @@ void Q3DView::keyPressEvent(QKeyEvent *event) { OnKeyDown(event->key(), event->c
 
 void Q3DView::keyReleaseEvent(QKeyEvent *event) { OnKeyUp(event->key(), event->count(), 0); }
 
-void Q3DView::wheelEvent(QWheelEvent *event) { OnMouseWheel(0, event->angleDelta().y(), event->position()); }
+void Q3DView::wheelEvent(QWheelEvent *event) {
+    OnMouseWheel(0, event->angleDelta().y(), event->position());
+}
 
 void Q3DView::timerSlot() { timerEvent(NULL); }

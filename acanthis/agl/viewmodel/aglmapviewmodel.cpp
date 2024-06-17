@@ -1,5 +1,8 @@
-#include "aglmapviewmodel.h"
+// SPDX-FileCopyrightText: 2021 Petros Koutsolampros
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
 
+#include "aglmapviewmodel.h"
 
 const QList<QSharedPointer<MapLayer>> &AGLMapViewModel::getMaps() const {
     return m_graphViewModel->getMapLayers();
@@ -56,7 +59,7 @@ void AGLMapViewModel::updateGL(bool m_core) {
 }
 
 void AGLMapViewModel::paintGL(const QMatrix4x4 &m_mProj, const QMatrix4x4 &m_mView,
-                           const QMatrix4x4 &m_mModel) {
+                              const QMatrix4x4 &m_mModel) {
     for (auto &map : getMaps()) {
         if (!map->isVisible())
             continue;

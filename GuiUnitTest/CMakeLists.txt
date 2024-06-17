@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2017 Christian Sailer
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+
 set(GuiUnitTest GuiUnitTest)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -7,7 +11,8 @@ find_package(Qt6 COMPONENTS Core Widgets Gui OpenGL REQUIRED)
 set(CMAKE_AUTOMOC ON)
 
 set(guiUnitTest_SRCS
-    main.cpp 
+    main.cpp
+    selfcleaningfile.h
     testviewhelpers.cpp 
     testsettings.cpp 
     ../depthmapX/settingsimpl.cpp 

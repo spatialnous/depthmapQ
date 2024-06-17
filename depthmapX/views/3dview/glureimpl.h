@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2000 Morten Eriksen
+//
+// SPDX-License-Identifier: SGI-B-1.1
+
 // Taken from https://github.com/Alexpux/superglu/blob/master/libutil/project.c
 // Only provided here temporarily until the 3DView is converted to modern OpenGL
 
@@ -96,12 +100,13 @@ namespace gluReimpl {
         glMultMatrixd(&m[0][0]);
     }
 
-    static void __gluMultMatrixVecd(const GLdouble matrix[16], const GLdouble in[4], GLdouble out[4]) {
+    static void __gluMultMatrixVecd(const GLdouble matrix[16], const GLdouble in[4],
+                                    GLdouble out[4]) {
         int i;
 
         for (i = 0; i < 4; i++) {
-            out[i] = in[0] * matrix[0 * 4 + i] + in[1] * matrix[1 * 4 + i] + in[2] * matrix[2 * 4 + i] +
-                     in[3] * matrix[3 * 4 + i];
+            out[i] = in[0] * matrix[0 * 4 + i] + in[1] * matrix[1 * 4 + i] +
+                     in[2] * matrix[2 * 4 + i] + in[3] * matrix[3 * 4 + i];
         }
     }
 
@@ -184,8 +189,8 @@ namespace gluReimpl {
     }
 
     GLint gluUnProject(GLdouble winx, GLdouble winy, GLdouble winz, const GLdouble modelMatrix[16],
-                       const GLdouble projMatrix[16], const GLint viewport[4], GLdouble *objx, GLdouble *objy,
-                       GLdouble *objz) {
+                       const GLdouble projMatrix[16], const GLint viewport[4], GLdouble *objx,
+                       GLdouble *objy, GLdouble *objz) {
         double finalMatrix[16];
         double in[4];
         double out[4];
@@ -219,4 +224,4 @@ namespace gluReimpl {
         *objz = out[2];
         return (GL_TRUE);
     }
-} // namespace glureimpl
+} // namespace gluReimpl

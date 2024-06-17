@@ -1,17 +1,5 @@
-// Copyright (C) 2021 - 2022 Petros Koutsolampros
-
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-
-// You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+// SPDX-FileCopyrightText: 2021 - 2022 Petros Koutsolampros
+// SPDX-License-Identifier: GPL-3.0-or-later
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
@@ -38,15 +26,17 @@ TreeView {
 
         function getImplicitWidth() {
             switch (model.column) {
-            case 0: // visible
+            case 0:
+                // visible
                 // first column, also contains the tree arrows
-                return padding + visibilityCheckbox.implicitWidth;
-            case 1: // editable
+                return padding + visibilityCheckbox.implicitWidth
+            case 1:
+                // editable
             default:
-                return padding + visibilityCheckbox.implicitWidth;
+                return padding + visibilityCheckbox.implicitWidth
             case nbuttons:
                 // label
-                return label.implicitWidth + padding;
+                return label.implicitWidth + padding
             }
         }
         function getModelIndex() {
@@ -67,9 +57,9 @@ TreeView {
                 // and Qt 6.4.2, the order of row and column was specified
                 // in the opposite order
                 // https://doc.qt.io/qt-6.5/qml-qtquick-tableview-obsolete.html#modelIndex-method
-                midx = modelIndex(model.column, model.row);
+                midx = modelIndex(model.column, model.row)
             }
-            return midx;
+            return midx
         }
 
         implicitWidth: getImplicitWidth()
@@ -86,7 +76,6 @@ TreeView {
 
         readonly property int nbuttons: 2
 
-
         Text {
             id: visibilityCheckbox
             visible: model.column === 0
@@ -95,9 +84,8 @@ TreeView {
             TapHandler {
                 onTapped: {
                     memodl.setItemVisible(getModelIndex(),
-                                          !model.visibility)
-                    graphViews.redraw();
-                }
+!model.visibility)
+                    graphViews.redraw();                }
             }
         }
         Text {
@@ -107,9 +95,8 @@ TreeView {
             TapHandler {
                 onTapped: {
                     memodl.setItemEditable(getModelIndex(),
-                                           !model.editability)
-                    graphViews.redraw();
-                }
+!model.editability)
+                    graphViews.redraw();                }
             }
         }
         Text {

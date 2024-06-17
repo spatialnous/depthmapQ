@@ -1,17 +1,6 @@
-// Copyright (C) 2022, Petros Koutsolampros
-
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-
-// You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+// SPDX-FileCopyrightText: 2022 Petros Koutsolampros
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "aqmapviewmodel.h"
 
@@ -57,7 +46,7 @@ int AQMapViewModel::columnCount(const QModelIndex &parent) const {
 }
 
 AQMapViewModel::LayerModelRole AQMapViewModel::getRole(int columnIndex) const {
-    switch(columnIndex) {
+    switch (columnIndex) {
     case 0:
         return VisibleRole;
     case 1:
@@ -65,7 +54,7 @@ AQMapViewModel::LayerModelRole AQMapViewModel::getRole(int columnIndex) const {
     case 2:
     default:
         return NameRole;
-    // further roles are not shown as columns
+        // further roles are not shown as columns
     }
 }
 
@@ -91,27 +80,25 @@ QVariant AQMapViewModel::data(const QModelIndex &index, int role) const {
 QHash<int, QByteArray> AQMapViewModel::roleNames() const {
     QHash<int, QByteArray> names = QAbstractItemModel::roleNames();
     names.insert(QHash<int, QByteArray>{
-                     {VisibleRole, "visibility"},
-                     {EditableRole, "editability"},
-                     {NameRole, "name"}
-                 });
+        {VisibleRole, "visibility"}, {EditableRole, "editability"}, {NameRole, "name"}});
     return names;
 }
 
 QSharedPointer<TreeItem> AQMapViewModel::addChildItem(QSharedPointer<TreeItem> parent,
-                                                QSharedPointer<TreeItem> newChild, int row) {
+                                                      QSharedPointer<TreeItem> newChild, int row) {
     auto mapItem = parent->addChildItem(newChild, row);
     mapItem->setParentItem(parent);
     return mapItem;
 }
 
-QSharedPointer<TreeItem> AQMapViewModel::addChildItem(QSharedPointer<TreeItem> parent, QString newChild,
-                                                int row) {
+QSharedPointer<TreeItem> AQMapViewModel::addChildItem(QSharedPointer<TreeItem> parent,
+                                                      QString newChild, int row) {
     return addChildItem(parent, QSharedPointer<TreeItem>(new TreeItem(newChild)), row);
 }
 
 void AQMapViewModel::resetItems() {
-    if (!m_graphViewModel) return;
+    if (!m_graphViewModel)
+        return;
     beginResetModel();
     int rowL1 = 0;
     for (QSharedPointer<MapLayer> mapLayer : m_graphViewModel->getMapLayers()) {
@@ -125,9 +112,9 @@ void AQMapViewModel::resetItems() {
         auto allAttrItem = addChildItem(mapItem, "Attributes", rowL2);
         for (int col = 0; col < mapLayer->getAttributes().getNumColumns(); ++col) {
             auto attrItem = addChildItem(allAttrItem,
-                         QSharedPointer<AttributeItem>(
-                             new AttributeItem(mapLayer->getAttributes().getColumn(col))),
-                         col);
+                                         QSharedPointer<AttributeItem>(new AttributeItem(
+                                             mapLayer->getAttributes().getColumn(col))),
+                                         col);
         }
         rowL1++;
     }

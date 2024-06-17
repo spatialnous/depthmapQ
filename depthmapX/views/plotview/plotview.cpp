@@ -1,31 +1,15 @@
-// Copyright (C) 2011-2012, Tasos Varoudis
-
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-
-// You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-// depthmapX - spatial network analysis platform
-
-// PlotView.cpp : implementation file
+// SPDX-FileCopyrightText: 2011-2012 Tasos Varoudis
 //
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "plotview.h"
 #include "mainwindow.h"
 
 #include "salalib/attributetablehelpers.h"
 
+#include <QTransform>
 #include <qevent.h>
 #include <qpainter.h>
-#include <QTransform>
 
 #ifdef _WIN32
 #define finite _finite
@@ -64,23 +48,27 @@ QPlotView::QPlotView() {
 int QPlotView::screenX(double x) {
     return m_screen_bounds.left() +
            m_screen_bounds.width() *
-               (m_data_bounds.width() ? (x - m_data_bounds.bottom_left.x) / m_data_bounds.width() : 0.5);
+               (m_data_bounds.width() ? (x - m_data_bounds.bottom_left.x) / m_data_bounds.width()
+                                      : 0.5);
 }
 
 int QPlotView::screenY(double y) {
     return m_screen_bounds.top() -
            (abs(m_screen_bounds.height()) *
-            (m_data_bounds.height() ? (y - m_data_bounds.bottom_left.y) / m_data_bounds.height() : 0.5));
+            (m_data_bounds.height() ? (y - m_data_bounds.bottom_left.y) / m_data_bounds.height()
+                                    : 0.5));
 }
 
 double QPlotView::dataX(int x) {
-    return m_data_bounds.bottom_left.x +
-           m_data_bounds.width() * double(x - m_screen_bounds.left()) / double(m_screen_bounds.width());
+    return m_data_bounds.bottom_left.x + m_data_bounds.width() *
+                                             double(x - m_screen_bounds.left()) /
+                                             double(m_screen_bounds.width());
 }
 
 double QPlotView::dataY(int y) {
-    return m_data_bounds.bottom_left.y +
-           m_data_bounds.height() * double(m_screen_bounds.top() - y) / double(abs(m_screen_bounds.height()));
+    return m_data_bounds.bottom_left.y + m_data_bounds.height() *
+                                             double(m_screen_bounds.top() - y) /
+                                             double(abs(m_screen_bounds.height()));
 }
 
 QSize QPlotView::sizeHint() const { return QSize(2000, 2000); }
@@ -94,10 +82,10 @@ bool QPlotView::eventFilter(QObject *object, QEvent *e) {
                 if (pDoc->m_meta_graph->viewingProcessed()) {
                     AttributeTable &table = pDoc->m_meta_graph->getAttributeTable();
 
-                    auto xRange =
-                        getIndexItemsInValueRange(idx_x, table, dataX(hit_point.x() - 2), dataX(hit_point.x() + 2));
-                    auto yRange =
-                        getIndexItemsInValueRange(idx_y, table, dataY(hit_point.y() + 2), dataY(hit_point.y() - 2));
+                    auto xRange = getIndexItemsInValueRange(idx_x, table, dataX(hit_point.x() - 2),
+                                                            dataX(hit_point.x() + 2));
+                    auto yRange = getIndexItemsInValueRange(idx_y, table, dataY(hit_point.y() + 2),
+                                                            dataY(hit_point.y() - 2));
 
                     // work out anything near this point...
                     std::set<AttributeKey> xkeys;
@@ -113,7 +101,8 @@ bool QPlotView::eventFilter(QObject *object, QEvent *e) {
                     }
                     if (displayRow) {
                         // and that it has an appropriate state to display a hover wnd
-                        float val = displayRow->getValue(pDoc->m_meta_graph->getDisplayedAttribute());
+                        float val =
+                            displayRow->getValue(pDoc->m_meta_graph->getDisplayedAttribute());
                         if (val == -1.0f)
                             setToolTip("No value");
                         else if (val != -2.0f)
@@ -131,7 +120,8 @@ void QPlotView::paintEvent(QPaintEvent *event) {
 
     QRect rect = QRect(0, 0, width(), height());
     PafColor selcol(SALA_SELECTED_COLOR);
-    pDC.setPen(QPen(QBrush(QColor(selcol.redb(), selcol.greenb(), selcol.blueb())), 1, Qt::DotLine, Qt::RoundCap));
+    pDC.setPen(QPen(QBrush(QColor(selcol.redb(), selcol.greenb(), selcol.blueb())), 1, Qt::DotLine,
+                    Qt::RoundCap));
 
     /*  if (pDC->IsPrinting())
             {
@@ -177,7 +167,8 @@ void QPlotView::closeEvent(QCloseEvent *event) {
 }
 
 bool QPlotView::Output(QPainter *pDC, QGraphDoc *pDoc, bool screendraw) {
-    // this is going to need a timer at somepoint, but for now, it's all very easy to start off:
+    // this is going to need a timer at somepoint, but for now, it's all very easy
+    // to start off:
     auto lock = pDoc->getLockDeferred();
     if (!lock.try_lock()) {
         return false;
@@ -188,8 +179,8 @@ bool QPlotView::Output(QPainter *pDC, QGraphDoc *pDoc, bool screendraw) {
     }
 
     AttributeTable &table = pDoc->m_meta_graph->getAttributeTable();
-    AttributeTableHandle &tableHandle = pDoc->m_meta_graph->getAttributeTableHandle();
-    LayerManagerImpl &layers = pDoc->m_meta_graph->getLayers();
+    AttributeTableHandle &tableHandle = pDoc->getAttributeTableHandle();
+    LayerManagerImpl &layers = pDoc->getLayers();
 
     QRect rect = QRect(0, 0, width(), height());
     int mindim = __min(rect.width(), rect.height());
@@ -288,14 +279,17 @@ bool QPlotView::Output(QPainter *pDC, QGraphDoc *pDoc, bool screendraw) {
     }
 
     pDC->setPen(pen);
-    pDC->drawText(minx_pos - 50, 99 * rect.height() / 100 - texth, 100, 16, Qt::AlignCenter, str_minx);
+    pDC->drawText(minx_pos - 50, 99 * rect.height() / 100 - texth, 100, 16, Qt::AlignCenter,
+                  str_minx);
     if (minx != maxx) {
-        pDC->drawText(maxx_pos - 50, 99 * rect.height() / 100 - texth, 100, 16, Qt::AlignCenter, str_maxx);
+        pDC->drawText(maxx_pos - 50, 99 * rect.height() / 100 - texth, 100, 16, Qt::AlignCenter,
+                      str_maxx);
     }
 
     pDC->drawText(yaxis_pos - texth - 100, miny_pos - texth / 2, 100, 16, Qt::AlignRight, str_miny);
     if (miny != maxy) {
-        pDC->drawText(yaxis_pos - texth - 100, maxy_pos - texth / 2, 100, 16, Qt::AlignRight, str_maxy);
+        pDC->drawText(yaxis_pos - texth - 100, maxy_pos - texth / 2, 100, 16, Qt::AlignRight,
+                      str_maxy);
     }
 
     pDC->drawLine(QPoint(yaxis_pos - texth / 2, miny_pos), QPoint(yaxis_pos, miny_pos));
@@ -340,10 +334,12 @@ bool QPlotView::Output(QPainter *pDC, QGraphDoc *pDoc, bool screendraw) {
         }
         if (!m_view_monochrome) {
             pen2 = QPen(QBrush(QColor(rgb)), spacer, Qt::SolidLine, Qt::FlatCap);
-            // pDC->setPen(QPen(QBrush(QColor(rgb)), spacer, Qt::SolidLine, Qt::FlatCap));
+            // pDC->setPen(QPen(QBrush(QColor(rgb)), spacer, Qt::SolidLine,
+            // Qt::FlatCap));
         } else if (sel_parity != (iter.getRow().isSelected() ? 1 : -1)) {
             pen2 = QPen(QBrush(QColor(rgb)), spacer, Qt::SolidLine, Qt::FlatCap);
-            // pDC->setPen(QPen(QBrush(QColor(rgb)), spacer, Qt::SolidLine, Qt::FlatCap));
+            // pDC->setPen(QPen(QBrush(QColor(rgb)), spacer, Qt::SolidLine,
+            // Qt::FlatCap));
             sel_parity = (iter.getRow().isSelected() ? 1 : -1);
         }
         pDC->setPen(pen2);
@@ -363,37 +359,46 @@ bool QPlotView::Output(QPainter *pDC, QGraphDoc *pDoc, bool screendraw) {
         if (m_regression.model(m_data_bounds.bottom_left.x) < m_data_bounds.bottom_left.y) {
             // check line is on page
             if (m_regression.model(m_data_bounds.top_right.x) > m_data_bounds.bottom_left.y) {
-                bl = QPoint(screenX(m_regression.invmodel(m_data_bounds.bottom_left.y)), m_screen_bounds.top());
+                bl = QPoint(screenX(m_regression.invmodel(m_data_bounds.bottom_left.y)),
+                            m_screen_bounds.top());
                 if (m_regression.model(m_data_bounds.top_right.x) < m_data_bounds.top_right.y) {
-                    tr = QPoint(m_screen_bounds.right(), screenY(m_regression.model(m_data_bounds.top_right.x)));
+                    tr = QPoint(m_screen_bounds.right(),
+                                screenY(m_regression.model(m_data_bounds.top_right.x)));
                 } else {
-                    tr = QPoint(screenX(m_regression.invmodel(m_data_bounds.top_right.y)), m_screen_bounds.bottom());
+                    tr = QPoint(screenX(m_regression.invmodel(m_data_bounds.top_right.y)),
+                                m_screen_bounds.bottom());
                 }
                 pDC->drawLine(bl, tr);
             }
         } else if (m_regression.model(m_data_bounds.bottom_left.x) > m_data_bounds.top_right.y) {
             // check line is on page
             if (m_regression.model(m_data_bounds.top_right.x) < m_data_bounds.top_right.y) {
-                bl = QPoint(screenX(m_regression.invmodel(m_data_bounds.bottom_left.x)), m_screen_bounds.bottom());
+                bl = QPoint(screenX(m_regression.invmodel(m_data_bounds.bottom_left.x)),
+                            m_screen_bounds.bottom());
                 if (m_regression.model(m_data_bounds.top_right.x) > m_data_bounds.bottom_left.x) {
-                    tr = QPoint(m_screen_bounds.right(), screenY(m_regression.model(m_data_bounds.top_right.x)));
+                    tr = QPoint(m_screen_bounds.right(),
+                                screenY(m_regression.model(m_data_bounds.top_right.x)));
                 } else {
-                    tr = QPoint(screenX(m_regression.invmodel(m_data_bounds.top_right.y)), m_screen_bounds.top());
+                    tr = QPoint(screenX(m_regression.invmodel(m_data_bounds.top_right.y)),
+                                m_screen_bounds.top());
                 }
                 pDC->drawLine(bl, tr);
             }
         } else {
-            bl = QPoint(m_screen_bounds.left(), screenY(m_regression.model(m_data_bounds.bottom_left.x)));
+            bl = QPoint(m_screen_bounds.left(),
+                        screenY(m_regression.model(m_data_bounds.bottom_left.x)));
             double trv = m_regression.model(m_data_bounds.top_right.x);
             if (trv >= m_data_bounds.bottom_left.y && trv <= m_data_bounds.top_right.y) {
                 string += " v1";
                 tr = QPoint(m_screen_bounds.right(), screenY(trv));
             } else if (m_regression.b() > 0) { // upward inclined
                 string += " v2";
-                tr = QPoint(screenX(m_regression.invmodel(m_data_bounds.top_right.y)), m_screen_bounds.bottom());
+                tr = QPoint(screenX(m_regression.invmodel(m_data_bounds.top_right.y)),
+                            m_screen_bounds.bottom());
             } else { // downward inclined
                 string += " v3";
-                tr = QPoint(screenX(m_regression.invmodel(m_data_bounds.bottom_left.y)), m_screen_bounds.top());
+                tr = QPoint(screenX(m_regression.invmodel(m_data_bounds.bottom_left.y)),
+                            m_screen_bounds.top());
             }
             pDC->drawLine(bl, tr);
         }
@@ -528,10 +533,11 @@ void QPlotView::SetAxis(int axis, int col, bool reset) {
 
 void QPlotView::ResetRegression() {
     m_regression.clear();
-    if (m_x_axis != -1 && m_y_axis != -1 && pDoc->m_meta_graph && pDoc->m_meta_graph->viewingProcessed()) {
+    if (m_x_axis != -1 && m_y_axis != -1 && pDoc->m_meta_graph &&
+        pDoc->m_meta_graph->viewingProcessed()) {
         AttributeTable &table = pDoc->m_meta_graph->getAttributeTable();
         for (auto iter = table.begin(); iter != table.end(); iter++) {
-            if (isObjectVisible(pDoc->m_meta_graph->getLayers(), iter->getRow())) {
+            if (isObjectVisible(pDoc->getLayers(), iter->getRow())) {
                 float x = iter->getRow().getValue(m_x_axis);
                 float y = iter->getRow().getValue(m_y_axis);
                 if (std::isfinite(x) && std::isfinite(y) && x != -1.0f && y != -1.0f) {
@@ -592,17 +598,18 @@ void QPlotView::mouseMoveEvent(QMouseEvent *e) {
 void QPlotView::mouseReleaseEvent(QMouseEvent *e) {
     if (pressed_nFlags == MK_RBUTTON) {
         pDoc->m_meta_graph->clearSel();
-        pDoc->SetRedrawFlag(QGraphDoc::VIEW_ALL, QGraphDoc::REDRAW_POINTS, QGraphDoc::NEW_SELECTION);
+        pDoc->SetRedrawFlag(QGraphDoc::VIEW_ALL, QGraphDoc::REDRAW_POINTS,
+                            QGraphDoc::NEW_SELECTION);
         return;
     }
     m_selecting = false;
 
     AttributeTable &table = pDoc->m_meta_graph->getAttributeTable();
 
-    auto xRange =
-        getIndexItemsInValueRange(idx_x, table, dataX(m_drag_rect_a.left() - 2), dataX(m_drag_rect_a.right() + 2));
-    auto yRange =
-        getIndexItemsInValueRange(idx_y, table, dataY(m_drag_rect_a.bottom() + 2), dataY(m_drag_rect_a.top() - 2));
+    auto xRange = getIndexItemsInValueRange(idx_x, table, dataX(m_drag_rect_a.left() - 2),
+                                            dataX(m_drag_rect_a.right() + 2));
+    auto yRange = getIndexItemsInValueRange(idx_y, table, dataY(m_drag_rect_a.bottom() + 2),
+                                            dataY(m_drag_rect_a.top() - 2));
 
     // Stop drag rect...
     m_drag_rect_a = QRect(0, 0, 0, 0);

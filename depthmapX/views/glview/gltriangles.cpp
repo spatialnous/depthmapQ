@@ -1,18 +1,6 @@
-// depthmapX - spatial network analysis platform
-// Copyright (C) 2017, Petros Koutsolampros
-
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-
-// You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+// SPDX-FileCopyrightText: 2017 Petros Koutsolampros
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "gltriangles.h"
 #include <qmath.h>
@@ -53,7 +41,8 @@ static const char *fragmentShaderSource = // auto-format hack
         "}\n";
 // clang-format on
 
-void GLTriangles::loadTriangleData(const std::vector<std::pair<std::vector<Point2f>, QRgb>> &triangleData) {
+void GLTriangles::loadTriangleData(
+    const std::vector<std::pair<std::vector<Point2f>, QRgb>> &triangleData) {
 
     init(triangleData.size());
 
@@ -82,7 +71,8 @@ void GLTriangles::initializeGL(bool m_core) {
     if (m_data.size() == 0)
         return;
     m_program = new QOpenGLShaderProgram;
-    m_program->addShaderFromSourceCode(QOpenGLShader::Vertex, m_core ? vertexShaderSourceCore : vertexShaderSource);
+    m_program->addShaderFromSourceCode(QOpenGLShader::Vertex,
+                                       m_core ? vertexShaderSourceCore : vertexShaderSource);
     m_program->addShaderFromSourceCode(QOpenGLShader::Fragment,
                                        m_core ? fragmentShaderSourceCore : fragmentShaderSource);
     m_program->bindAttributeLocation("vertex", 0);
@@ -125,7 +115,8 @@ void GLTriangles::cleanup() {
     m_program = 0;
 }
 
-void GLTriangles::paintGL(const QMatrix4x4 &m_mProj, const QMatrix4x4 &m_mView, const QMatrix4x4 &m_mModel) {
+void GLTriangles::paintGL(const QMatrix4x4 &m_mProj, const QMatrix4x4 &m_mView,
+                          const QMatrix4x4 &m_mModel) {
     if (!m_built)
         return;
     QOpenGLVertexArrayObject::Binder vaoBinder(&m_vao);

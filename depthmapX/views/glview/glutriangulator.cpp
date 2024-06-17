@@ -1,4 +1,9 @@
-// adapted from: https://stackoverflow.com/questions/12600325/force-glutesselator-to-generate-only-gl-triangles
+// SPDX-FileCopyrightText: 2017 Petros Koutsolampros
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
+// adapted from:
+// https://stackoverflow.com/questions/12600325/force-glutesselator-to-generate-only-gl-triangles
 
 #include "glutriangulator.h"
 
@@ -39,7 +44,8 @@ void __stdcall tess_combine
 #else
 void tess_combine
 #endif
-    (GLdouble coords[3], void *vertex_data[4], GLfloat weight[4], void **outData, TessContext *ctx) {
+    (GLdouble coords[3], void *vertex_data[4], GLfloat weight[4], void **outData,
+     TessContext *ctx) {
     GLdouble *newVert = new GLdouble[3];
     ctx->combined.push_back(newVert);
 

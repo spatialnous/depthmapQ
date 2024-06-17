@@ -1,17 +1,6 @@
-// Copyright (C) 2011-2012, Tasos Varoudis
-
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-
-// You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+// SPDX-FileCopyrightText: 2011-2012 Tasos Varoudis
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "mainwindow.h"
 
@@ -41,13 +30,13 @@ CColourScaleDlg::CColourScaleDlg(QWidget *parent) : QDialog(parent) {
     c_red_slider_ctrl->setTickInterval(10);
 
     // these are out of order...
-    c_color_type->addItem(QString(tr("Equal Ranges (3-Colour)")));            // AXMANESQUE
-    c_color_type->addItem(QString(tr("Equal Ranges (Blue-Red)")));            // BLUERED
-    c_color_type->addItem(QString(tr("Equal Ranges (Purple-Orange)")));       // PURPLEORANGE
-    c_color_type->addItem(QString(tr("depthmapX Classic")));                  // DEPTHMAPCLASSIC
-    c_color_type->addItem(QString(tr("Equal Ranges (Greyscale)")));           // GREYSCALE
-    c_color_type->addItem(QString(tr("Equal Ranges (Monochrome)")));          // MONOCHROME
-    c_color_type->addItem(QString(tr("Equal Ranges (3-Colour Hue Only)")));   // HUEONLYAXMANESQUE
+    c_color_type->addItem(QString(tr("Equal Ranges (3-Colour)")));          // AXMANESQUE
+    c_color_type->addItem(QString(tr("Equal Ranges (Blue-Red)")));          // BLUERED
+    c_color_type->addItem(QString(tr("Equal Ranges (Purple-Orange)")));     // PURPLEORANGE
+    c_color_type->addItem(QString(tr("depthmapX Classic")));                // DEPTHMAPCLASSIC
+    c_color_type->addItem(QString(tr("Equal Ranges (Greyscale)")));         // GREYSCALE
+    c_color_type->addItem(QString(tr("Equal Ranges (Monochrome)")));        // MONOCHROME
+    c_color_type->addItem(QString(tr("Equal Ranges (3-Colour Hue Only)"))); // HUEONLYAXMANESQUE
 
     m_color_type_map.push_back(DisplayParams::AXMANESQUE);
     m_color_type_map.push_back(DisplayParams::BLUERED);
@@ -257,7 +246,8 @@ void CColourScaleDlg::OnFocusGraph(QGraphDoc *pDoc, int lParam) {
                pDoc != m_viewDoc) { // [Possible] change of window (sent on focus)
         m_viewDoc = pDoc;
         MyUpdateData(false, false);
-    } else if (lParam != QGraphDoc::CONTROLS_LOADALL && pDoc == m_viewDoc) { // Force update if match current window
+    } else if (lParam != QGraphDoc::CONTROLS_LOADALL &&
+               pDoc == m_viewDoc) { // Force update if match current window
         MyUpdateData(false, false);
     }
 }
@@ -284,7 +274,8 @@ void CColourScaleDlg::MyUpdateData(bool dir, bool apply_to_all) {
                     }
                     m_displayparams = map.getDisplayParams();
                     m_color = m_displayparams.colorscale;
-                    bool show_lines = m_show_lines, show_fill = m_show_fill, show_centroids = m_show_centroids;
+                    bool show_lines = m_show_lines, show_fill = m_show_fill,
+                         show_centroids = m_show_centroids;
                     map.getPolygonDisplay(show_lines, show_fill, show_centroids);
                     m_show_lines = show_lines;
                     m_show_fill = show_fill;
@@ -297,7 +288,8 @@ void CColourScaleDlg::MyUpdateData(bool dir, bool apply_to_all) {
                     }
                     m_displayparams = map.getDisplayParams();
                     m_color = m_displayparams.colorscale;
-                    bool show_lines = m_show_lines, show_fill = m_show_fill, show_centroids = m_show_centroids;
+                    bool show_lines = m_show_lines, show_fill = m_show_fill,
+                         show_centroids = m_show_centroids;
                     map.getPolygonDisplay(show_lines, show_fill, show_centroids);
                     m_show_lines = show_lines;
                     m_show_fill = show_fill;
@@ -326,13 +318,16 @@ void CColourScaleDlg::MyUpdateData(bool dir, bool apply_to_all) {
                 graph->getDisplayedPointMap().setDisplayParams(m_displayparams, apply_to_all);
             } else if (graph->getViewClass() & MetaGraph::VIEWAXIAL) {
                 graph->getDisplayedShapeGraph().setDisplayParams(m_displayparams, apply_to_all);
-                graph->getDisplayedShapeGraph().setPolygonDisplay(m_show_lines, m_show_fill, m_show_centroids);
+                graph->getDisplayedShapeGraph().setPolygonDisplay(m_show_lines, m_show_fill,
+                                                                  m_show_centroids);
             } else if (graph->getViewClass() & MetaGraph::VIEWDATA) {
                 graph->getDisplayedDataMap().setDisplayParams(m_displayparams, apply_to_all);
-                graph->getDisplayedDataMap().setPolygonDisplay(m_show_lines, m_show_fill, m_show_centroids);
+                graph->getDisplayedDataMap().setPolygonDisplay(m_show_lines, m_show_fill,
+                                                               m_show_centroids);
             }
         }
-        m_viewDoc->SetRedrawFlag(QGraphDoc::VIEW_ALL, QGraphDoc::REDRAW_GRAPH, QGraphDoc::NEW_DEPTHMAPVIEW_SETUP);
+        m_viewDoc->SetRedrawFlag(QGraphDoc::VIEW_ALL, QGraphDoc::REDRAW_GRAPH,
+                                 QGraphDoc::NEW_DEPTHMAPVIEW_SETUP);
     }
 }
 

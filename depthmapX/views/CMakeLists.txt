@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2017 Petros Koutsolampros
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+
 target_sources(depthmapX
     PRIVATE
         mapview.cpp
@@ -14,6 +18,7 @@ target_sources(depthmapX
         glview/glshapemap.cpp
         glview/gldynamicrect.cpp
         glview/gldynamicline.cpp
+        plotview/linreg.h
         plotview/plotview.cpp
         tableview/tableview.cpp
         depthmapview/depthmapview.cpp
@@ -36,9 +41,11 @@ target_sources(depthmapX
         glview/gldynamicrect.h
         glview/gldynamicline.h
         plotview/plotview.h
+        plotview/linreg.h
         tableview/tableview.h
         depthmapview/depthmapview.h
         glview/glregularpolygons.h
         glview/gltriangles.h
-        3dview/3dview.h)
+        3dview/3dview.h
+        3dview/glureimpl.h)
 

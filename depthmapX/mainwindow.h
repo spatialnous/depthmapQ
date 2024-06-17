@@ -1,47 +1,37 @@
-// Copyright (C) 2011-2012, Tasos Varoudis
-
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-
-// You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+// SPDX-FileCopyrightText: 2011-2012 Tasos Varoudis
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "depthmapX/indexWidget.h"
-#include "depthmapX/treeWindow.h"
-#include "depthmapX/GraphDoc.h"
-#include "depthmapX/compatibilitydefines.h"
-#include "depthmapX/settings.h"
-#include "depthmapX/mainwindowmoduleregistry.hpp"
+#include "GraphDoc.h"
+#include "dialogs/ColourScaleDlg.h"
+#include "indexWidget.h"
+#include "mainwindowmoduleregistry.hpp"
+#include "settings.h"
+#include "treeWindow.h"
+#include "views/mapview.h"
 
-#include "depthmapX/dialogs/ColourScaleDlg.h"
-#include "depthmapX/views/glview/glview.h"
-
-#include "interfaceversion.h"
-
-#include <QMainWindow>
 #include <QButtonGroup>
 #include <QComboBox>
+#include <QMainWindow>
 
-class ItemTreeEntry
-{
-public:
-   ItemTreeEntry() { m_type = -1; m_cat = -1; m_subcat = -1; }
-   ItemTreeEntry(char t, short c, short sc)
-   { m_type = t; m_cat = c; m_subcat = sc; }
-   char m_type;
-   short m_cat;
-   short m_subcat;
+class ItemTreeEntry {
+  public:
+    ItemTreeEntry() {
+        m_type = -1;
+        m_cat = -1;
+        m_subcat = -1;
+    }
+    ItemTreeEntry(char t, short c, short sc) {
+        m_type = t;
+        m_cat = c;
+        m_subcat = sc;
+    }
+    char m_type;
+    short m_cat;
+    short m_subcat;
 };
 
 class QDepthmapView;
@@ -56,26 +46,23 @@ class QSignalMapper;
 class QToolButton;
 QT_END_NAMESPACE
 
-const int  MaxRecentFiles = 5;
+const int MaxRecentFiles = 5;
 
 enum { FOCUSGRAPH = 1001, AllTransactionsDone = 1002 };
 
-class QmyEvent : public QEvent
-{
-public:
-    void* wparam;
+class QmyEvent : public QEvent {
+  public:
+    void *wparam;
     int lparam;
-    QmyEvent(Type type, void* wp, int lp);
-
+    QmyEvent(Type type, void *wp, int lp);
 };
 
-class MainWindow : public QMainWindow
-{
+class MainWindow : public QMainWindow {
     Q_OBJECT
 
-public:
+  public:
     MainWindow(const QString &fileToLoad, Settings &settings);
-   // Graph analysis options
+    // Graph analysis options
     QString m_formula_cache;
     Options m_options;
     QRgb m_foreground;
@@ -85,9 +72,9 @@ public:
 
     QGraphDoc *activeMapDoc();
 
-    bool m_simpleVersion;  // bool that replaces compile defines
+    bool m_simpleVersion; // bool that replaces compile defines
 
-    void RedoPlotViewMenu(QGraphDoc* pDoc);
+    void RedoPlotViewMenu(QGraphDoc *pDoc);
     void updateToolbar();
     void update3DToolbar();
     void showContextMenu(QPoint &point);
@@ -97,18 +84,18 @@ public:
 
     void chooseAttributeOnIndex(int attributeIdx);
 
-protected:
-    QGraphDoc* m_treeDoc;
+  protected:
+    QGraphDoc *m_treeDoc;
     void closeEvent(QCloseEvent *event);
     bool eventFilter(QObject *object, QEvent *e);
-    virtual void actionEvent( QActionEvent * event );
+    virtual void actionEvent(QActionEvent *event);
 
-private slots:
+  private slots:
     void updateActiveWindows();
     void updateSubWindowTitles(QString newTitle);
     void updateWindowMenu();
     void setActiveSubWindow(QWidget *window);
-    void OnSelchangingTree(QTreeWidgetItem* item, int col);
+    void OnSelchangingTree(QTreeWidgetItem *item, int col);
     void OnSelchangingList();
     void OnFileNew();
     void OnFileImport();
@@ -181,7 +168,7 @@ private slots:
     void OnViewScatterplot();
     void OnToolsRun();
     void OnToolsAgentRun();
-// MapView message
+    // MapView message
     void zoomModeTriggered();
     void FillModeTriggered();
     void LineModeTriggered();
@@ -202,13 +189,13 @@ private slots:
     void OnSelchangeViewSelector_Y(int);
     void OninvertColor();
     void OnzoomTo();
-// PlotView message
+    // PlotView message
     void OntoggleColor();
     void OntoggleOrg();
     void OnviewTrend();
     void OnYX();
     void OnRtwo();
-//Menu Update slots
+    // Menu Update slots
     void updateViewMenu();
     void updateAttributesMenu();
     void updateMapMenu();
@@ -220,7 +207,7 @@ private slots:
     void updateAgentToolsSubMenu();
     void updateSegmentSubMenu();
     void updateAxialSubMenu();
-//3D View ToolBar slots
+    // 3D View ToolBar slots
     void OnToolsImportTraces();
     void OnAddAgent();
     void OnToolsAgentsPlay();
@@ -232,8 +219,9 @@ private slots:
     void On3dZoom();
     void OnPlayLoop();
     void On3dFilled();
-private:
-    int OnFocusGraph(QGraphDoc* pDoc, int lParam);
+
+  private:
+    int OnFocusGraph(QGraphDoc *pDoc, int lParam);
     void setCurrentFile(const QString &fileName);
     void updateRecentFileActions(const QStringList &files);
     QString strippedName(const QString &fullFileName);
@@ -250,21 +238,21 @@ private:
 
     bool m_defaultMapWindowIsLegacy;
 
-    QWidget * setupAttributesListWidget();
+    QWidget *setupAttributesListWidget();
     MapView *createMapView();
     MapView *activeMapView();
     QMdiSubWindow *findMapView(const QString &fileName);
-//////////////////////////////////////////////////////
-//	treeContorl
+    //////////////////////////////////////////////////////
+    //	treeContorl
     QVector<QIcon> m_tree_icon;
     std::map<int, std::string> m_view_map_entries;
 
     std::vector<bool> m_attribute_locked;
-    std::map<QTreeWidgetItem*, ItemTreeEntry> m_treegraphmap;
-    std::map<QTreeWidgetItem*, ItemTreeEntry> m_treedrawingmap;
-    QTreeWidgetItem* m_topgraph;
-    QTreeWidgetItem* m_backgraph;
-    QTreeWidgetItem* m_treeroots[5];
+    std::map<QTreeWidgetItem *, ItemTreeEntry> m_treegraphmap;
+    std::map<QTreeWidgetItem *, ItemTreeEntry> m_treedrawingmap;
+    QTreeWidgetItem *m_topgraph;
+    QTreeWidgetItem *m_backgraph;
+    QTreeWidgetItem *m_treeroots[5];
 
     void MakeTree();
     void MakeGraphTree();
@@ -275,12 +263,12 @@ private:
     void SetDrawingTreeChecks();
     void SetGraphTreeChecks();
 
-////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////
 
     QMdiArea *mdiArea;
     QSignalMapper *windowMapper;
-    IndexWidget* m_indexWidget;
-    AttribWindow* m_attrWindow;
+    IndexWidget *m_indexWidget;
+    AttribWindow *m_attrWindow;
     CColourScaleDlg m_wndColourScale;
 
     QLabel *g_size;
@@ -320,8 +308,7 @@ private:
     QToolButton *attr_add_button;
     QToolButton *attr_del_button;
 
-
-    //File Menu Actions
+    // File Menu Actions
     QAction *newAct;
     QAction *openAct;
     QAction *closeAct;
@@ -335,7 +322,7 @@ private:
     QAction *separatorAct;
     QAction *exitAct;
 
-    //Edit Menu Actions
+    // Edit Menu Actions
     QAction *undoAct;
     QAction *copyDataAct;
     QAction *copyScreenAct;
@@ -344,7 +331,7 @@ private:
     QAction *selectByQueryAct;
     QAction *selectionToLayerAct;
 
-    //Map Menu Actions
+    // Map Menu Actions
     QAction *mapNewAct;
     QAction *deleteAct;
     QAction *convertActiveMapAct;
@@ -359,11 +346,11 @@ private:
     QAction *exportSegmentConnectionsPairAct;
     QAction *exportPointmapConnectionsPairAct;
 
-    //Attributes Menu Actions
+    // Attributes Menu Actions
     QAction *renameColumnAct;
     QAction *columnPropertiesAct;
 
-    //Tools Menu Actions
+    // Tools Menu Actions
     QAction *makeVisibilityGraphAct;
     QAction *unmakeVisibilityGraphAct;
     QAction *importVGALinksAct;
@@ -388,11 +375,11 @@ private:
     QAction *segmentMetricStepAct;
     QAction *optionsAct;
 
-    //View Menu Actions
+    // View Menu Actions
     QAction *showGridAct;
     QAction *attributeSummaryAct;
 
-    //Window Menu Actions
+    // Window Menu Actions
     QAction *mapAct;
     QAction *scatterPlotAct;
     QAction *tableAct;
@@ -403,14 +390,14 @@ private:
     QAction *tileAct;
     QAction *arrangeIconsAct;
 
-    //Help Menu Actions
+    // Help Menu Actions
     QAction *onlineBugsAct;
     QAction *onlineHandbookAct;
     QAction *onlineTutorialsAct;
     QAction *onlineScriptingManualAct;
     QAction *aboutDepthMapAct;
 
-//depthmapX Contorl
+    // depthmapX Contorl
     QAction *addColumAct;
     QAction *updateColumAct;
     QAction *removeColumAct;
@@ -430,7 +417,7 @@ private:
     QAction *PartialMakeIosAct;
     QAction *JoinAct;
     QAction *JoinUnlinkAct;
-//PlotMap control
+    // PlotMap control
 
     QComboBox *x_coord;
     QComboBox *y_coord;
@@ -439,7 +426,7 @@ private:
     QAction *viewTrend;
     QAction *yx;
     QAction *Rtwo;
-//3D View ToolBar
+    // 3D View ToolBar
     QAction *toolsImportTracesAct;
     QAction *addAgentAct;
     QAction *toolsAgentsPlayAct;
@@ -454,32 +441,31 @@ private:
 
     int m_selected_mapbar_item = -1;
 
-
     enum {
-       ID_MAPBAR_ZOOM_ITEMS = 2,
-       ID_MAPBAR_FILL_ITEMS = 8,
-       ID_MAPBAR_DRAW_ITEMS = 10,
-       ID_MAPBAR_ISOVIST_ITEMS = 12,
-       ID_MAPBAR_JOIN_ITEMS = 15
+        ID_MAPBAR_ZOOM_ITEMS = 2,
+        ID_MAPBAR_FILL_ITEMS = 8,
+        ID_MAPBAR_DRAW_ITEMS = 10,
+        ID_MAPBAR_ISOVIST_ITEMS = 12,
+        ID_MAPBAR_JOIN_ITEMS = 15
     };
 
     enum {
-       ID_MAPBAR_ITEM_SELECT = 0,
-       ID_MAPBAR_ITEM_MOVE = 1,
-       ID_MAPBAR_ITEM_ZOOM_IN = 2,
-       ID_MAPBAR_ITEM_ZOOM_OUT = 3,
-       ID_MAPBAR_ITEM_FILL = 7,
-       ID_MAPBAR_ITEM_SEMIFILL = 8,
-       ID_MAPBAR_ITEM_PENCIL = 9,
-       ID_MAPBAR_ITEM_LINETOOL = 10,
-       ID_MAPBAR_ITEM_POLYGON = 11,
-       ID_MAPBAR_ITEM_ISOVIST = 12,
-       ID_MAPBAR_ITEM_HALFISOVIST = 13,
-       ID_MAPBAR_ITEM_AL2 = 14,
-       ID_MAPBAR_ITEM_PD = 15,
-       ID_MAPBAR_ITEM_JOIN = 16,
-       ID_MAPBAR_ITEM_UNJOIN = 17,
-       ID_MAPBAR_ITEM_AUGMENT_FILL = 18 // AV test - TV
+        ID_MAPBAR_ITEM_SELECT = 0,
+        ID_MAPBAR_ITEM_MOVE = 1,
+        ID_MAPBAR_ITEM_ZOOM_IN = 2,
+        ID_MAPBAR_ITEM_ZOOM_OUT = 3,
+        ID_MAPBAR_ITEM_FILL = 7,
+        ID_MAPBAR_ITEM_SEMIFILL = 8,
+        ID_MAPBAR_ITEM_PENCIL = 9,
+        ID_MAPBAR_ITEM_LINETOOL = 10,
+        ID_MAPBAR_ITEM_POLYGON = 11,
+        ID_MAPBAR_ITEM_ISOVIST = 12,
+        ID_MAPBAR_ITEM_HALFISOVIST = 13,
+        ID_MAPBAR_ITEM_AL2 = 14,
+        ID_MAPBAR_ITEM_PD = 15,
+        ID_MAPBAR_ITEM_JOIN = 16,
+        ID_MAPBAR_ITEM_UNJOIN = 17,
+        ID_MAPBAR_ITEM_AUGMENT_FILL = 18 // AV test - TV
     };
 
     int m_currentIsovistModeType = ID_MAPBAR_ITEM_ISOVIST;

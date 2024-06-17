@@ -1,0 +1,48 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: acanthis
+Upstream-Contact: Petros Koutsolampros <commits@pklampros.io>
+Source: https://github.com/spatialnous/salalib
+
+Files: .clang-format resources/graph.grammar .gitmodules .mailmap .travis.yml .github/*
+Copyright: Petros Koutsolampros <commits@pklampros.io>
+License: GPL-3.0-or-later
+
+Files: depthmapX/images/* depthmapX/icons/* depthmapX/UI/*.ui depthmapX/icons.rc depthmapX/*.qrc depthmapX/resources/**/*.qrc depthmapX/**/*.png depthmapX/resources/Info.plist tools/build-appimage/depthmapX.desktop
+Copyright: depthmapX authors
+License: GPL-3.0-or-later
+
+Files: acanthis/images/* acanthis/dialogs/*.ui acanthis/dialogs/**/*.png acanthis/resources/Info.plist acanthis/**/*.qrc acanthis/*.qrc
+Copyright: Petros Koutsolampros <commits@pklampros.io>
+License: GPL-3.0-or-later
+
+Files: .gitignore GuiUnitTest/.gitignore README.md ci/* tools/build-*/*.txt tools/build-image/Dockerfile
+Copyright: depthmapX authors
+License: GPL-3.0-or-later
+
+Files: dist/* docs/*.md
+Copyright: depthmapX authors
+License: GPL-3.0-or-later
+
+Files: testdata/*
+Copyright: Public domain
+License: CC0-1.0
+
+Files: ThirdParty/Catch/*
+Copyright: Catch2 Authors
+License: BSL-1.0
+
+Files: ThirdParty/FakeIt/*
+Copyright: Eran Pe'er
+License: MIT
+
+Files: docs/Agents_Manual_Draft01_2012.pdf
+Copyright: Kinda Al_Sayed, Alasdair Turner
+License: GPL-3.0-or-later
+
+Files: docs/DepthmapManualForDummies-v13.pdf
+Copyright: Akkelies van Nes <a.vannes@tudelft.nl>, Chunyan Song
+License: CC0-1.0
+
+Files: docs/DepthmapManualForDummies_v20_short.pdf
+Copyright: Akkelies van Nes <avn@hvl.no>, Claudia Yamu, Chunyan Song, Abdelbaseer A. Mohamed
+License: CC0-1.0

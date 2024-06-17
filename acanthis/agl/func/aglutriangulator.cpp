@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2017 Petros Koutsolampros
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 // adapted from:
 // https://stackoverflow.com/questions/12600325/force-glutesselator-to-generate-only-gl-triangles
 
