@@ -7,7 +7,6 @@
 #include "graphviewmodel.h"
 
 #include <QAbstractListModel>
-#include <qqml.h>
 
 class AQMapViewModel : public QAbstractItemModel {
     Q_OBJECT

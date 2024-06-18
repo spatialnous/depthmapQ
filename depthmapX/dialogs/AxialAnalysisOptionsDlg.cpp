@@ -4,7 +4,9 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "AxialAnalysisOptionsDlg.h"
+
 #include "mainwindow.h"
+
 #include <QMessageBox>
 
 CAxialAnalysisOptionsDlg::CAxialAnalysisOptionsDlg(MetaGraph *graph, QWidget *parent)

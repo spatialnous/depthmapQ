@@ -6,6 +6,7 @@
 #pragma once
 
 #include "imainwindowmodule.h"
+
 #include <memory>
 #include <vector>
 

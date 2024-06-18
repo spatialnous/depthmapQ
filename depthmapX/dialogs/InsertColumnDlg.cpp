@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "InsertColumnDlg.h"
+
 #include "mainwindow.h"
 
 CInsertColumnDlg::CInsertColumnDlg(AttributeTable *table, int col, QWidget *parent)

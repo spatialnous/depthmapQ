@@ -2,10 +2,9 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
+#pragma once
+
 #include "ui_PushDialog.h"
-#include <salalib/mgraph.h>
-#include <salalib/shapegraph.h>
-#include <salalib/shapemap.h>
 
 class CPushDialog : public QDialog, public Ui::CPushDialog {
     Q_OBJECT

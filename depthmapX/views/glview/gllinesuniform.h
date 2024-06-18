@@ -5,6 +5,7 @@
 #pragma once
 
 #include "genlib/p2dpoly.h"
+
 #include <QOpenGLBuffer>
 #include <QOpenGLFunctions>
 #include <QOpenGLShaderProgram>
@@ -12,7 +13,6 @@
 #include <QRgb>
 #include <QVector3D>
 #include <QVector>
-#include <qopengl.h>
 
 class GLLinesUniform {
   public:

@@ -2,6 +2,8 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
+#pragma once
+
 #include "ui_FindLocDlg.h"
 
 class CFindLocDlg : public QDialog, public Ui::CFindLocDlg {

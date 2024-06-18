@@ -4,8 +4,6 @@
 
 #pragma once
 
-#include "maplayer.h"
-
 #include "salalib/mgraph.h"
 
 #include <QObject>

@@ -2,6 +2,8 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
+#include "treeWindow.h"
+
 #include <QtCore/QDebug>
 #include <QtCore/QEvent>
 
@@ -12,8 +14,6 @@
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QMessageBox>
 #include <QtWidgets/QTreeWidgetItem>
-
-#include "treeWindow.h"
 
 QT_BEGIN_NAMESPACE
 

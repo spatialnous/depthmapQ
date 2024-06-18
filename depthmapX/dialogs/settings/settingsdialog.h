@@ -7,7 +7,9 @@
 #include "settingspage.h"
 
 #include "depthmapX/settings.h"
+
 #include <QDialog>
+
 #include <memory>
 #include <vector>
 

@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "NewLayerDlg.h"
+
 #include <QMessageBox>
 
 CNewLayerDlg::CNewLayerDlg(QWidget *parent) : QDialog(parent) {

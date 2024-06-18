@@ -22,15 +22,20 @@ add_compile_definitions(_DEPTHMAP)
 
 set(depthmapXTest_SRCS
     main.cpp
+    selfcleaningfile.h
     testgllines.cpp
     testgllinesuniform.cpp
     testglrastertexture.cpp
+    testviewhelpers.cpp
+    testsettings.cpp
+    ../depthmapX/settingsimpl.cpp
+    ../depthmapX/views/viewhelpers.cpp
     ../depthmapX/views/glview/gllines.h
     ../depthmapX/views/glview/gllines.cpp
-	../depthmapX/views/glview/gllinesuniform.h
-	../depthmapX/views/glview/gllinesuniform.cpp
-	../depthmapX/views/glview/glrastertexture.h
-	../depthmapX/views/glview/glrastertexture.cpp)
+    ../depthmapX/views/glview/gllinesuniform.h
+    ../depthmapX/views/glview/gllinesuniform.cpp
+    ../depthmapX/views/glview/glrastertexture.h
+    ../depthmapX/views/glview/glrastertexture.cpp)
 
 
 include_directories("../ThirdParty/Catch")

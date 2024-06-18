@@ -6,6 +6,7 @@
 
 #include "depthmapX/GraphDoc.h"
 #include "depthmapX/settings.h"
+
 #include <QOpenGLWidget>
 
 class MapView : public QOpenGLWidget {

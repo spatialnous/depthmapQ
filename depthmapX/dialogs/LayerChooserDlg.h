@@ -2,10 +2,9 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
+#pragma once
+
 #include "ui_LayerChooserDlg.h"
-#include <salalib/mgraph.h>
-#include <salalib/shapegraph.h>
-#include <salalib/shapemap.h>
 
 class CLayerChooserDlg : public QDialog, public Ui::CLayerChooserDlg {
     Q_OBJECT

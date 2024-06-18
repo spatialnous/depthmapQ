@@ -4,9 +4,8 @@
 
 #pragma once
 
-#include "depthmapX/mainwindowfactory.h"
-#include "interfaceversion.h"
-#include "settingsimpl.h"
+#include "mainwindow.h"
+
 #include <QApplication>
 #include <QFileOpenEvent>
 #include <QtDebug>

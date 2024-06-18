@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include "mainwindow.h"
+#include "ColourScaleDlg.h"
 
 CColourScaleDlg::CColourScaleDlg(QWidget *parent) : QDialog(parent) {
     setupUi(this);

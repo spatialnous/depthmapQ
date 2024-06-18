@@ -4,12 +4,7 @@
 
 #include <QWidget>
 
-/////////////////////////////////////////////////////////////////////////////
-// PlotView view
-
-// class CHoverWnd;
-
-#include "qpixmap.h"
+#include <QPixmap>
 #include <QPoint>
 #include <QRect>
 #include <QSize>

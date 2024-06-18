@@ -11,7 +11,6 @@
 #include <QRgb>
 #include <QVector3D>
 #include <QVector>
-#include <qopengl.h>
 
 class GLDynamicRect {
   public:

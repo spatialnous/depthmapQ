@@ -4,6 +4,7 @@
 
 #include "generalpage.h"
 #include "depthmapX/settings.h"
+
 #include <QtWidgets>
 
 GeneralPage::GeneralPage(Settings &settings, QWidget *parent) : SettingsPage(settings, parent) {

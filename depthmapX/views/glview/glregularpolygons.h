@@ -4,9 +4,9 @@
 
 #pragma once
 
-#include "salalib/pafcolor.h"
+#include "gltriangles.h"
 
-#include "depthmapX/views/glview/gltriangles.h"
+#include "salalib/pafcolor.h"
 
 #include "genlib/p2dpoly.h"
 
@@ -17,7 +17,6 @@
 #include <QVector3D>
 #include <QVector>
 #include <memory>
-#include <qopengl.h>
 
 /**
  * @brief Meant to represent regular polygons i.e. those that are equiangular (all angles are equal

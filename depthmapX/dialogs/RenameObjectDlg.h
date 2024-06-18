@@ -2,6 +2,8 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
+#pragma once
+
 #include "ui_RenameObjectDlg.h"
 
 class CRenameObjectDlg : public QDialog, public Ui::CRenameObjectDlg {

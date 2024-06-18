@@ -2,10 +2,11 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
+#pragma once
+
 #include "ui_AttributeChooserDlg.h"
-#include <salalib/mgraph.h>
-#include <salalib/shapegraph.h>
-#include <salalib/shapemap.h>
+
+#include "salalib/attributetable.h"
 
 class CAttributeChooserDlg : public QDialog, public Ui::CAttributeChooserDlg {
     Q_OBJECT

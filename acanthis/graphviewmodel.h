@@ -12,7 +12,7 @@
 #include "shapemaplayer.h"
 
 #include <QObject>
-#include <qqml.h>
+#include <QtQmlIntegration/QtQmlIntegration>
 
 // This class is meant to hold display information about one view[port]
 // of the graph document, such as which items are displayed

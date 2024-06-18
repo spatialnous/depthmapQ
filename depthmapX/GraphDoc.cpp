@@ -12,8 +12,6 @@
 #include "dialogs/AxialAnalysisOptionsDlg.h"
 #include "dialogs/ColumnPropertiesDlg.h"
 #include "dialogs/ConvertShapesDlg.h"
-#include "dialogs/EditConnectionsDlg.h"
-#include "dialogs/FewestLineOptionsDlg.h"
 #include "dialogs/FilePropertiesDlg.h"
 #include "dialogs/GridDialog.h"
 #include "dialogs/InsertColumnDlg.h"
@@ -28,11 +26,12 @@
 #include "dialogs/RenameObjectDlg.h"
 #include "dialogs/SegmentAnalysisDlg.h"
 #include "dialogs/TopoMetDlg.h"
-
 #include "views/depthmapview/depthmapview.h"
 #include "views/viewhelpers.h"
 
+#include "salalib/entityparsing.h"
 #include "salalib/importutils.h"
+#include "salalib/linkutils.h"
 #include "salalib/salaprogram.h"
 
 #include <QFile>

@@ -2,10 +2,12 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
+#pragma once
+
 #include "ui_InsertColumnDlg.h"
-#include <salalib/mgraph.h>
-#include <salalib/shapegraph.h>
-#include <salalib/shapemap.h>
+
+#include "salalib/attributetable.h"
+
 #include <string>
 #include <vector>
 

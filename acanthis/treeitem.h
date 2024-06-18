@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "QVariant"
+#include <QVariant>
 
 #include <memory>
 #include <vector>

@@ -3,8 +3,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "gllines.h"
-#include <genlib/exceptions.h>
-#include <qmath.h>
+
+#include <QtMath>
 
 static const char *vertexShaderSourceCore = //
     "#version 150\n"

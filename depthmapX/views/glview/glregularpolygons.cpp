@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "glregularpolygons.h"
+
 #include <math.h>
 
 void GLRegularPolygons::loadPolygonData(

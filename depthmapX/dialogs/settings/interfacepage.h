@@ -5,8 +5,10 @@
 #pragma once
 
 #include "settingspage.h"
+
 #include <QWidget>
 #include <QtWidgets>
+
 #include <map>
 #include <memory>
 

@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "MakeOptionsDlg.h"
+
 #include <QMessageBox>
 
 CMakeOptionsDlg::CMakeOptionsDlg(QWidget *parent) : QDialog(parent) {

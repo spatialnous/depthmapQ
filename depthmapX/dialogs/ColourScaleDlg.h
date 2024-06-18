@@ -4,8 +4,9 @@
 
 #pragma once
 
-#include "depthmapX/GraphDoc.h"
 #include "depthmapX/ui_ColourScaleDlg.h"
+
+#include "depthmapX/GraphDoc.h"
 
 class CColourScaleDlg : public QDialog, public Ui::CColourScaleDlg {
     Q_OBJECT

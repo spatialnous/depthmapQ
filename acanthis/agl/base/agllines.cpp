@@ -4,7 +4,7 @@
 
 #include "agllines.h"
 
-#include <genlib/exceptions.h>
+#include "genlib/exceptions.h"
 
 #include <math.h>
 

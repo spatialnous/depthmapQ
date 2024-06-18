@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "glpointmap.h"
+
 #include "salalib/geometrygenerators.h"
 #include "salalib/linkutils.h"
 

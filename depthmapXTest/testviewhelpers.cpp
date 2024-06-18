@@ -2,8 +2,9 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include "catch.hpp"
 #include "depthmapX/views/viewhelpers.h"
+
+#include <catch.hpp>
 
 #include <iomanip>
 #include <sstream>

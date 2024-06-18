@@ -3,6 +3,9 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "mainwindow.h"
+
+#include "salalib/entityparsing.h"
+
 #include <QEvent>
 #include <QtGui>
 

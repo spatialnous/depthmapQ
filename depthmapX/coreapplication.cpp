@@ -2,7 +2,11 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include "depthmapX/coreapplication.h"
+#include "coreapplication.h"
+
+#include "interfaceversion.h"
+#include "mainwindowfactory.h"
+#include "settingsimpl.h"
 
 int CoreApplication::exec() {
     SettingsImpl settings(new DefaultSettingsFactory);

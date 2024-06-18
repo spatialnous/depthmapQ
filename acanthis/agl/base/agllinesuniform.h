@@ -15,7 +15,6 @@
 #include <QOpenGLVertexArrayObject>
 #include <QVector3D>
 #include <QVector>
-#include <qopengl.h>
 
 class AGLLinesUniform : public AGLObject {
   public:

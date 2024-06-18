@@ -61,9 +61,8 @@ set(MODULES_CORE_TEST FALSE)
 add_subdirectory(genlib)
 add_subdirectory(salalib)
 add_subdirectory(modules) # only the core modules are loaded here
-add_subdirectory(depthmapXTest)
 add_subdirectory(depthmapX)
-add_subdirectory(GuiUnitTest)
+add_subdirectory(depthmapXTest)
 add_subdirectory(acanthis)
 add_subdirectory(moduleTest)
 

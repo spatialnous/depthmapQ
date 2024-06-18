@@ -15,7 +15,6 @@
 #include <QRgb>
 #include <QVector3D>
 #include <QVector>
-#include <qopengl.h>
 
 /**
  * @brief General triangles representation. All same colour

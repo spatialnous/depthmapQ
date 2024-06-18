@@ -2,11 +2,12 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include <QtWidgets>
+#include "settingsdialog.h"
 
 #include "generalpage.h"
 #include "interfacepage.h"
-#include "settingsdialog.h"
+
+#include <QtWidgets>
 
 SettingsDialog::SettingsDialog(Settings &settings) : m_settings(settings) {
     contentsWidget = new QListWidget;

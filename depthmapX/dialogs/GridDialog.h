@@ -3,6 +3,8 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
+#pragma once
+
 #include "ui_GridDialog.h"
 
 class CGridDialog : public QDialog, public Ui::CGridDialog {

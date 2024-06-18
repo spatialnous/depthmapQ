@@ -2,10 +2,11 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
+#pragma once
+
 #include "ui_SegmentAnalysisDlg.h"
-#include <salalib/mgraph.h>
-#include <salalib/shapegraph.h>
-#include <salalib/shapemap.h>
+
+#include "salalib/mgraph.h"
 
 class CSegmentAnalysisDlg : public QDialog, public Ui::CSegmentAnalysisDlg {
     Q_OBJECT

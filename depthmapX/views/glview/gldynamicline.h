@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "depthmapX/views/glview/gldynamicrect.h"
+#include "gldynamicrect.h"
 
 class GLDynamicLine : public GLDynamicRect {
   public:

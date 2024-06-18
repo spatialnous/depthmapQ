@@ -2,6 +2,8 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
+#pragma once
+
 #include "ui_EditConnectionsDlg.h"
 
 class CEditConnectionsDlg : public QDialog, public Ui::CEditConnectionsDlg {

@@ -5,6 +5,7 @@
 
 #include "GraphDoc.h"
 #include "settings.h"
+
 #include <QTableWidget>
 
 class QEvent;

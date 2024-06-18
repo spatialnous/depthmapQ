@@ -3,11 +3,11 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "depthmapX/views/mapview.h"
+
+#include <QPixmap>
 #include <QPoint>
 #include <QRect>
 #include <QSize>
-
-#include <qpixmap.h>
 
 #define MK_LBUTTON 0x0001
 #define MK_RBUTTON 0x0002

@@ -4,16 +4,14 @@
 
 #pragma once
 
-#include "depthmapX/GraphDoc.h"
+#include "gldynamicline.h"
+#include "gldynamicrect.h"
+#include "gllines.h"
+#include "gllinesuniform.h"
+#include "glpointmap.h"
+#include "glshapegraph.h"
 
-#include "depthmapX/views/glview/gldynamicline.h"
-#include "depthmapX/views/glview/gldynamicrect.h"
-#include "depthmapX/views/glview/gllines.h"
-#include "depthmapX/views/glview/gllinesuniform.h"
-#include "depthmapX/views/glview/glpointmap.h"
-#include "depthmapX/views/glview/glpolygons.h"
-#include "depthmapX/views/glview/glrastertexture.h"
-#include "depthmapX/views/glview/glshapegraph.h"
+#include "depthmapX/GraphDoc.h"
 #include "depthmapX/views/mapview.h"
 
 #include <QMatrix4x4>

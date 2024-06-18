@@ -17,7 +17,6 @@
 #include <QRgb>
 #include <QVector3D>
 #include <QVector>
-#include <qopengl.h>
 
 class AGLLines : public AGLObject {
     friend class testgllines;

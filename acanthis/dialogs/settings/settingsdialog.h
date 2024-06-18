@@ -7,7 +7,9 @@
 #include "settingspage.h"
 
 #include "../../settings.h"
+
 #include <QDialog>
+
 #include <memory>
 #include <vector>
 

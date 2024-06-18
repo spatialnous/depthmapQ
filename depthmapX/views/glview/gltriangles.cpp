@@ -3,7 +3,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "gltriangles.h"
-#include <qmath.h>
+
+#include <QtMath>
 
 // clang-format off
 static const char *vertexShaderSourceCore = // auto-format hack

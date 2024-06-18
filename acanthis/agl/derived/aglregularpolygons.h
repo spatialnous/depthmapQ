@@ -16,7 +16,6 @@
 #include <QOpenGLVertexArrayObject>
 #include <QVector3D>
 #include <QVector>
-#include <qopengl.h>
 
 #include <memory>
 

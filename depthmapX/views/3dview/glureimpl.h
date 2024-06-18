@@ -46,11 +46,9 @@
 #include <math.h>
 
 #ifdef __APPLE__
-#include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
+#include "OpenGL/gl.h"
 #else
-#include <GL/gl.h>
-#include <GL/glu.h>
+#include "GL/gl.h"
 #endif
 
 namespace gluReimpl {

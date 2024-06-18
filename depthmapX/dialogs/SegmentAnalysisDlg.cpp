@@ -3,7 +3,9 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "SegmentAnalysisDlg.h"
+
 #include "mainwindow.h"
+
 #include <QMessageBox>
 
 CSegmentAnalysisDlg::CSegmentAnalysisDlg(MetaGraph *graph, QWidget *parent) : QDialog(parent) {

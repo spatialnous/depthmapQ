@@ -3,8 +3,10 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "mainwindowfactory.h"
+
 #include "dialogs/licenseagreement.h"
 #include "mainwindow.h"
+
 #include <memory>
 
 namespace MainWindowFactory {

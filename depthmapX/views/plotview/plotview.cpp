@@ -7,9 +7,9 @@
 
 #include "salalib/attributetablehelpers.h"
 
+#include <QCloseEvent>
+#include <QPainter>
 #include <QTransform>
-#include <qevent.h>
-#include <qpainter.h>
 
 #ifdef _WIN32
 #define finite _finite

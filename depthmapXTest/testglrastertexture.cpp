@@ -2,8 +2,9 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include "../depthmapX/views/glview/glrastertexture.h"
-#include "catch.hpp"
+#include "depthmapX/views/glview/glrastertexture.h"
+
+#include <catch.hpp>
 
 TEST_CASE("Test GLRasterTexture::loadRegionData()", "") {
     float bottomLeftX = 0;

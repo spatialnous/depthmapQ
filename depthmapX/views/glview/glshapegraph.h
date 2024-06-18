@@ -4,9 +4,10 @@
 
 #pragma once
 
-#include "depthmapX/views/glview/gllinesuniform.h"
-#include "depthmapX/views/glview/glshapemap.h"
-#include "salalib/mgraph.h"
+#include "gllinesuniform.h"
+#include "glshapemap.h"
+
+#include "salalib/shapegraph.h"
 
 class GLShapeGraph {
   public:

@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "AboutDlg.h"
+
 #include "version.h"
 #include "version_defs.h"
 

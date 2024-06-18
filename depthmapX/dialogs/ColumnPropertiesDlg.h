@@ -2,10 +2,12 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
+#pragma once
+
 #include "ui_ColumnPropertiesDlg.h"
-#include <salalib/mgraph.h>
-#include <salalib/shapegraph.h>
-#include <salalib/shapemap.h>
+
+#include "salalib/attributetable.h"
+#include "salalib/layermanagerimpl.h"
 
 class CColumnPropertiesDlg : public QDialog, public Ui::CColumnPropertiesDlg {
     Q_OBJECT
@@ -25,4 +27,6 @@ class CColumnPropertiesDlg : public QDialog, public Ui::CColumnPropertiesDlg {
 
   private slots:
     void OnOK();
+
+    double sqr(double x) { return x * x; }
 };

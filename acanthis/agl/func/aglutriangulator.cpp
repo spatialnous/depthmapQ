@@ -7,6 +7,15 @@
 
 #include "aglutriangulator.h"
 
+#ifdef __linux__
+#include "GL/glu.h"
+#elif _WIN32
+#include "GL/glu.h"
+#include "windows.h"
+#else
+#include "glu.h"
+#endif
+
 struct TessContext {
     ~TessContext() {
         for (size_t i = 0; i < combined.size(); ++i) {

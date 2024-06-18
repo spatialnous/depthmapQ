@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "depthmapX/GraphDoc.h"
+
 #include "salalib/agents/agentprogram.h"
 
 #include <QOpenGLWidget>

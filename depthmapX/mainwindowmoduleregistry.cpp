@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "mainwindowmoduleregistry.hpp"
+
 #include "modules/segmentshortestpaths/gui/segmentpathsmainwindow.h"
 
 void MainWindowModuleRegistry::populateModules() {

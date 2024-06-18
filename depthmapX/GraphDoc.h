@@ -4,6 +4,11 @@
 
 #pragma once
 
+#include "salalib/ianalysis.h"
+#include "salalib/mgraph.h"
+
+#include "genlib/comm.h"
+
 #include <QApplication>
 #include <QElapsedTimer>
 #include <QMutex>
@@ -12,18 +17,9 @@
 #include <QThread>
 #include <QWaitCondition>
 
-// My standard stuff:
-#include <float.h>
-#include <genlib/comm.h>
-#include <genlib/exceptions.h>
 #include <iomanip>
 #include <math.h>
 #include <sstream>
-// Sala
-#include "salalib/ianalysis.h"
-#include <salalib/entityparsing.h>
-#include <salalib/linkutils.h>
-#include <salalib/mgraph.h>
 
 QT_BEGIN_NAMESPACE
 

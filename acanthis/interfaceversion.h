@@ -5,8 +5,6 @@
 
 #pragma once
 
-#include "version_defs.h"
-
 #include "../version.h"
 
 #define INTERFACE_MAJOR_VERSION DEPTHMAPX_MAJOR_VERSION

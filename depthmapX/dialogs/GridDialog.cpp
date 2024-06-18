@@ -4,8 +4,10 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "GridDialog.h"
+
+#include "salalib/gridproperties.h"
+
 #include <QMessageBox>
-#include <salalib/gridproperties.h>
 
 CGridDialog::CGridDialog(double maxDimension, QWidget *parent)
     : QDialog(parent), m_maxdimension(maxDimension) {

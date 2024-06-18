@@ -2,8 +2,9 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include "../depthmapX/views/glview/gllinesuniform.h"
-#include "catch.hpp"
+#include "depthmapX/views/glview/gllinesuniform.h"
+
+#include <catch.hpp>
 
 TEST_CASE("Test GLLinesUniform::loadLineData()", "") {
     Point2f line1Start(0, 0);

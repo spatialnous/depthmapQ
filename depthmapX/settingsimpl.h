@@ -3,10 +3,13 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #pragma once
+
 #include "settings.h"
+
+#include <QSettings>
+#include <QStandardPaths>
+
 #include <memory>
-#include <qsettings.h>
-#include <qstandardpaths.h>
 
 class QSettingsFactory {
   public:

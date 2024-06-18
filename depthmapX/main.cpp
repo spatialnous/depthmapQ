@@ -3,11 +3,11 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
+#include "coreapplication.h"
+
 #include <QDateTime>
 #include <QDir>
 #include <QPixmap>
-
-#include "coreapplication.h"
 
 #ifdef _WIN32
 #include <windows.h>

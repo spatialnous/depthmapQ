@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "gldynamicline.h"
+
 /**
  * @brief GLDynamicLine::GLDynamicLine
  * This class is an OpenGL representation of a dynamic line. See GLDynamicRect

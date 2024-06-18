@@ -2,9 +2,11 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include <../depthmapX/settingsimpl.h>
+#include "selfcleaningfile.h"
+
+#include "depthmapX/settingsimpl.h"
+
 #include <catch.hpp>
-#include <selfcleaningfile.h>
 
 class TestSettingsFactory : public QSettingsFactory {
   public:

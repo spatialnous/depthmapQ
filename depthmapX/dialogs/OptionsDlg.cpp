@@ -3,7 +3,9 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "OptionsDlg.h"
+
 #include "mainwindow.h"
+
 #include <QMessageBox>
 
 COptionsDlg::COptionsDlg(QWidget *parent) : QDialog(parent) {

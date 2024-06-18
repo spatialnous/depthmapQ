@@ -4,10 +4,11 @@
 
 #pragma once
 
-#include "depthmapX/views/glview/gllinesuniform.h"
-#include "depthmapX/views/glview/glrastertexture.h"
-#include "depthmapX/views/glview/gltrianglesuniform.h"
-#include "salalib/mgraph.h"
+#include "gllinesuniform.h"
+#include "glrastertexture.h"
+#include "gltrianglesuniform.h"
+
+#include "salalib/pointdata.h"
 
 class GLPixelMap {
   public:

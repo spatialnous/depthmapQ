@@ -4,9 +4,9 @@
 
 #pragma once
 
-#include "salalib/pafcolor.h"
+#include "gltrianglesuniform.h"
 
-#include "depthmapX/views/glview/gltrianglesuniform.h"
+#include "salalib/pafcolor.h"
 
 #include "genlib/p2dpoly.h"
 
@@ -16,8 +16,8 @@
 #include <QOpenGLVertexArrayObject>
 #include <QVector3D>
 #include <QVector>
+
 #include <memory>
-#include <qopengl.h>
 
 /**
  * @brief The GLPolygons class is a plain wrapper class for multiple GLPolygon

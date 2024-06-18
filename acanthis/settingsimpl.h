@@ -6,8 +6,8 @@
 
 #include "settings.h"
 
-#include <qsettings.h>
-#include <qstandardpaths.h>
+#include <QSettings>
+#include <QStandardPaths>
 
 #include <memory>
 

@@ -5,6 +5,7 @@
 #pragma once
 
 #include "settingspage.h"
+
 #include <QWidget>
 #include <iostream>
 

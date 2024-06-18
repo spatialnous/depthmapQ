@@ -19,7 +19,9 @@ template <class T> struct LinReg {
     bool cached;
     double ca;
     double cb;
-    //
+
+    double sqr(T x) { return static_cast<double>(x) * static_cast<double>(x); }
+
     LinReg() {
         S_x = 0;
         S_y = 0;

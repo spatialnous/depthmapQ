@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "AttributeSummary.h"
+
 #include "ColumnPropertiesDlg.h"
 #include "GraphDoc.h"
 

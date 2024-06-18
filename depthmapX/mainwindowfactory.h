@@ -4,8 +4,10 @@
 
 #pragma once
 
+#include "mainwindow.h"
+
 #include <QDialog>
-#include <mainwindow.h>
+
 #include <memory>
 
 class Settings;

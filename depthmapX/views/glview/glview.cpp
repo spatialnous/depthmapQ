@@ -3,8 +3,10 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "glview.h"
+
 #include "depthmapX/views/depthmapview/depthmapview.h"
 #include "mainwindow.h"
+
 #include <QCoreApplication>
 #include <QMouseEvent>
 

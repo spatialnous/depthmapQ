@@ -3,8 +3,9 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "glrastertexture.h"
+
 #include <QOpenGLFunctions>
-#include <qmath.h>
+#include <QtMath>
 
 static const char *vertexShaderSourceCore = // auto-format hack
     "#version 150\n"

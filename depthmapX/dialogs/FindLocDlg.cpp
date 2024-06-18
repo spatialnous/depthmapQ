@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "FindLocDlg.h"
+
 #include <QMessageBox>
 
 CFindLocDlg::CFindLocDlg(QWidget *parent) : QDialog(parent) {
