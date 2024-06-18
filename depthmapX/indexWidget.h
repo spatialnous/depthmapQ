@@ -2,8 +2,8 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#ifndef treeWindow_H
-#define treeWindow_H
+#pragma once
+
 #include <QListWidget>
 
 QT_BEGIN_NAMESPACE
@@ -25,5 +25,3 @@ class AttribWindow : public QListWidget {
 };
 
 QT_END_NAMESPACE
-
-#endif

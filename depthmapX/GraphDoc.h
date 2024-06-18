@@ -2,8 +2,7 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#ifndef GRAPHDOC_H
-#define GRAPHDOC_H
+#pragma once
 
 #include <QApplication>
 #include <QElapsedTimer>
@@ -378,5 +377,3 @@ class QGraphDoc : public QWidget {
 };
 
 QT_END_NAMESPACE
-
-#endif

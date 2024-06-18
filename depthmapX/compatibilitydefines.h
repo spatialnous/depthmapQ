@@ -2,8 +2,7 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#ifndef COMPATIBILITYDEFINES_H
-#define COMPATIBILITYDEFINES_H
+#pragma once
 
 #ifndef _WIN32
 #define TRUE 1
@@ -24,5 +23,3 @@
 #else
 #define MODULE_API
 #endif
-
-#endif // COMPATIBILITYDEFINES_H

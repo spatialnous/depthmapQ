@@ -2,8 +2,7 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#ifndef indexWidget_H
-#define indexWidget_H
+#pragma once
 
 #include <QTreeWidget>
 
@@ -49,5 +48,3 @@ class IndexWidget : public QTreeWidget {
 };
 
 QT_END_NAMESPACE
-
-#endif // BOOKMARK_WIDGET_H

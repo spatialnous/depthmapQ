@@ -2,8 +2,7 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#ifndef DEPTHMAPX_VIEWHELPERS_H
-#define DEPTHMAPX_VIEWHELPERS_H
+#pragma once
 
 #include "genlib/p2dpoly.h"
 #include <QPoint>
@@ -13,5 +12,3 @@ namespace ViewHelpers {
     Point2f calculateCenter(const QPointF &point, const QPointF &oldCentre, double factor);
     std::string getCurrentDate();
 } // namespace ViewHelpers
-
-#endif // VIEWHELPERS_H

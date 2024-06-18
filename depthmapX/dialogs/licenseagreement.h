@@ -2,10 +2,8 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#ifndef LICENSEAGREEMENT_H
-#define LICENSEAGREEMENT_H
+#pragma once
 
-#include "compatibilitydefines.h"
 #include "ui_licenseagreement.h"
 #include <QDialog>
 
@@ -23,5 +21,3 @@ class LicenseAgreement : public QDialog {
   private:
     Ui::LicenseAgreement *ui;
 };
-
-#endif // LICENSEAGREEMENT_H

@@ -4,6 +4,7 @@
 
 #include "AboutDlg.h"
 #include "version.h"
+#include "version_defs.h"
 
 CAboutDlg::CAboutDlg(QWidget *parent) : QDialog(parent) {
     setupUi(this);

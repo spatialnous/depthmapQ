@@ -2,8 +2,7 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#pragma once
 
 #include "GraphDoc.h"
 #include "dialogs/ColourScaleDlg.h"
@@ -470,5 +469,3 @@ class MainWindow : public QMainWindow {
 
     int m_currentIsovistModeType = ID_MAPBAR_ITEM_ISOVIST;
 };
-
-#endif

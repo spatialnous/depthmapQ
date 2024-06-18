@@ -2,8 +2,7 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#ifndef MAINWINDOWFACTORY_H
-#define MAINWINDOWFACTORY_H
+#pragma once
 
 #include <QDialog>
 #include <mainwindow.h>
@@ -15,4 +14,3 @@ namespace MainWindowFactory {
     std::unique_ptr<MainWindow> getMainWindow(const QString &fileToLoad, Settings &settings);
     std::unique_ptr<QDialog> getLicenseDialog();
 } // namespace MainWindowFactory
-#endif // MAINWINDOWFACTORY_H

@@ -2,8 +2,7 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#ifndef ColourScaleDlg_H
-#define ColourScaleDlg_H
+#pragma once
 
 #include "depthmapX/GraphDoc.h"
 #include "depthmapX/ui_ColourScaleDlg.h"
@@ -52,5 +51,3 @@ class CColourScaleDlg : public QDialog, public Ui::CColourScaleDlg {
     void OnOK();
     void OnCancel();
 };
-
-#endif

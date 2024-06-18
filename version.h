@@ -3,10 +3,7 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#ifndef VERSION_H
-#define VERSION_H
-
-#include "version_defs.h"
+#pragma once
 
 // use these to define the depthmap versions
 #define DEPTHMAPX_MAJOR_VERSION 0
@@ -19,5 +16,3 @@
 #define STRINGIFY(v) #v
 #define TITLE_BASE_FORMAT(interface, version, minor, revision)                                     \
     interface " " STRINGIFY(version) "." STRINGIFY(minor) "." STRINGIFY(revision)
-
-#endif // VERSION_H
