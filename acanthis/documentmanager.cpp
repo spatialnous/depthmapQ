@@ -19,7 +19,7 @@ void DocumentManager::createEmptyDocument() {
     }
     m_openedDocuments.push_back(
         std::make_pair(newDocName, std::unique_ptr<GraphModel>(new GraphModel(newDocName))));
-    m_lastDocumentIndex = m_openedDocuments.size() - 1;
+    m_lastDocumentIndex = static_cast<unsigned int>(m_openedDocuments.size() - 1);
 }
 
 void DocumentManager::removeDocument(unsigned int index) {
@@ -38,11 +38,12 @@ void DocumentManager::openDocument(QString urlString) {
     auto doc = std::find_if(m_openedDocuments.begin(), m_openedDocuments.end(),
                             NameDocumentComparator(fileName));
     if (doc != m_openedDocuments.end()) {
-        m_lastDocumentIndex = std::distance(m_openedDocuments.begin(), doc);
+        m_lastDocumentIndex =
+            static_cast<unsigned int>(std::distance(m_openedDocuments.begin(), doc));
         return;
     }
 
     m_openedDocuments.push_back(
         std::make_pair(fileName, std::unique_ptr<GraphModel>(new GraphModel(fileName))));
-    m_lastDocumentIndex = m_openedDocuments.size() - 1;
+    m_lastDocumentIndex = static_cast<unsigned int>(m_openedDocuments.size() - 1);
 }

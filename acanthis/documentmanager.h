@@ -33,7 +33,7 @@ class DocumentManager : public QObject {
     };
     std::vector<std::pair<std::string, std::unique_ptr<GraphModel>>> m_openedDocuments;
 
-    size_t m_lastDocumentIndex = 0;
+    unsigned int m_lastDocumentIndex = 0;
 
   public:
     DocumentManager();
@@ -42,7 +42,9 @@ class DocumentManager : public QObject {
     Q_INVOKABLE void openDocument(QString urlString);
     Q_INVOKABLE bool hasDocument() { return !m_openedDocuments.empty(); }
     Q_INVOKABLE unsigned int lastDocumentIndex() { return m_lastDocumentIndex; }
-    Q_INVOKABLE unsigned int numOpenedDocuments() { return m_openedDocuments.size(); }
+    Q_INVOKABLE unsigned int numOpenedDocuments() {
+        return static_cast<unsigned int>(m_openedDocuments.size());
+    }
 
     GraphModel *lastDocument() { return m_openedDocuments[m_lastDocumentIndex].second.get(); }
 };

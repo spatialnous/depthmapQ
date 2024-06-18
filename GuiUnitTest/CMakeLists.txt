@@ -23,5 +23,8 @@ include_directories("../ThirdParty/Catch" "../ThirdParty/FakeIt" "../depthmapX")
 set(LINK_LIBS salalib genlib Qt6::Core)
 
 add_executable(${GuiUnitTest} ${guiUnitTest_SRCS})
+
+target_compile_options(${GuiUnitTest} PRIVATE ${COMPILE_WARNINGS})
+
 target_link_libraries(${GuiUnitTest} ${LINK_LIBS})
 

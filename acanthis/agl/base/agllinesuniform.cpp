@@ -48,11 +48,12 @@ void AGLLinesUniform::loadLineData(const std::vector<SimpleLine> &lines, const Q
     m_built = false;
 
     m_count = 0;
-    m_data.resize(lines.size() * 2 * DATA_DIMENSIONS);
+    m_data.resize(static_cast<qsizetype>(lines.size() * 2 * static_cast<size_t>(DATA_DIMENSIONS)));
 
     for (auto &line : lines) {
-        add(QVector3D(line.start().x, line.start().y, 0.0f));
-        add(QVector3D(line.end().x, line.end().y, 0.0f));
+        add(QVector3D(static_cast<float>(line.start().x), static_cast<float>(line.start().y),
+                      0.0f));
+        add(QVector3D(static_cast<float>(line.end().x), static_cast<float>(line.end().y), 0.0f));
     }
     m_colour.setX(lineColour.redF());
     m_colour.setY(lineColour.greenF());
@@ -64,7 +65,8 @@ void AGLLinesUniform::setupVertexAttribs() {
     m_vbo.bind();
     QOpenGLFunctions *f = QOpenGLContext::currentContext()->functions();
     f->glEnableVertexAttribArray(0);
-    f->glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, DATA_DIMENSIONS * sizeof(GLfloat), 0);
+    f->glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE,
+                             DATA_DIMENSIONS * static_cast<GLsizei>(sizeof(GLfloat)), 0);
     m_vbo.release();
 }
 
@@ -94,7 +96,7 @@ void AGLLinesUniform::initializeGL(bool coreProfile) {
     // Setup our vertex buffer object.
     m_vbo.create();
     m_vbo.bind();
-    m_vbo.allocate(constData(), m_count * sizeof(GLfloat));
+    m_vbo.allocate(constData(), m_count * static_cast<GLsizei>(sizeof(GLfloat)));
 
     // Store the vertex attribute bindings for the program.
     setupVertexAttribs();
@@ -109,7 +111,7 @@ void AGLLinesUniform::updateGL(bool coreProfile) {
         initializeGL(coreProfile);
     } else {
         m_vbo.bind();
-        m_vbo.allocate(constData(), m_count * sizeof(GLfloat));
+        m_vbo.allocate(constData(), m_count * static_cast<GLsizei>(sizeof(GLfloat)));
         m_vbo.release();
         m_built = true;
     }

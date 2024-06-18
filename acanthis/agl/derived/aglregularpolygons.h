@@ -28,5 +28,5 @@
 class AGLRegularPolygons : public AGLTriangles {
   public:
     void loadPolygonData(const std::vector<std::pair<Point2f, PafColor>> &colouredPoints,
-                         const int sides, const float radius);
+                         const unsigned int sides, const float radius);
 };

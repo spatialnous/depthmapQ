@@ -62,7 +62,8 @@ void GLTrianglesUniform::setupVertexAttribs() {
     m_vbo.bind();
     QOpenGLFunctions *f = QOpenGLContext::currentContext()->functions();
     f->glEnableVertexAttribArray(0);
-    f->glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, DATA_DIMENSIONS * sizeof(GLfloat), 0);
+    f->glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE,
+                             DATA_DIMENSIONS * static_cast<GLsizei>(sizeof(GLfloat)), 0);
     m_vbo.release();
 }
 
@@ -87,7 +88,7 @@ void GLTrianglesUniform::initializeGL(bool m_core) {
 
     m_vbo.create();
     m_vbo.bind();
-    m_vbo.allocate(constData(), m_count * sizeof(GLfloat));
+    m_vbo.allocate(constData(), m_count * static_cast<GLsizei>(sizeof(GLfloat)));
 
     setupVertexAttribs();
     m_program->setUniformValue(m_colourVectorLoc, m_colour);
@@ -101,7 +102,7 @@ void GLTrianglesUniform::updateGL(bool m_core) {
         initializeGL(m_core);
     } else {
         m_vbo.bind();
-        m_vbo.allocate(constData(), m_count * sizeof(GLfloat));
+        m_vbo.allocate(constData(), m_count * static_cast<GLsizei>(sizeof(GLfloat)));
         m_vbo.release();
         m_built = true;
     }

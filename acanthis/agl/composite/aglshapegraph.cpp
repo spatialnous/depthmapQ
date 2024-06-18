@@ -6,8 +6,8 @@
 
 void AGLShapeGraph::loadGLObjects() {
     AGLShapeMap::loadGLObjects();
-    m_glGraph.setNodeSize(m_shapeGraph.getSpacing() * 0.05);
-    m_glGraph.setGraphCornerRadius(m_shapeGraph.getSpacing() * 0.3);
+    m_glGraph.setNodeSize(static_cast<float>(m_shapeGraph.getSpacing()) * 0.05f);
+    m_glGraph.setGraphCornerRadius(static_cast<float>(m_shapeGraph.getSpacing()) * 0.3f);
 
     std::vector<Connector> &connections = m_shapeGraph.getConnections();
     auto &shapes = m_shapeGraph.getAllShapes();
@@ -16,7 +16,7 @@ void AGLShapeGraph::loadGLObjects() {
         auto &fromShape = shapeIter->second;
         auto fromCentroid = fromShape.getCentroid();
         for (size_t &connection : connector.m_connections) {
-            auto &toShape = shapes[connection];
+            auto &toShape = shapes[static_cast<int>(connection)];
             auto toCentroid = toShape.getCentroid();
             m_glGraph.addConnection(
                 SimpleLine(fromCentroid.x, fromCentroid.y, toCentroid.x, toCentroid.y),

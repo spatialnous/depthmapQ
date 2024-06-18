@@ -49,21 +49,22 @@ void AGLTrianglesUniform::loadTriangleData(const std::vector<Point2f> &points,
     m_built = false;
 
     m_count = 0;
-    m_data.resize(points.size() * DATA_DIMENSIONS);
+    m_data.resize(static_cast<qsizetype>(points.size() * static_cast<size_t>(DATA_DIMENSIONS)));
 
     for (auto &point : points) {
-        add(QVector3D(point.x, point.y, 0.0f));
+        add(QVector3D(static_cast<float>(point.x), static_cast<float>(point.y), 0.0f));
     }
-    m_colour.setX(qRed(polyColour) / 255.0);
-    m_colour.setY(qGreen(polyColour) / 255.0);
-    m_colour.setZ(qBlue(polyColour) / 255.0);
+    m_colour.setX(static_cast<float>(qRed(polyColour)) / 255.0f);
+    m_colour.setY(static_cast<float>(qGreen(polyColour)) / 255.0f);
+    m_colour.setZ(static_cast<float>(qBlue(polyColour)) / 255.0f);
 }
 
 void AGLTrianglesUniform::setupVertexAttribs() {
     m_vbo.bind();
     QOpenGLFunctions *f = QOpenGLContext::currentContext()->functions();
     f->glEnableVertexAttribArray(0);
-    f->glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, DATA_DIMENSIONS * sizeof(GLfloat), 0);
+    f->glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE,
+                             DATA_DIMENSIONS * static_cast<GLsizei>(sizeof(GLfloat)), 0);
     m_vbo.release();
 }
 
@@ -88,7 +89,7 @@ void AGLTrianglesUniform::initializeGL(bool core) {
 
     m_vbo.create();
     m_vbo.bind();
-    m_vbo.allocate(constData(), m_count * sizeof(GLfloat));
+    m_vbo.allocate(constData(), m_count * static_cast<GLsizei>(sizeof(GLfloat)));
 
     setupVertexAttribs();
     m_program->setUniformValue(m_colourVectorLoc, m_colour);
@@ -102,16 +103,16 @@ void AGLTrianglesUniform::updateGL(bool m_core) {
         initializeGL(m_core);
     } else {
         m_vbo.bind();
-        m_vbo.allocate(constData(), m_count * sizeof(GLfloat));
+        m_vbo.allocate(constData(), m_count * static_cast<GLsizei>(sizeof(GLfloat)));
         m_vbo.release();
         m_built = true;
     }
 }
 
 void AGLTrianglesUniform::updateColour(const QRgb &polyColour) {
-    m_colour.setX(qRed(polyColour) / 255.0);
-    m_colour.setY(qGreen(polyColour) / 255.0);
-    m_colour.setZ(qBlue(polyColour) / 255.0);
+    m_colour.setX(static_cast<float>(qRed(polyColour)) / 255.0f);
+    m_colour.setY(static_cast<float>(qGreen(polyColour)) / 255.0f);
+    m_colour.setZ(static_cast<float>(qBlue(polyColour)) / 255.0f);
     m_program->bind();
     m_program->setUniformValue(m_colourVectorLoc, m_colour);
     m_program->release();

@@ -54,15 +54,18 @@ void GLLines::loadLineData(const std::vector<std::pair<SimpleLine, PafColor>> &c
     m_built = false;
 
     m_count = 0;
-    m_data.resize(colouredLines.size() * 2 * DATA_DIMENSIONS);
+    m_data.resize(
+        static_cast<qsizetype>(colouredLines.size() * 2 * static_cast<size_t>(DATA_DIMENSIONS)));
 
     for (auto &colouredLine : colouredLines) {
         const SimpleLine &line = colouredLine.first;
         const PafColor &colour = colouredLine.second;
 
         QVector3D colourVector(colour.redf(), colour.greenf(), colour.bluef());
-        add(QVector3D(line.start().x, line.start().y, 0.0f), colourVector);
-        add(QVector3D(line.end().x, line.end().y, 0.0f), colourVector);
+        add(QVector3D(static_cast<float>(line.start().x), static_cast<float>(line.start().y), 0.0f),
+            colourVector);
+        add(QVector3D(static_cast<float>(line.end().x), static_cast<float>(line.end().y), 0.0f),
+            colourVector);
     }
 }
 
@@ -71,8 +74,11 @@ void GLLines::setupVertexAttribs() {
     QOpenGLFunctions *f = QOpenGLContext::currentContext()->functions();
     f->glEnableVertexAttribArray(0);
     f->glEnableVertexAttribArray(1);
-    f->glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, DATA_DIMENSIONS * sizeof(GLfloat), 0);
-    f->glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, DATA_DIMENSIONS * sizeof(GLfloat),
+
+    f->glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE,
+                             DATA_DIMENSIONS * static_cast<GLsizei>(sizeof(GLfloat)), 0);
+    f->glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE,
+                             DATA_DIMENSIONS * static_cast<GLsizei>(sizeof(GLfloat)),
                              reinterpret_cast<void *>(3 * sizeof(GLfloat)));
     m_vbo.release();
 }
@@ -103,7 +109,7 @@ void GLLines::initializeGL(bool coreProfile) {
     // Setup our vertex buffer object.
     m_vbo.create();
     m_vbo.bind();
-    m_vbo.allocate(constData(), m_count * sizeof(GLfloat));
+    m_vbo.allocate(constData(), m_count * static_cast<GLsizei>(sizeof(GLfloat)));
 
     // Store the vertex attribute bindings for the program.
     setupVertexAttribs();
@@ -117,7 +123,7 @@ void GLLines::updateGL(bool coreProfile) {
         initializeGL(coreProfile);
     } else {
         m_vbo.bind();
-        m_vbo.allocate(constData(), m_count * sizeof(GLfloat));
+        m_vbo.allocate(constData(), m_count * static_cast<GLsizei>(sizeof(GLfloat)));
         m_vbo.release();
         m_built = true;
     }

@@ -14,8 +14,8 @@
 
 class AGLShapeMap : public AGLMap {
   public:
-    AGLShapeMap(ShapeMap &shapeMap, int pointSides, float pointRadius)
-        : AGLMap(), m_shapeMap(shapeMap), m_pointSides(pointSides), m_pointRadius(pointRadius){};
+    AGLShapeMap(ShapeMap &shapeMap, unsigned int pointSides, float pointRadius)
+        : AGLMap(), m_pointSides(pointSides), m_pointRadius(pointRadius), m_shapeMap(shapeMap){};
 
     void initializeGL(bool m_core) override {
         m_lines.initializeGL(m_core);
@@ -72,7 +72,7 @@ class AGLShapeMap : public AGLMap {
     AGLPolygons m_polygons;
     AGLRegularPolygons m_points;
     AGLLines m_hoveredShapes;
-    const int m_pointSides;
+    const unsigned int m_pointSides;
     const float m_pointRadius;
 
   private:

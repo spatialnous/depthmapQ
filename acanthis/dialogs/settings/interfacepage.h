@@ -23,10 +23,10 @@ class InterfacePage : public SettingsPage {
     bool m_defaultMapWindowIsLegacy = false;
     bool m_highlightOnHover = true;
     void readSettings(Settings &settings) {
-        m_foreground =
-            QColor(settings.readSetting(SettingTag::foregroundColour, qRgb(128, 255, 128)).toInt());
+        m_foreground = QColor(
+            settings.readSetting(SettingTag::foregroundColour, qRgb(128, 255, 128)).toUInt());
         m_background =
-            QColor(settings.readSetting(SettingTag::backgroundColour, qRgb(0, 0, 0)).toInt());
+            QColor(settings.readSetting(SettingTag::backgroundColour, qRgb(0, 0, 0)).toUInt());
         m_antialiasingSamples = settings.readSetting(SettingTag::antialiasingSamples, 0).toInt();
         m_defaultMapWindowIsLegacy =
             settings.readSetting(SettingTag::legacyMapWindow, false).toBool();

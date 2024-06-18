@@ -83,12 +83,12 @@ void AGLGraph::loadGLObjects() {
             const Point2f &intp = connection.second;
             intp.angle();
             Point2f intFrom = (connection.first.start() - intp).normalise();
-            float fromAngle = atan2(intFrom.y, intFrom.x);
+            double fromAngle = atan2(intFrom.y, intFrom.x);
             if (fromAngle < 0) {
                 fromAngle += 2 * M_PI;
             }
             Point2f intTo = (connection.first.end() - intp).normalise();
-            float toAngle = atan2(intTo.y, intTo.x);
+            double toAngle = atan2(intTo.y, intTo.x);
             if (toAngle < 0) {
                 toAngle += 2 * M_PI;
             }
@@ -102,11 +102,11 @@ void AGLGraph::loadGLObjects() {
             intTo =
                 Point2f(m_graphCornerRadius * cos(toAngle), m_graphCornerRadius * sin(toAngle)) +
                 intp;
-            float angleDiff = 2 * M_PI / 16.0;
+            double angleDiff = 2 * M_PI / 16.0;
 
             if (toAngle - fromAngle > M_PI) {
-                int startFrom = floor(fromAngle / angleDiff) - 1;
-                for (float a = startFrom * angleDiff; a > toAngle - 2 * M_PI; a -= angleDiff) {
+                int startFrom = static_cast<int>(floor(fromAngle / angleDiff) - 1);
+                for (double a = startFrom * angleDiff; a > toAngle - 2 * M_PI; a -= angleDiff) {
                     Point2f newTo =
                         Point2f(m_graphCornerRadius * cos(a), m_graphCornerRadius * sin(a)) + intp;
                     nodeEdgeLines.push_back(SimpleLine(intFrom.x, intFrom.y, newTo.x, newTo.y));
@@ -114,7 +114,7 @@ void AGLGraph::loadGLObjects() {
                 }
                 nodeEdgeLines.push_back(SimpleLine(intFrom.x, intFrom.y, intTo.x, intTo.y));
             } else {
-                for (float a = 0; a < 2 * M_PI; a += angleDiff) {
+                for (double a = 0; a < 2 * M_PI; a += angleDiff) {
                     if (a < fromAngle)
                         continue;
                     if (a >= toAngle)

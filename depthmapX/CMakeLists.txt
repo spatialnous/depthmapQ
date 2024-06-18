@@ -120,6 +120,8 @@ if(APPLE)
             MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/resources/Info.plist)
 endif(APPLE)
 
+target_compile_options(${depthmapX} PRIVATE ${COMPILE_WARNINGS})
+
 find_package(OpenGL REQUIRED)
 
 set(modules_gui "" CACHE INTERNAL "modules_gui" FORCE)

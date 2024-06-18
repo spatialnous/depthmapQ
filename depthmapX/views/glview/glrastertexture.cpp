@@ -66,8 +66,10 @@ void GLRasterTexture::setupVertexAttribs() {
     QOpenGLFunctions *f = QOpenGLContext::currentContext()->functions();
     f->glEnableVertexAttribArray(0);
     f->glEnableVertexAttribArray(1);
-    f->glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, DATA_DIMENSIONS * sizeof(GLfloat), 0);
-    f->glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, DATA_DIMENSIONS * sizeof(GLfloat),
+    f->glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE,
+                             DATA_DIMENSIONS * static_cast<GLsizei>(sizeof(GLfloat)), 0);
+    f->glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE,
+                             DATA_DIMENSIONS * static_cast<GLsizei>(sizeof(GLfloat)),
                              reinterpret_cast<void *>(3 * sizeof(GLfloat)));
     m_vbo.release();
 }
@@ -95,7 +97,7 @@ void GLRasterTexture::initializeGL(bool coreProfile) {
     // Setup our vertex buffer object.
     m_vbo.create();
     m_vbo.bind();
-    m_vbo.allocate(constData(), m_count * sizeof(GLfloat));
+    m_vbo.allocate(constData(), m_count * static_cast<GLsizei>(sizeof(GLfloat)));
 
     // Store the vertex attribute bindings for the program.
     setupVertexAttribs();
@@ -112,7 +114,7 @@ void GLRasterTexture::updateGL(bool coreProfile) {
         initializeGL(coreProfile);
     } else {
         m_vbo.bind();
-        m_vbo.allocate(constData(), m_count * sizeof(GLfloat));
+        m_vbo.allocate(constData(), m_count * static_cast<GLsizei>(sizeof(GLfloat)));
         m_vbo.release();
         m_built = true;
     }

@@ -30,13 +30,13 @@ void AGLMapViewport::forceUpdate() {
     setDirtyRenderer();
 }
 
-void AGLMapViewport::mouseReleaseEvent(QMouseEvent *event) {
+void AGLMapViewport::mouseReleaseEvent(QMouseEvent *) {
     if (m_wasPanning) {
         m_wasPanning = false;
         return;
     }
-    QPoint mousePoint = event->pos();
-    Point2f worldPoint = getWorldPoint(mousePoint);
+    //    QPoint mousePoint = event->pos();
+    //    Point2f worldPoint = getWorldPoint(mousePoint);
     //    if (!m_pDoc.m_communicator) {
     //        QtRegion r;
     //        if (m_mouseDragRect.isNull()) {
@@ -288,8 +288,8 @@ void AGLMapViewport::mousePressEvent(QMouseEvent *event) {
 }
 
 void AGLMapViewport::mouseMoveEvent(QMouseEvent *event) {
-    int dx = event->position().x() - m_mouseLastPos.x();
-    int dy = event->position().y() - m_mouseLastPos.y();
+    auto dx = static_cast<int>(event->position().x() - m_mouseLastPos.x());
+    auto dy = static_cast<int>(event->position().y() - m_mouseLastPos.y());
 
     Point2f worldPoint = getWorldPoint(event->pos());
 
@@ -357,10 +357,10 @@ void AGLMapViewport::mouseMoveEvent(QMouseEvent *event) {
 void AGLMapViewport::wheelEvent(QWheelEvent *event) {
     QPoint numDegrees = event->angleDelta() / 8;
 
-    int x = event->position().x();
-    int y = event->position().y();
+    auto x = static_cast<int>(event->position().x());
+    auto y = static_cast<int>(event->position().y());
 
-    zoomBy(1 - 0.25f * numDegrees.y() / 15.0f, x, y);
+    zoomBy(1 - 0.25f * static_cast<float>(numDegrees.y()) / 15.0f, x, y);
 
     update();
 
@@ -407,7 +407,7 @@ bool AGLMapViewport::eventFilter(QObject *object, QEvent *e) {
 }
 
 void AGLMapViewport::zoomBy(float dzf, int mouseX, int mouseY) {
-    GLfloat screenRatio = GLfloat(width()) / height();
+    GLfloat screenRatio = static_cast<GLfloat>(width()) / static_cast<GLfloat>(height());
     float pzf = m_zoomFactor;
     m_zoomFactor = m_zoomFactor * dzf;
     if (m_zoomFactor < m_minZoomFactor)
@@ -421,8 +421,8 @@ void AGLMapViewport::zoomBy(float dzf, int mouseX, int mouseY) {
 }
 
 void AGLMapViewport::panBy(int dx, int dy) {
-    m_eyePosX += m_zoomFactor * GLfloat(dx) / height();
-    m_eyePosY -= m_zoomFactor * GLfloat(dy) / height();
+    m_eyePosX += m_zoomFactor * (static_cast<GLfloat>(dx) / static_cast<GLfloat>(height()));
+    m_eyePosY -= m_zoomFactor * (static_cast<GLfloat>(dy) / static_cast<GLfloat>(height()));
 
     update();
 }
@@ -433,8 +433,9 @@ Point2f AGLMapViewport::getWorldPoint(const QPoint &screenPoint) {
 }
 
 QPoint AGLMapViewport::getScreenPoint(const Point2f &worldPoint) {
-    return QPoint((worldPoint.x + m_eyePosX) * height() / m_zoomFactor + width() * 0.5,
-                  -(worldPoint.y + m_eyePosY) * height() / m_zoomFactor + height() * 0.5);
+    return QPoint(
+        static_cast<int>((worldPoint.x + m_eyePosX) * height() / m_zoomFactor + width() * 0.5),
+        static_cast<int>(-(worldPoint.y + m_eyePosY) * height() / m_zoomFactor + height() * 0.5));
 }
 
 void AGLMapViewport::resetView() {
@@ -545,14 +546,14 @@ void AGLMapViewport::zoomToRegion(const QtRegion region) {
         (region.top_right.y == 0 && region.bottom_left.y == 0))
         // region is unset, don't try to change the view to it
         return;
-    m_eyePosX = -(region.top_right.x + region.bottom_left.x) * 0.5f;
-    m_eyePosY = -(region.top_right.y + region.bottom_left.y) * 0.5f;
+    m_eyePosX = -static_cast<float>(region.top_right.x + region.bottom_left.x) * 0.5f;
+    m_eyePosY = -static_cast<float>(region.top_right.y + region.bottom_left.y) * 0.5f;
     if (region.width() > region.height()) {
-        m_zoomFactor = region.top_right.x - region.bottom_left.x;
+        m_zoomFactor = static_cast<float>(region.top_right.x - region.bottom_left.x);
     } else {
-        m_zoomFactor = region.top_right.y - region.bottom_left.y;
+        m_zoomFactor = static_cast<float>(region.top_right.y - region.bottom_left.y);
     }
-    m_minZoomFactor = m_zoomFactor * 0.001;
+    m_minZoomFactor = static_cast<float>(m_zoomFactor) * 0.001f;
     m_maxZoomFactor = m_zoomFactor * 10;
 }
 

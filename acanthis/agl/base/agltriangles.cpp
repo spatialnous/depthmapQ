@@ -45,14 +45,15 @@ static const char *fragmentShaderSource = // auto-format hack
 void AGLTriangles::loadTriangleData(
     const std::vector<std::pair<std::vector<Point2f>, QRgb>> &triangleData) {
 
-    init(triangleData.size());
+    init(static_cast<int>(triangleData.size()));
 
     for (auto &triangle : triangleData) {
-        float r = qRed(triangle.second) / 255.0;
-        float g = qGreen(triangle.second) / 255.0;
-        float b = qBlue(triangle.second) / 255.0;
+        float r = static_cast<float>(qRed(triangle.second)) / 255.0f;
+        float g = static_cast<float>(qGreen(triangle.second)) / 255.0f;
+        float b = static_cast<float>(qBlue(triangle.second)) / 255.0f;
         for (auto &point : triangle.first) {
-            add(QVector3D(point.x, point.y, 0.0f), QVector3D(r, g, b));
+            add(QVector3D(static_cast<float>(point.x), static_cast<float>(point.y), 0.0f),
+                QVector3D(r, g, b));
         }
     }
 }
@@ -62,8 +63,10 @@ void AGLTriangles::setupVertexAttribs() {
     QOpenGLFunctions *f = QOpenGLContext::currentContext()->functions();
     f->glEnableVertexAttribArray(0);
     f->glEnableVertexAttribArray(1);
-    f->glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, DATA_DIMENSIONS * sizeof(GLfloat), 0);
-    f->glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, DATA_DIMENSIONS * sizeof(GLfloat),
+    f->glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE,
+                             DATA_DIMENSIONS * static_cast<GLsizei>(sizeof(GLfloat)), 0);
+    f->glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE,
+                             DATA_DIMENSIONS * static_cast<GLsizei>(sizeof(GLfloat)),
                              (void *)(3 * sizeof(GLfloat)));
     m_vbo.release();
 }
@@ -89,7 +92,7 @@ void AGLTriangles::initializeGL(bool m_core) {
 
     m_vbo.create();
     m_vbo.bind();
-    m_vbo.allocate(constData(), m_count * sizeof(GLfloat));
+    m_vbo.allocate(constData(), m_count * static_cast<GLsizei>(sizeof(GLfloat)));
 
     setupVertexAttribs();
     m_program->release();
@@ -102,7 +105,7 @@ void AGLTriangles::updateGL(bool m_core) {
         initializeGL(m_core);
     } else {
         m_vbo.bind();
-        m_vbo.allocate(constData(), m_count * sizeof(GLfloat));
+        m_vbo.allocate(constData(), m_count * static_cast<GLsizei>(sizeof(GLfloat)));
         m_vbo.release();
         m_built = true;
     }

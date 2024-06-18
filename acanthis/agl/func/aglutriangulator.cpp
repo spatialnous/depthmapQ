@@ -44,8 +44,7 @@ void __stdcall tess_combine
 #else
 void tess_combine
 #endif
-    (GLdouble coords[3], void *vertex_data[4], GLfloat weight[4], void **outData,
-     TessContext *ctx) {
+    (GLdouble coords[3], void *[4], GLfloat[4], void **outData, TessContext *ctx) {
     GLdouble *newVert = new GLdouble[3];
     ctx->combined.push_back(newVert);
 

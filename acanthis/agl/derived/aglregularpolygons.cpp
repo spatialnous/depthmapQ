@@ -7,14 +7,16 @@
 #include <math.h>
 
 void AGLRegularPolygons::loadPolygonData(
-    const std::vector<std::pair<Point2f, PafColor>> &colouredPoints, const int sides,
+    const std::vector<std::pair<Point2f, PafColor>> &colouredPoints, const unsigned int sides,
     const float radius) {
-    init(colouredPoints.size() * sides * 3);
+    init(static_cast<int>(colouredPoints.size() * static_cast<size_t>(sides) * 3));
     std::vector<Point2f> points(sides * 3);
-    float angle = 2 * M_PI / sides;
-    for (int i = 0; i < sides; i++) {
-        points[i * 3] = Point2f(cos((i)*angle) * radius, sin((i)*angle) * radius);
-        points[i * 3 + 1] = Point2f(cos((i + 1) * angle) * radius, sin((i + 1) * angle) * radius);
+    float angle = static_cast<float>(2 * M_PI / sides);
+    for (size_t i = 0; i < sides; i++) {
+        points[i * 3] = Point2f(cos(static_cast<float>(i) * angle) * radius,
+                                sin(static_cast<float>(i) * angle) * radius);
+        points[i * 3 + 1] = Point2f(cos(static_cast<float>(i + 1) * angle) * radius,
+                                    sin(static_cast<float>(i + 1) * angle) * radius);
         points[i * 3 + 2] = Point2f(0, 0);
     }
 
@@ -30,7 +32,8 @@ void AGLRegularPolygons::loadPolygonData(
             point.y -= prevCentre.y;
             point.x += centre.x;
             point.y += centre.y;
-            add(QVector3D(point.x, point.y, 0.0f), QVector3D(r, g, b));
+            add(QVector3D(static_cast<float>(point.x), static_cast<float>(point.y), 0.0f),
+                QVector3D(r, g, b));
         }
         prevCentre = centre;
     }

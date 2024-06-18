@@ -11,7 +11,7 @@
 
 class AGLShapeGraph : public AGLShapeMap {
   public:
-    AGLShapeGraph(ShapeGraph &shapeGraph, int pointSides, float pointRadius)
+    AGLShapeGraph(ShapeGraph &shapeGraph, unsigned int pointSides, float pointRadius)
         : AGLShapeMap(shapeGraph, pointSides, pointRadius), m_shapeGraph(shapeGraph){};
 
     void initializeGL(bool core) override {

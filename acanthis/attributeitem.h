@@ -16,12 +16,9 @@ class AttributeItem : public QObject, public TreeItem {
     Q_PROPERTY(QString name MEMBER m_name NOTIFY nameChanged)
     Q_PROPERTY(bool visible MEMBER m_visible NOTIFY visibilityChanged)
 
-    AttributeColumn &m_attributeColumn;
-
   public:
     AttributeItem(AttributeColumn &attributeColumn)
-        : TreeItem(QString::fromStdString(attributeColumn.getName())),
-          m_attributeColumn(attributeColumn) {
+        : TreeItem(QString::fromStdString(attributeColumn.getName())) {
         m_visible = false;
     };
 

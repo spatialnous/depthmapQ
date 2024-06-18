@@ -92,6 +92,8 @@ if(APPLE)
         MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/resources/Info.plist)
 endif(APPLE)
 
+target_compile_options(${projectName} PRIVATE ${COMPILE_WARNINGS})
+
 set_target_properties(${projectName} PROPERTIES
     QT_QML_MODULE_VERSION 1.0
     QT_QML_MODULE_URI acanthis

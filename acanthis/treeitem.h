@@ -28,12 +28,14 @@ class TreeItem {
     }
 
     const QSharedPointer<TreeItem> getParent() const { return m_parentItem; };
-    const int getRow() const { return m_row; }
-    const int nChildren() const { return m_children.size(); }
+    int getRow() const { return m_row; }
+    qsizetype nChildren() const { return m_children.size(); }
     const QString getName() const { return m_name; }
-    const bool isVisible() const { return m_visible; }
-    const bool isEditable() const { return m_editable; }
-    const QSharedPointer<TreeItem> getChild(size_t idx) { return m_children.at(idx); }
+    bool isVisible() const { return m_visible; }
+    bool isEditable() const { return m_editable; }
+    const QSharedPointer<TreeItem> getChild(size_t idx) {
+        return m_children.at(static_cast<qsizetype>(idx));
+    }
 
     void setParentItem(QWeakPointer<TreeItem> parent) { m_parentItem = parent; }
     void setRow(int row) { m_row = row; }

@@ -15,7 +15,7 @@ QModelIndex AQMapViewModel::index(int row, int column, const QModelIndex &parent
     if (!hasIndex(row, column, parent))
         return QModelIndex();
     TreeItem *parentItem = getItem(parent);
-    auto childPtr = parentItem->getChild(row);
+    auto childPtr = parentItem->getChild(static_cast<size_t>(row));
     if (childPtr) {
         return createIndex(row, column, childPtr.get());
     } else {
@@ -37,7 +37,7 @@ QModelIndex AQMapViewModel::parent(const QModelIndex &index) const {
 
 int AQMapViewModel::rowCount(const QModelIndex &parent) const {
     TreeItem *parentItem = getItem(parent);
-    return parentItem->nChildren();
+    return static_cast<int>(parentItem->nChildren());
 }
 
 int AQMapViewModel::columnCount(const QModelIndex &parent) const {
@@ -110,11 +110,11 @@ void AQMapViewModel::resetItems() {
             rowL2++;
         }
         auto allAttrItem = addChildItem(mapItem, "Attributes", rowL2);
-        for (int col = 0; col < mapLayer->getAttributes().getNumColumns(); ++col) {
+        for (size_t col = 0; col < mapLayer->getAttributes().getNumColumns(); ++col) {
             auto attrItem = addChildItem(allAttrItem,
                                          QSharedPointer<AttributeItem>(new AttributeItem(
                                              mapLayer->getAttributes().getColumn(col))),
-                                         col);
+                                         static_cast<int>(col));
         }
         rowL1++;
     }

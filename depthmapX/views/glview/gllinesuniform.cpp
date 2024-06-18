@@ -47,23 +47,25 @@ void GLLinesUniform::loadLineData(const std::vector<SimpleLine> &lines, const QR
     m_built = false;
 
     m_count = 0;
-    m_data.resize(lines.size() * 2 * DATA_DIMENSIONS);
+    m_data.resize(static_cast<qsizetype>(lines.size() * 2 * static_cast<size_t>(DATA_DIMENSIONS)));
 
     for (auto &line : lines) {
-        add(QVector3D(line.start().x, line.start().y, 0.0f));
-        add(QVector3D(line.end().x, line.end().y, 0.0f));
+        add(QVector3D(static_cast<float>(line.start().x), static_cast<float>(line.start().y),
+                      0.0f));
+        add(QVector3D(static_cast<float>(line.end().x), static_cast<float>(line.end().y), 0.0f));
     }
-    m_colour.setX(qRed(lineColour) / 255.0f);
-    m_colour.setY(qGreen(lineColour) / 255.0f);
-    m_colour.setZ(qBlue(lineColour) / 255.0f);
-    m_colour.setW(qAlpha(lineColour) / 255.0f);
+    m_colour.setX(static_cast<float>(qRed(lineColour)) / 255.0f);
+    m_colour.setY(static_cast<float>(qGreen(lineColour)) / 255.0f);
+    m_colour.setZ(static_cast<float>(qBlue(lineColour)) / 255.0f);
+    m_colour.setW(static_cast<float>(qAlpha(lineColour)) / 255.0f);
 }
 
 void GLLinesUniform::setupVertexAttribs() {
     m_vbo.bind();
     QOpenGLFunctions *f = QOpenGLContext::currentContext()->functions();
     f->glEnableVertexAttribArray(0);
-    f->glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, DATA_DIMENSIONS * sizeof(GLfloat), 0);
+    f->glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE,
+                             DATA_DIMENSIONS * static_cast<GLsizei>(sizeof(GLfloat)), 0);
     m_vbo.release();
 }
 
@@ -93,7 +95,7 @@ void GLLinesUniform::initializeGL(bool coreProfile) {
     // Setup our vertex buffer object.
     m_vbo.create();
     m_vbo.bind();
-    m_vbo.allocate(constData(), m_count * sizeof(GLfloat));
+    m_vbo.allocate(constData(), m_count * static_cast<GLsizei>(sizeof(GLfloat)));
 
     // Store the vertex attribute bindings for the program.
     setupVertexAttribs();
@@ -108,16 +110,16 @@ void GLLinesUniform::updateGL(bool coreProfile) {
         initializeGL(coreProfile);
     } else {
         m_vbo.bind();
-        m_vbo.allocate(constData(), m_count * sizeof(GLfloat));
+        m_vbo.allocate(constData(), m_count * static_cast<GLsizei>(sizeof(GLfloat)));
         m_vbo.release();
         m_built = true;
     }
 }
 
 void GLLinesUniform::updateColour(const QRgb &lineColour) {
-    m_colour.setX(qRed(lineColour) / 255.0f);
-    m_colour.setY(qGreen(lineColour) / 255.0f);
-    m_colour.setZ(qBlue(lineColour) / 255.0f);
+    m_colour.setX(static_cast<float>(qRed(lineColour)) / 255.0f);
+    m_colour.setY(static_cast<float>(qGreen(lineColour)) / 255.0f);
+    m_colour.setZ(static_cast<float>(qBlue(lineColour)) / 255.0f);
     m_program->bind();
     m_program->setUniformValue(m_colourVectorLoc, m_colour);
     m_program->release();

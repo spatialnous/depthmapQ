@@ -9,21 +9,24 @@
 
 void AGLPixelMap::loadGLObjects() {
     QtRegion region = m_pixelMap.getRegion();
-    m_rasterTexture.loadRegionData(region.bottom_left.x, region.bottom_left.y, region.top_right.x,
-                                   region.top_right.y);
+    m_rasterTexture.loadRegionData(
+        static_cast<float>(region.bottom_left.x), static_cast<float>(region.bottom_left.y),
+        static_cast<float>(region.top_right.x), static_cast<float>(region.top_right.y));
 
     if (m_showGrid) {
         std::vector<SimpleLine> gridData;
         double spacing = m_pixelMap.getSpacing();
         double offsetX = region.bottom_left.x;
         double offsetY = region.bottom_left.y;
-        for (int x = 1; x < m_pixelMap.getCols(); x++) {
-            gridData.push_back(SimpleLine(offsetX + x * spacing, region.bottom_left.y,
-                                          offsetX + x * spacing, region.top_right.y));
+        for (size_t x = 1; x < m_pixelMap.getCols(); x++) {
+            gridData.push_back(
+                SimpleLine(offsetX + static_cast<double>(x) * spacing, region.bottom_left.y,
+                           offsetX + static_cast<double>(x) * spacing, region.top_right.y));
         }
-        for (int y = 1; y < m_pixelMap.getRows(); y++) {
-            gridData.push_back(SimpleLine(region.bottom_left.x, offsetY + y * spacing,
-                                          region.top_right.x, offsetY + y * spacing));
+        for (size_t y = 1; y < m_pixelMap.getRows(); y++) {
+            gridData.push_back(
+                SimpleLine(region.bottom_left.x, offsetY + static_cast<double>(y) * spacing,
+                           region.top_right.x, offsetY + static_cast<double>(y) * spacing));
         }
         m_grid.loadLineData(gridData, m_gridColour);
     }
@@ -37,28 +40,30 @@ void AGLPixelMap::loadGLObjects() {
         }
 
         const std::vector<Point2f> &linkFillTriangles =
-            GeometryGenerators::generateMultipleDiskTriangles(32, m_pixelMap.getSpacing() * 0.25,
-                                                              mergedPixelLocations);
+            GeometryGenerators::generateMultipleDiskTriangles(
+                32, static_cast<float>(m_pixelMap.getSpacing()) * 0.25f, mergedPixelLocations);
         m_linkFills.loadTriangleData(linkFillTriangles, qRgb(0, 0, 0));
 
         std::vector<SimpleLine> linkFillPerimeters =
-            GeometryGenerators::generateMultipleCircleLines(32, m_pixelMap.getSpacing() * 0.25,
-                                                            mergedPixelLocations);
+            GeometryGenerators::generateMultipleCircleLines(
+                32, static_cast<float>(m_pixelMap.getSpacing()) * 0.25f, mergedPixelLocations);
         linkFillPerimeters.insert(linkFillPerimeters.end(), mergedPixelLines.begin(),
                                   mergedPixelLines.end());
         m_linkLines.loadLineData(linkFillPerimeters, qRgb(0, 255, 0));
     }
 }
 void AGLPixelMap::loadGLObjectsRequiringGLContext() {
-    QImage data(m_pixelMap.getCols(), m_pixelMap.getRows(), QImage::Format_RGBA8888);
+    QImage data(static_cast<int>(m_pixelMap.getCols()), static_cast<int>(m_pixelMap.getRows()),
+                QImage::Format_RGBA8888);
     data.fill(Qt::transparent);
 
-    for (int y = 0; y < m_pixelMap.getRows(); y++) {
-        for (int x = 0; x < m_pixelMap.getCols(); x++) {
-            PixelRef pix(x, y);
+    for (size_t y = 0; y < m_pixelMap.getRows(); y++) {
+        for (size_t x = 0; x < m_pixelMap.getCols(); x++) {
+            PixelRef pix(static_cast<short>(x), static_cast<short>(y));
             PafColor colour = m_pixelMap.getPointColor(pix);
             if (colour.alphab() != 0) { // alpha == 0 is transparent
-                data.setPixelColor(x, y, qRgb(colour.redb(), colour.greenb(), colour.blueb()));
+                data.setPixelColor(static_cast<int>(x), static_cast<int>(y),
+                                   qRgb(colour.redb(), colour.greenb(), colour.blueb()));
             }
         }
     }

@@ -43,6 +43,8 @@ endif(APPLE)
 
 add_executable(${depthmapXTest} ${depthmapXTest_SRCS})
 
+target_compile_options(${depthmapXTest} PRIVATE ${COMPILE_WARNINGS})
+
 find_package(OpenGL REQUIRED)
 
 target_link_libraries(${depthmapXTest} Qt6::OpenGL salalib genlib OpenGL::GL)

@@ -32,7 +32,7 @@ class GraphViewModel : public QObject {
     QList<QSharedPointer<MapLayer>> m_mapLayers;
 
   public:
-    Q_INVOKABLE explicit GraphViewModel(QString id, QObject *parent = nullptr) : m_id(id){};
+    Q_INVOKABLE explicit GraphViewModel(QString id, QObject *) : m_id(id){};
     QList<QSharedPointer<MapLayer>> &getMapLayers() { return m_mapLayers; }
     const QList<QSharedPointer<MapLayer>> &getMapLayers() const { return m_mapLayers; }
     bool hasMetaGraph() const { return m_graphModel->hasMetaGraph(); }

@@ -25,10 +25,9 @@ AGLMapViewRenderer::AGLMapViewRenderer(const QQuickFramebufferObject *item,
                                        const QColor &foregrounColour,
                                        const QColor &backgroundColour, int antialiasingSamples,
                                        bool highlightOnHover)
-    : m_item(static_cast<const AGLMapViewport *>(item)),
-      m_model(new AGLMapViewModel(graphViewModel)), m_foregroundColour(foregrounColour),
-      m_backgroundColour(backgroundColour), m_antialiasingSamples(antialiasingSamples),
-      m_highlightOnHover(highlightOnHover) {
+    : m_item(static_cast<const AGLMapViewport *>(item)), m_foregroundColour(foregrounColour),
+      m_backgroundColour(backgroundColour), m_model(new AGLMapViewModel(graphViewModel)),
+      m_highlightOnHover(highlightOnHover), m_antialiasingSamples(antialiasingSamples) {
 
     if (!m_model->hasGraphViewModel())
         return;
@@ -119,7 +118,8 @@ void AGLMapViewRenderer::render() {
 }
 
 void AGLMapViewRenderer::recalcView() {
-    GLfloat screenRatio = GLfloat(m_viewportSize.width()) / m_viewportSize.height();
+    GLfloat screenRatio =
+        GLfloat(m_viewportSize.width()) / static_cast<float>(m_viewportSize.height());
     m_mProj.setToIdentity();
 
     if (m_perspectiveView) {
