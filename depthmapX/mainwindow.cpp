@@ -9,6 +9,7 @@
 #include "depthmapX/views/plotview/plotview.h"
 #include "depthmapX/views/tableview/tableview.h"
 #include "dialogs/AboutDlg.h"
+#include "dialogs/ColourScaleDlg.h"
 #include "dialogs/settings/settingsdialog.h"
 #include "interfaceversion.h"
 #include "views/glview/glview.h"
@@ -127,7 +128,6 @@ void MainWindow::closeEvent(QCloseEvent *event) {
     if (activeMapView()) {
         event->ignore();
     } else {
-        QApplication::postEvent((QObject *)&m_wndColourScale, new QEvent(QEvent::Close));
         writeSettings();
         event->accept();
     }
@@ -547,17 +547,14 @@ void MainWindow::OnViewSummary() {
 }
 
 void MainWindow::OnViewColourRange() {
-    if (m_wndColourScale.isVisible()) {
-        m_wndColourScale.hide();
-    } else {
-        QRect recta, rectb;
-        recta = geometry();
-        rectb = m_wndColourScale.geometry();
-        m_wndColourScale.setGeometry(recta.right() - 7 - rectb.width(), recta.top() + 68,
-                                     rectb.width(), rectb.height());
-        m_wndColourScale.m_docked = true;
-        m_wndColourScale.show();
-    }
+    CColourScaleDlg wndColourScale;
+    QRect recta, rectb;
+    recta = geometry();
+    rectb = wndColourScale.geometry();
+    wndColourScale.setGeometry(recta.right() - 7 - rectb.width(), recta.top() + 68, rectb.width(),
+                               rectb.height());
+    wndColourScale.m_docked = true;
+    wndColourScale.show();
 }
 
 void MainWindow::OnHelpBugs() {
@@ -1115,8 +1112,6 @@ int MainWindow::OnFocusGraph(QGraphDoc *pDoc, int lParam) {
         // Stop some strange auto scroll property:
         //		SetTreeStyle(TVS_NOSCROLL, FALSE);
     }
-
-    m_wndColourScale.OnFocusGraph(pDoc, lParam);
 
     in_FocusGraph = false;
     return 0;

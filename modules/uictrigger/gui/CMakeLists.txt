@@ -2,9 +2,8 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-set(module segmentpathsgui)
-set(segmentpathsgui_SRCS
-    segmentpathsmainwindow.cpp)
+set(module uictrigger)
+
 set(modules_gui "${modules_gui}" ${module} CACHE INTERNAL "modules_gui" FORCE)
 
 find_package(Qt6 COMPONENTS Core Widgets Gui OpenGLWidgets OpenGL REQUIRED)
@@ -17,7 +16,7 @@ include_directories(${Qt6Gui_INCLUDE_DIRS})
 include_directories(${Qt6OpenGL_INCLUDE_DIRS})
 include_directories(${Qt6OpenGLWidgets_INCLUDE_DIRS})
 
-set(CMAKE_AUTOMOC OFF)
+set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOUIC_SEARCH_PATHS "../../../depthmapX/UI")
 
@@ -27,7 +26,7 @@ add_definitions(${Qt6Gui_DEFINITIONS})
 add_definitions(${Qt6OpenGL_DEFINITIONS})
 add_definitions(${Qt6OpenGLWidgets_DEFINITIONS})
 
-add_compile_definitions(SEGMENTPATHS_GUI_LIBRARY)
+add_compile_definitions(UICTRIGGER_GUI_LIBRARY)
 
-add_library(${module} OBJECT ${segmentpathsgui_SRCS}
+add_library(${module} OBJECT
     ../../../depthmapX/imainwindowmodule.h)

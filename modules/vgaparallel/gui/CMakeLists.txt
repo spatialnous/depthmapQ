@@ -1,10 +1,11 @@
-# SPDX-FileCopyrightText: 2020 Petros Koutsolampros
+# SPDX-FileCopyrightText: 2024 Petros Koutsolampros
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-set(module segmentpathsgui)
-set(segmentpathsgui_SRCS
-    segmentpathsmainwindow.cpp)
+set(module vgaparallel)
+set(module_SRCS
+    vgaparallelmainwindow.h
+    vgaparallelmainwindow.cpp)
 set(modules_gui "${modules_gui}" ${module} CACHE INTERNAL "modules_gui" FORCE)
 
 find_package(Qt6 COMPONENTS Core Widgets Gui OpenGLWidgets OpenGL REQUIRED)
@@ -27,7 +28,7 @@ add_definitions(${Qt6Gui_DEFINITIONS})
 add_definitions(${Qt6OpenGL_DEFINITIONS})
 add_definitions(${Qt6OpenGLWidgets_DEFINITIONS})
 
-add_compile_definitions(SEGMENTPATHS_GUI_LIBRARY)
+add_compile_definitions(VGAPARALLEL_GUI_LIBRARY)
 
-add_library(${module} OBJECT ${segmentpathsgui_SRCS}
+add_library(${module} OBJECT ${module_SRCS}
     ../../../depthmapX/imainwindowmodule.h)

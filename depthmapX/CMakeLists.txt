@@ -132,9 +132,23 @@ set(MODULES_CORE FALSE)
 set(MODULES_CORE_TEST FALSE)
 add_subdirectory(../modules modules)
 
-target_link_libraries(${depthmapX} salalib genlib Qt6::Core
-    Qt6::Gui Qt6::Widgets Qt6::OpenGLWidgets Qt6::OpenGL
-    OpenGL::GL  OpenGL::GLU ${modules_gui} ${modules_core})
+set(LIBRARIES
+    Qt6::Core
+    Qt6::Gui
+    Qt6::Widgets
+    Qt6::OpenGLWidgets
+    Qt6::OpenGL
+    OpenGL::GL
+    OpenGL::GLU
+)
+find_package(OpenMP)
+if(OpenMP_CXX_FOUND)
+    set(${LIBRARIES} ${LIBRARIES} OpenMP::OpenMP_CXX)
+elseif()
+    message("OpenMP not found, building without")
+endif()
+
+target_link_libraries(${depthmapX} salalib genlib ${LIBRARIES} ${modules_gui} ${modules_core})
 
 add_subdirectory(dialogs)
 add_subdirectory(views)

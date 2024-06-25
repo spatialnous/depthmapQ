@@ -5,7 +5,6 @@
 #pragma once
 
 #include "GraphDoc.h"
-#include "dialogs/ColourScaleDlg.h"
 #include "indexWidget.h"
 #include "mainwindowmoduleregistry.hpp"
 #include "settings.h"
@@ -36,8 +35,7 @@ class ItemTreeEntry {
 class QDepthmapView;
 class QGraphDoc;
 
-QT_BEGIN_NAMESPACE
-class QAction;
+QT_BEGIN_NAMESPACE class QAction;
 class QMenu;
 class QMdiArea;
 class QMdiSubWindow;
@@ -268,7 +266,6 @@ class MainWindow : public QMainWindow {
     QSignalMapper *windowMapper;
     IndexWidget *m_indexWidget;
     AttribWindow *m_attrWindow;
-    CColourScaleDlg m_wndColourScale;
 
     QLabel *g_size;
     QLabel *g_pos_curr;
