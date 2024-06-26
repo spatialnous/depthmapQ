@@ -14,6 +14,11 @@
 #include <QtOpenGL>
 #include <QtWidgets/QFileDialog>
 
+#ifdef _WIN32
+// Required for MSVC (even in 2024)
+#include <windows.h>
+#endif
+
 #ifdef __APPLE__
 #include "OpenGL/gl.h"
 #else

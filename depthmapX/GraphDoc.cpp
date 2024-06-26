@@ -44,10 +44,6 @@
 #include <QtWidgets/QPushButton>
 #include <stdio.h>
 
-#ifdef _WIN32
-#include <windows.h>
-#endif
-
 QT_BEGIN_NAMESPACE
 Q_DECLARE_METATYPE(std::string)
 
