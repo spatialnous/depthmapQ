@@ -15,6 +15,15 @@ set(CMAKE_AUTOMOC ON)
 
 set(CMAKE_COMPILE_WARNING_AS_ERROR OFF)
 
+if (NOT FORCE_GLOBAL_COMPILE_WARNINGS)
+    if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR
+        "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+        set(COMPILE_WARNINGS -Wall -Wextra -Wpedantic)
+    elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
+        set(COMPILE_WARNINGS /W4 /EHsc)
+    endif()
+endif()
+
 # Find the QtWidgets library
 find_package(Qt6 COMPONENTS Core Widgets Gui OpenGLWidgets OpenGL REQUIRED)
 
@@ -154,6 +163,7 @@ if ((MSVC) AND (MSVC_VERSION GREATER_EQUAL 1914))
     # new option required from MSVC, but not yet implemented in CMake
     # see: https://gitlab.kitware.com/cmake/cmake/-/issues/18837
     target_compile_options(${depthmapX} PUBLIC "/Zc:__cplusplus" "-permissive-")
+    target_compile_options(${depthmapX} PRIVATE ${COMPILE_WARNINGS})
 endif()
 
 add_subdirectory(dialogs)
