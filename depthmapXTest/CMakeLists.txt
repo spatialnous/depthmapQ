@@ -50,6 +50,12 @@ add_executable(${depthmapXTest} ${depthmapXTest_SRCS})
 
 target_compile_options(${depthmapXTest} PRIVATE ${COMPILE_WARNINGS})
 
+if ((MSVC) AND (MSVC_VERSION GREATER_EQUAL 1914))
+    # new option required from MSVC, but not yet implemented in CMake
+    # see: https://gitlab.kitware.com/cmake/cmake/-/issues/18837
+        target_compile_options(${depthmapXTest} PUBLIC "/Zc:__cplusplus")
+endif()
+
 find_package(OpenGL REQUIRED)
 
 target_link_libraries(${depthmapXTest} Qt6::OpenGL salalib genlib OpenGL::GL)
