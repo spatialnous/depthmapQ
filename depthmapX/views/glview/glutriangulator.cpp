@@ -15,7 +15,7 @@
 // because glu.h needs it for MSVC
 #include "GL/glu.h"
 #else
-#include "glu.h"
+#include "OpenGL/glu.h"
 #endif
 
 struct TessContext {
