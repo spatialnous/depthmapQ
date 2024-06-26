@@ -52,4 +52,4 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: depthmapX-win64
-        path: build/depthmapX/
+        path: build/depthmapX/Release/
