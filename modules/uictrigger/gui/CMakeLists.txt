@@ -30,3 +30,9 @@ add_compile_definitions(UICTRIGGER_GUI_LIBRARY)
 
 add_library(${module} OBJECT
     ../../../depthmapX/imainwindowmodule.h)
+
+if ((MSVC) AND (MSVC_VERSION GREATER_EQUAL 1914))
+    # new option required from MSVC, but not yet implemented in CMake
+    # see: https://gitlab.kitware.com/cmake/cmake/-/issues/18837
+        target_compile_options(${module} PUBLIC "/Zc:__cplusplus -permissive-")
+endif()
