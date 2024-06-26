@@ -10,8 +10,10 @@
 #ifdef __linux__
 #include "GL/glu.h"
 #elif _WIN32
-#include "GL/glu.h"
 #include "windows.h"
+// it is important in this case for windows.h to be included first
+// because glu.h needs it for MSVC
+#include "GL/glu.h"
 #else
 #include "glu.h"
 #endif
