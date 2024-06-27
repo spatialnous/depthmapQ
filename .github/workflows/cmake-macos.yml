@@ -45,11 +45,11 @@ jobs:
       # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
       run: chmod +x ../ci/runTests.sh && ../ci/runTests.sh
 
-#    - name: Deploy for macos
-#      run: macdeployqt build/depthmapX/depthmapX/
+    - name: Deploy for macos
+      run: macdeployqt build/depthmapX/depthmapX.app/
 
     - name: Store the executable
       uses: actions/upload-artifact@v4
       with:
         name: depthmapX-macos
-        path: build/depthmapX/
+        path: build/depthmapX/depthmapX.app/
