@@ -48,8 +48,12 @@ jobs:
     - name: Deploy for macos
       run: macdeployqt build/depthmapX/depthmapX.app/
 
+    - name: Create the DMG file
+      working-directory: build/depthmapX
+      run: hdiutil create -format UDZO -srcfolder depthmapX.app depthmapX.dmg
+
     - name: Store the executable
       uses: actions/upload-artifact@v4
       with:
         name: depthmapX-macos
-        path: build/depthmapX/depthmapX.app/
+        path: build/depthmapX/depthmapX.dmg
