@@ -4,4 +4,5 @@
 
 #!/bin/sh
 
-echo Running unit tests ./depthmapXTest/depthmapXTest && ./moduleTest/moduleTest || exit 1
+echo Running unit tests
+./depthmapXTest/depthmapXTest && ./moduleTest/moduleTest --allow-running-no-tests || exit 1
