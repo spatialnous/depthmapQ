@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "GraphDoc.h"
+#include "graphdoc.h"
 #include "indexWidget.h"
 #include "mainwindowmoduleregistry.hpp"
 #include "settings.h"

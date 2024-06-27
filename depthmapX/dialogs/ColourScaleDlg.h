@@ -6,7 +6,7 @@
 
 #include "depthmapX/ui_ColourScaleDlg.h"
 
-#include "depthmapX/GraphDoc.h"
+#include "depthmapX/graphdoc.h"
 
 class CColourScaleDlg : public QDialog, public Ui::CColourScaleDlg {
     Q_OBJECT

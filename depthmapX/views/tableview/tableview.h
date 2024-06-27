@@ -3,7 +3,7 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include "GraphDoc.h"
+#include "graphdoc.h"
 #include "settings.h"
 
 #include <QTableWidget>

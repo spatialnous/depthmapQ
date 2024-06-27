@@ -8,7 +8,7 @@
 #include "salalib/segmmodules/segmtopologicalshortestpath.h"
 #include "salalib/segmmodules/segmtulipshortestpath.h"
 
-#include "depthmapX/GraphDoc.h"
+#include "depthmapX/graphdoc.h"
 #include "depthmapX/mainwindowhelpers.h"
 
 #include <QMenuBar>

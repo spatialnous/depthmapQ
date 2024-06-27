@@ -11,7 +11,7 @@
 #include "glpointmap.h"
 #include "glshapegraph.h"
 
-#include "depthmapX/GraphDoc.h"
+#include "depthmapX/graphdoc.h"
 #include "depthmapX/views/mapview.h"
 
 #include <QMatrix4x4>

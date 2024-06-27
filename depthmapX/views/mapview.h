@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "depthmapX/GraphDoc.h"
+#include "depthmapX/graphdoc.h"
 #include "depthmapX/settings.h"
 
 #include <QOpenGLWidget>

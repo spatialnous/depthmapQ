@@ -5,7 +5,7 @@
 #include "AttributeSummary.h"
 
 #include "ColumnPropertiesDlg.h"
-#include "GraphDoc.h"
+#include "graphdoc.h"
 
 CAttributeSummary::CAttributeSummary(QGraphDoc *pDoc, QWidget *parent) : QDialog(parent) {
     setupUi(this);

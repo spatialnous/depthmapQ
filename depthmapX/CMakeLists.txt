@@ -30,7 +30,7 @@ find_package(Qt6 COMPONENTS Core Widgets Gui OpenGLWidgets OpenGL REQUIRED)
 add_compile_definitions(_DEPTHMAP)
 
 set(depthmapX_SRCS
-    GraphDoc.cpp
+    graphdoc.cpp
     indexWidget.cpp
     mainwindow.cpp
     mdichild.cpp
@@ -42,7 +42,7 @@ set(depthmapX_SRCS
     compatibilitydefines.h
     mainwindow.h
     settings.h
-    GraphDoc.h
+    graphdoc.h
     mainwindowfactory.h
     settingsimpl.h
     indexWidget.h

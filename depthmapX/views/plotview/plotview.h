@@ -9,7 +9,7 @@
 #include <QRect>
 #include <QSize>
 
-#include "GraphDoc.h"
+#include "graphdoc.h"
 #include "linreg.h"
 
 #define MK_LBUTTON 0x0001
