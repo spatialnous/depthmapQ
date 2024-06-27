@@ -6,7 +6,7 @@
 
 #include "depthmapX/settingsimpl.h"
 
-#include <catch.hpp>
+#include "catch_amalgamated.hpp"
 
 class TestSettingsFactory : public QSettingsFactory {
   public:

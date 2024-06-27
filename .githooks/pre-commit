@@ -2,9 +2,11 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-#!/bin/bash
+#!/bin/sh
 
 set -e
+
+beginswith() { case $2 in "$1"*) true;; *) false;; esac; }
 
 echo "Checking for submodule commits not pushed"
 CHNG=$(git submodule foreach --quiet 'git diff --stat main origin/main')
@@ -18,7 +20,10 @@ reuse lint
 echo "Running clang-format..."
 for FILE in $(git diff --cached --name-only --diff-filter=d | grep -E '.*\.(c|cpp|h|hpp)$')
 do
-    echo "Checking file: $FILE"
-    clang-format --dry-run --Werror -style=file:.clang-format $FILE
+    if beginswith ThirdParty "$FILE"; then
+        echo "Skippint file: $FILE"
+    else
+        echo "Checking file: $FILE"
+        clang-format --dry-run --Werror -style=file:.clang-format $FILE
+    fi
 done
-echo "clang-format satisfied"

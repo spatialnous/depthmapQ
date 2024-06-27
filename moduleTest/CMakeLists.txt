@@ -5,7 +5,18 @@
 set(moduleTest moduleTest)
 
 set(moduleTest_SRCS
+    ../ThirdParty/Catch/catch_amalgamated.cpp
     main.cpp)
+
+if (NOT FORCE_GLOBAL_COMPILE_WARNINGS)
+    if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR
+        "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+    # reducing the warning level for catch2
+        set(COMPILE_WARNINGS -Wall -Wextra)
+    elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
+        set(COMPILE_WARNINGS /W4 /EHsc)
+    endif()
+endif()
 
 include_directories("../ThirdParty/Catch" "../ThirdParty/FakeIt")
 

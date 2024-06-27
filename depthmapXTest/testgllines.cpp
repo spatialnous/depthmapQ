@@ -4,7 +4,7 @@
 
 #include "depthmapX/views/glview/gllines.h"
 
-#include <catch.hpp>
+#include "catch_amalgamated.hpp"
 
 TEST_CASE("Test GLLines::loadLineData()", "") {
     Point2f line1Start(0, 0);

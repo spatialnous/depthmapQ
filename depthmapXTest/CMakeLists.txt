@@ -5,6 +5,16 @@
 
 set(depthmapXTest depthmapXTest)
 
+if (NOT FORCE_GLOBAL_COMPILE_WARNINGS)
+    if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR
+        "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+        # reducing the warning level for catch2
+        set(COMPILE_WARNINGS -Wall -Wextra)
+    elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
+        set(COMPILE_WARNINGS /W4 /EHsc)
+    endif()
+endif()
+
 # Find includes in corresponding build directories
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 # Instruct CMake to run moc automatically when needed
@@ -21,6 +31,7 @@ include_directories(${QT})
 add_compile_definitions(_DEPTHMAP)
 
 set(depthmapXTest_SRCS
+    ../ThirdParty/Catch/catch_amalgamated.cpp
     main.cpp
     selfcleaningfile.h
     testgllines.cpp

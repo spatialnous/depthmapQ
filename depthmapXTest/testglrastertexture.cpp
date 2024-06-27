@@ -4,15 +4,13 @@
 
 #include "depthmapX/views/glview/glrastertexture.h"
 
-#include <catch.hpp>
+#include "catch_amalgamated.hpp"
 
 TEST_CASE("Test GLRasterTexture::loadRegionData()", "") {
     float bottomLeftX = 0;
     float bottomLeftY = 0;
     float topRightX = 2;
     float topRightY = 4;
-
-    QRgb lineColour = qRgb(255, 0, 0);
 
     GLRasterTexture glrastertexture;
     glrastertexture.loadRegionData(bottomLeftX, bottomLeftY, topRightX, topRightY);

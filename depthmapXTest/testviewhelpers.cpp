@@ -4,7 +4,7 @@
 
 #include "depthmapX/views/viewhelpers.h"
 
-#include <catch.hpp>
+#include "catch_amalgamated.hpp"
 
 #include <iomanip>
 #include <sstream>
