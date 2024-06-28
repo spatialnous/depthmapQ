@@ -60,7 +60,8 @@ MainWindow::MainWindow(const QString &fileToLoad, Settings &settings) : mSetting
             SLOT(updateActiveWindows()));
 
     windowMapper = new QSignalMapper(this);
-    connect(windowMapper, SIGNAL(mapped(QWidget *)), this, SLOT(setActiveSubWindow(QWidget *)));
+    connect(windowMapper, &QSignalMapper::mappedObject, this,
+            [=](QObject *object) { setActiveSubWindow(qobject_cast<QWidget *>(object)); });
 
     m_indexWidget = new IndexWidget(this);
     QDockWidget *indexDock = new QDockWidget(tr("Index"), this);
@@ -1660,6 +1661,12 @@ void MainWindow::StepDepthTriggered() { activeMapDoc()->OnToolsPD(); }
 
 void MainWindow::zoomButtonTriggered() {
     int id = zoomInAct->data().value<int>();
+    for (auto action : zoomToolButton->menu()->actions()) {
+        if (action->isChecked()) {
+            id = action->data().value<int>();
+            break;
+        }
+    }
     if (id == ID_MAPBAR_ITEM_ZOOM_IN) {
         m_selected_mapbar_item = ID_MAPBAR_ITEM_ZOOM_IN;
         activeMapView()->OnViewZoomIn();
@@ -1670,13 +1677,13 @@ void MainWindow::zoomButtonTriggered() {
 }
 
 void MainWindow::FillButtonTriggered() {
-    int id;                                  // = qVariantValue<int>(STDFillColorAct->data());
-    if (qobject_cast<QAction *>(sender())) { // Not sure // Hack TV
-        QAction *temp = qobject_cast<QAction *>(sender());
-        id = temp->data().value<int>();
-        delete temp;
-    } else {
-        id = STDFillColorAct->data().value<int>();
+    int id = STDFillColorAct->data().value<int>();
+
+    for (auto action : fillColorToolButton->menu()->actions()) {
+        if (action->isChecked()) {
+            id = action->data().value<int>();
+            break;
+        }
     }
 
     if (id == ID_MAPBAR_ITEM_FILL) {
@@ -1694,6 +1701,12 @@ void MainWindow::FillButtonTriggered() {
 
 void MainWindow::LineButtonTriggered() {
     int id = SelectLineAct->data().value<int>();
+    for (auto action : lineToolButton->menu()->actions()) {
+        if (action->isChecked()) {
+            id = action->data().value<int>();
+            break;
+        }
+    }
     if (id == ID_MAPBAR_ITEM_LINETOOL) {
         m_selected_mapbar_item = ID_MAPBAR_ITEM_LINETOOL;
         activeMapView()->OnEditLineTool();
@@ -1724,9 +1737,8 @@ void MainWindow::joinButtonTriggered() {
     }
 }
 
-void MainWindow::zoomModeTriggered() {
-    zoomInAct = qobject_cast<QAction *>(sender());
-    if (zoomInAct->data() == ID_MAPBAR_ITEM_ZOOM_IN)
+void MainWindow::zoomModeTriggered(QAction *triggerAction) {
+    if (triggerAction->data() == ID_MAPBAR_ITEM_ZOOM_IN)
         zoomToolButton->setIcon(QIcon(":/images/win/b-5-3.png"));
     else
         zoomToolButton->setIcon(QIcon(":/images/win/b-5-4.png"));
@@ -1740,9 +1752,8 @@ void MainWindow::FillModeTriggered() {
     FillButtonTriggered();
 }
 
-void MainWindow::LineModeTriggered() {
-    SelectLineAct = qobject_cast<QAction *>(sender());
-    if (SelectLineAct->data() == ID_MAPBAR_ITEM_LINETOOL)
+void MainWindow::LineModeTriggered(QAction *triggerAction) {
+    if (triggerAction->data() == ID_MAPBAR_ITEM_LINETOOL)
         lineToolButton->setIcon(QIcon(":/images/win/b-5-10.png"));
     else
         lineToolButton->setIcon(QIcon(":/images/win/b-5-11.png"));
@@ -1761,9 +1772,8 @@ void MainWindow::isoModeTriggered(int isovistModeType) {
     isoButtonTriggered();
 }
 
-void MainWindow::joinTriggered() {
-    JoinAct = qobject_cast<QAction *>(sender());
-    if (JoinAct->data() == ID_MAPBAR_ITEM_JOIN)
+void MainWindow::joinTriggered(QAction *triggerAction) {
+    if (triggerAction->data() == ID_MAPBAR_ITEM_JOIN)
         JoinToolButton->setIcon(QIcon(":/images/win/b-5-16.png"));
     else
         JoinToolButton->setIcon(QIcon(":/images/win/b-5-17.png"));
@@ -1946,30 +1956,28 @@ QString MainWindow::strippedName(const QString &fullFileName) {
     return QFileInfo(fullFileName).fileName();
 }
 
-void MainWindow::openRecentFile() {
-    QAction *action = qobject_cast<QAction *>(sender());
-    if (action) {
-        QMdiSubWindow *existing = findMapView(action->data().toString());
-        if (existing) {
-            mdiArea->setActiveSubWindow(existing);
-            return;
-        }
-        MapView *child = createMapView();
-        QByteArray ba = action->data().toString().toUtf8(); // quick fix for weird chars
-                                                            // (russian filename bug report)
-        char *file = ba.data(); // quick fix for weird chars (russian filename bug report)
-        if (child->getGraphDoc()->OnOpenDocument(
-                file)) // quick fix for weird chars (russian filename bug report)
-        {
-            child->setCurrentFile(action->data().toString());
-            child->postLoadFile();
-            setCurrentFile(action->data().toString());
-            statusBar()->showMessage(tr("File loaded"), 2000);
-            child->show();
-            OnFocusGraph(child->getGraphDoc(), QGraphDoc::CONTROLS_LOADALL);
-        } else
-            child->close();
+void MainWindow::openRecentFile(QString fileName) {
+
+    QMdiSubWindow *existing = findMapView(fileName);
+    if (existing) {
+        mdiArea->setActiveSubWindow(existing);
+        return;
     }
+    MapView *child = createMapView();
+    QByteArray ba = fileName.toUtf8(); // quick fix for weird chars
+                                       // (russian filename bug report)
+    char *file = ba.data();            // quick fix for weird chars (russian filename bug report)
+    if (child->getGraphDoc()->OnOpenDocument(
+            file)) // quick fix for weird chars (russian filename bug report)
+    {
+        child->setCurrentFile(fileName);
+        child->postLoadFile();
+        setCurrentFile(fileName);
+        statusBar()->showMessage(tr("File loaded"), 2000);
+        child->show();
+        OnFocusGraph(child->getGraphDoc(), QGraphDoc::CONTROLS_LOADALL);
+    } else
+        child->close();
 }
 
 void MainWindow::RedoPlotViewMenu(QGraphDoc *pDoc) {
@@ -2716,7 +2724,9 @@ void MainWindow::createActions() {
     for (int i = 0; i < MaxRecentFiles; ++i) {
         recentFileActs[i] = new QAction(this);
         recentFileActs[i]->setVisible(false);
-        connect(recentFileActs[i], SIGNAL(triggered()), this, SLOT(openRecentFile()));
+
+        connect(recentFileActs[i], &QAction::triggered, this,
+                [=]() { openRecentFile(recentFileActs[i]->data().toString()); });
     }
 
     exitAct = new QAction(tr("E&xit"), this);
@@ -3060,13 +3070,13 @@ void MainWindow::createActions() {
         zoomInAct->setCheckable(1);
         zoomInAct->setChecked(1);
         zoomInAct->setData(ID_MAPBAR_ITEM_ZOOM_IN);
-        connect(zoomInAct, SIGNAL(triggered()), this, SLOT(zoomModeTriggered()));
+        connect(zoomInAct, &QAction::triggered, this, [=]() { zoomModeTriggered(zoomInAct); });
         zoomMenu->addAction(zoomInAct);
         zoomOutAct = new QAction(tr("Zoom out"), this);
         zoomOutAct->setStatusTip(tr("Zoom out of or into (using Alt-key) view of map\nZoom Out"));
         zoomOutAct->setCheckable(1);
         zoomOutAct->setData(ID_MAPBAR_ITEM_ZOOM_OUT);
-        connect(zoomOutAct, SIGNAL(triggered()), this, SLOT(zoomModeTriggered()));
+        connect(zoomOutAct, &QAction::triggered, this, [=]() { zoomModeTriggered(zoomOutAct); });
         zoomMenu->addAction(zoomOutAct);
         zoomMenu->setDefaultAction(zoomInAct);
         zoomToolButton->setMenu(zoomMenu);
@@ -3088,30 +3098,28 @@ void MainWindow::createActions() {
         STDFillColorAct->setCheckable(1);
         STDFillColorAct->setChecked(1);
         STDFillColorAct->setData(ID_MAPBAR_ITEM_FILL);
-        connect(STDFillColorAct, SIGNAL(triggered()), this, SLOT(FillModeTriggered()));
+        connect(STDFillColorAct, &QAction::triggered, this, [=]() { FillModeTriggered(); });
+        fillColorMenu->addAction(STDFillColorAct);
 
         ContextFillColorAct = new QAction(tr("Context Fill"), this);
         ContextFillColorAct->setStatusTip(tr("Context Fill grid spaces with points\nFill"));
         ContextFillColorAct->setCheckable(1);
         ContextFillColorAct->setData(ID_MAPBAR_ITEM_SEMIFILL);
-        connect(ContextFillColorAct, SIGNAL(triggered()), this, SLOT(FillModeTriggered()));
+        connect(ContextFillColorAct, &QAction::triggered, this, [=]() { FillModeTriggered(); });
+        fillColorMenu->addAction(ContextFillColorAct);
 
-        // AV test - TV
         AugmentFillColorAct = new QAction(tr("Augmented Fill"), this);
         AugmentFillColorAct->setStatusTip(tr("Augmented Fill grid spaces with points\nFill"));
         AugmentFillColorAct->setCheckable(1);
         AugmentFillColorAct->setData(ID_MAPBAR_ITEM_AUGMENT_FILL);
-        // connect(AugmentFillColorAct, SIGNAL(triggered()), this,
-        // SLOT(FillModeTriggered()));
+        connect(AugmentFillColorAct, &QAction::triggered, this, [=]() { FillModeTriggered(); });
+        fillColorMenu->addAction(AugmentFillColorAct); // AV TV
 
-        fillColorMenu->addAction(STDFillColorAct);
-        fillColorMenu->addAction(ContextFillColorAct);
-        // fillColorMenu->addAction(AugmentFillColorAct); // AV TV
         fillColorMenu->setDefaultAction(STDFillColorAct);
         fillColorToolButton->setMenu(fillColorMenu);
         fillColorToolButton->setIcon(QIcon(":/images/win/b-5-8.png"));
         fillColorToolButton->setCheckable(1);
-        connect(fillColorToolButton, SIGNAL(clicked()), this, SLOT(FillButtonTriggered()));
+        connect(fillColorToolButton, &QToolButton::clicked, this, [=]() { FillButtonTriggered(); });
 
         QActionGroup *tGroup = new QActionGroup(this);
         tGroup->addAction(STDFillColorAct);
@@ -3127,12 +3135,14 @@ void MainWindow::createActions() {
         SelectLineAct->setCheckable(1);
         SelectLineAct->setChecked(1);
         SelectLineAct->setData(ID_MAPBAR_ITEM_LINETOOL);
-        connect(SelectLineAct, SIGNAL(triggered()), this, SLOT(LineModeTriggered()));
+        connect(SelectLineAct, &QAction::triggered, this,
+                [=]() { LineModeTriggered(SelectLineAct); });
         SelectPolyLineAct = new QAction(tr("Polygon"), this);
         SelectPolyLineAct->setStatusTip(tr("Draw a new polygon\nPolygon"));
         SelectPolyLineAct->setCheckable(1);
         SelectPolyLineAct->setData(ID_MAPBAR_ITEM_POLYGON);
-        connect(SelectPolyLineAct, SIGNAL(triggered()), this, SLOT(LineModeTriggered()));
+        connect(SelectPolyLineAct, &QAction::triggered, this,
+                [=]() { LineModeTriggered(SelectPolyLineAct); });
         lineToolMenu->addAction(SelectLineAct);
         lineToolMenu->addAction(SelectPolyLineAct);
         lineToolMenu->setDefaultAction(SelectLineAct);
@@ -3183,12 +3193,12 @@ void MainWindow::createActions() {
         JoinAct->setCheckable(1);
         JoinAct->setChecked(1);
         JoinAct->setData(ID_MAPBAR_ITEM_JOIN);
-        connect(JoinAct, SIGNAL(triggered()), this, SLOT(joinTriggered()));
+        connect(JoinAct, &QAction::triggered, this, [=]() { joinTriggered(JoinAct); });
         JoinUnlinkAct = new QAction(tr("unLink"), this);
         JoinUnlinkAct->setStatusTip(tr("unmerge points\nUnlink"));
         JoinUnlinkAct->setCheckable(1);
         JoinUnlinkAct->setData(ID_MAPBAR_ITEM_UNJOIN);
-        connect(JoinUnlinkAct, SIGNAL(triggered()), this, SLOT(joinTriggered()));
+        connect(JoinUnlinkAct, &QAction::triggered, this, [=]() { joinTriggered(JoinUnlinkAct); });
         joinToolMenu->addAction(JoinAct);
         joinToolMenu->addAction(JoinUnlinkAct);
         joinToolMenu->setDefaultAction(JoinAct);

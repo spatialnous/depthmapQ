@@ -166,17 +166,17 @@ class MainWindow : public QMainWindow {
     void OnToolsRun();
     void OnToolsAgentRun();
     // MapView message
-    void zoomModeTriggered();
+    void zoomModeTriggered(QAction *triggerAction);
     void FillModeTriggered();
-    void LineModeTriggered();
+    void LineModeTriggered(QAction *triggerAction);
     void isoModeTriggered(int isovistModeType);
-    void joinTriggered();
+    void joinTriggered(QAction *triggerAction);
     void zoomButtonTriggered();
     void FillButtonTriggered();
     void LineButtonTriggered();
     void isoButtonTriggered();
     void joinButtonTriggered();
-    void openRecentFile();
+    void openRecentFile(QString fileName);
     void StepDepthTriggered();
     void AxialMapTriggered();
     void SelectPenTriggered();
