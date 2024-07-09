@@ -4,7 +4,7 @@
 
 #include "AttributeChooserDlg.h"
 
-CAttributeChooserDlg::CAttributeChooserDlg(AttributeTable &table, QWidget *parent)
+CAttributeChooserDlg::CAttributeChooserDlg(const AttributeTable &table, QWidget *parent)
     : QDialog(parent) {
     setupUi(this);
     c_attribute_chooser->setCurrentIndex(-1); // m_attribute = -1;

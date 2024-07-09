@@ -118,9 +118,9 @@ class GLView : public MapView, protected QOpenGLFunctions {
     void resetView();
 
     void highlightHoveredItems(const QtRegion &region);
-    void highlightHoveredPixels(const PointMap &map, const QtRegion &region);
-    void highlightHoveredPixels(const PointMap &map, const std::set<PixelRef> &refs);
-    void highlightHoveredShapes(const ShapeMap &map, const QtRegion &region);
+    void highlightHoveredPixels(const PointMapDX &map, const QtRegion &region);
+    void highlightHoveredPixels(const PointMapDX &map, const std::set<PixelRef> &refs);
+    void highlightHoveredShapes(const ShapeMapDX &map, const QtRegion &region);
 
     void loadAxes();
     void loadDrawingGLObjects();

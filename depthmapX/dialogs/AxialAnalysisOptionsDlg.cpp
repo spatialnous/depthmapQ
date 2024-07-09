@@ -9,8 +9,8 @@
 
 #include <QMessageBox>
 
-CAxialAnalysisOptionsDlg::CAxialAnalysisOptionsDlg(MetaGraph *graph, QWidget *parent)
-    : QDialog(parent) {
+CAxialAnalysisOptionsDlg::CAxialAnalysisOptionsDlg(MetaGraphDX *graph, QWidget *parent)
+    : QDialog(parent), m_meta_graph(graph) {
     setupUi(this);
     m_radius = QString(tr(""));
     m_choice = false;
@@ -18,8 +18,6 @@ CAxialAnalysisOptionsDlg::CAxialAnalysisOptionsDlg(MetaGraph *graph, QWidget *pa
     m_weighted = false;
     m_rra = false;
     m_local = false;
-
-    m_meta_graph = graph;
 
     foreach (QWidget *widget, QApplication::topLevelWidgets()) {
         MainWindow *mainWin = qobject_cast<MainWindow *>(widget);
@@ -219,8 +217,8 @@ void CAxialAnalysisOptionsDlg::UpdateData(bool value) {
 }
 
 void CAxialAnalysisOptionsDlg::showEvent(QShowEvent *event) {
-    const ShapeGraph &map = m_meta_graph->getDisplayedShapeGraph();
-    const AttributeTable &table = map.getAttributeTable();
+    const auto &map = m_meta_graph->getDisplayedShapeGraph();
+    const auto &table = map.getAttributeTable();
     for (int i = 0; i < table.getNumColumns(); i++) {
         c_attribute_chooser->addItem(QString(table.getColumnName(i).c_str()));
     }

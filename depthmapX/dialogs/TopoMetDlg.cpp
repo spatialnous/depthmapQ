@@ -8,7 +8,7 @@
 
 CTopoMetDlg::CTopoMetDlg(QWidget *parent) : QDialog(parent) {
     setupUi(this);
-    m_topological = TOPOMET_METHOD_TOPOLOGICAL;
+    m_analysisType = AnalysisType::ISOVIST;
     m_selected_only = false;
     m_radius = tr("n");
 
@@ -54,22 +54,22 @@ void CTopoMetDlg::OnOK() {
 void CTopoMetDlg::UpdateData(bool value) {
     if (value) {
         if (c_topological->isChecked())
-            m_topological = TOPOMET_METHOD_TOPOLOGICAL;
+            m_analysisType = AnalysisType::ISOVIST;
         else if (radioButton->isChecked())
-            m_topological = TOPOMET_METHOD_METRIC;
+            m_analysisType = AnalysisType::VISUAL;
         else
-            m_topological = -1;
+            m_analysisType = AnalysisType::NONE;
         m_radius = c_radius->text();
         if (checkBox->checkState())
             m_selected_only = true;
         else
             m_selected_only = false;
     } else {
-        switch (m_topological) {
-        case TOPOMET_METHOD_TOPOLOGICAL:
+        switch (m_analysisType) {
+        case AnalysisType::ISOVIST:
             c_topological->setChecked(true);
             break;
-        case TOPOMET_METHOD_METRIC:
+        case AnalysisType::VISUAL:
             radioButton->setChecked(true);
             break;
         default:

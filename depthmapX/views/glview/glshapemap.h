@@ -9,6 +9,7 @@
 #include "glregularpolygons.h"
 
 #include "salalib/shapemap.h"
+#include "salaobj/shapemapdx.h"
 
 class GLShapeMap {
   public:
@@ -37,7 +38,7 @@ class GLShapeMap {
                   const std::vector<std::pair<std::vector<Point2f>, PafColor>> &colouredPolygons,
                   const std::vector<std::pair<Point2f, PafColor>> &colouredPoints,
                   const int pointSides, const float pointRadius);
-    void loadGLObjects(ShapeMap &shapeMap);
+    void loadGLObjects(ShapeMapDX &shapeMap);
 
   private:
     GLLines m_lines;

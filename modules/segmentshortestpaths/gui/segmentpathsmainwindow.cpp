@@ -64,20 +64,34 @@ void SegmentPathsMainWindow::OnShortestPath(MainWindow *mainWindow, PathType pat
         return;
     }
 
+    int refFrom = *graphDoc->m_meta_graph->getDisplayedShapeGraph().getSelSet().begin();
+    int refTo = *graphDoc->m_meta_graph->getDisplayedShapeGraph().getSelSet().rbegin();
+
     graphDoc->m_communicator = new CMSCommunicator();
+    auto &map = graphDoc->m_meta_graph->getDisplayedShapeGraph();
     switch (pathType) {
     case PathType::ANGULAR:
         graphDoc->m_communicator->setAnalysis(std::unique_ptr<IAnalysis>(
-            new SegmentTulipShortestPath(graphDoc->m_meta_graph->getDisplayedShapeGraph())));
+            new SegmentTulipShortestPath(map.getInternalMap(), refFrom, refTo)));
+        map.overrideDisplayedAttribute(-2); // <- override if it's already showing
+        map.setDisplayedAttribute(SegmentTulipShortestPath::Column::ANGULAR_SHORTEST_PATH_ANGLE);
         break;
-    case PathType::METRIC:
+    case PathType::METRIC: {
+        auto &selected = map.getSelSet();
         graphDoc->m_communicator->setAnalysis(std::unique_ptr<IAnalysis>(
-            new SegmentMetricShortestPath(graphDoc->m_meta_graph->getDisplayedShapeGraph())));
+            new SegmentMetricShortestPath(map.getInternalMap(), refFrom, refTo)));
+        map.overrideDisplayedAttribute(-2);
+        map.setDisplayedAttribute(SegmentMetricShortestPath::Column::METRIC_SHORTEST_PATH_DEPTH);
         break;
-    case PathType::TOPOLOGICAL:
+    }
+    case PathType::TOPOLOGICAL: {
         graphDoc->m_communicator->setAnalysis(std::unique_ptr<IAnalysis>(
-            new SegmentTopologicalShortestPath(graphDoc->m_meta_graph->getDisplayedShapeGraph())));
+            new SegmentTopologicalShortestPath(map.getInternalMap(), refFrom, refTo)));
+        map.overrideDisplayedAttribute(-2); // <- override if it's already showing
+        map.setDisplayedAttribute(
+            SegmentTopologicalShortestPath::Column::TOPOLOGICAL_SHORTEST_PATH_DEPTH);
         break;
+    }
     }
     graphDoc->m_communicator->SetFunction(CMSCommunicator::FROMCONNECTOR);
     graphDoc->m_communicator->setSuccessUpdateFlags(QGraphDoc::NEW_DATA);

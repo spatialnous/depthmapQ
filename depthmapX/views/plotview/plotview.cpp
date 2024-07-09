@@ -178,9 +178,10 @@ bool QPlotView::Output(QPainter *pDC, QGraphDoc *pDoc, bool screendraw) {
         return false;
     }
 
-    AttributeTable &table = pDoc->m_meta_graph->getAttributeTable();
-    AttributeTableHandle &tableHandle = pDoc->getAttributeTableHandle();
-    LayerManagerImpl &layers = pDoc->getLayers();
+    auto &table = pDoc->m_meta_graph->getAttributeTable();
+    auto &tableHandle = pDoc->getAttributeTableHandle();
+    auto &layers = pDoc->getLayers();
+    auto &selSet = pDoc->m_meta_graph->getSelSet();
 
     QRect rect = QRect(0, 0, width(), height());
     int mindim = __min(rect.width(), rect.height());
@@ -319,11 +320,13 @@ bool QPlotView::Output(QPainter *pDC, QGraphDoc *pDoc, bool screendraw) {
         if (m_view_monochrome) {
             rgb = m_foreground;
         } else {
-            PafColor color = dXreimpl::getDisplayColor(iter.getKey(), iter.getRow(), tableHandle);
+            PafColor color =
+                dXreimpl::getDisplayColor(iter.getKey(), iter.getRow(), tableHandle, selSet);
             rgb = qRgb(color.redb(), color.greenb(), color.blueb());
         }
         int tempspacer = spacer;
-        if (iter.getRow().isSelected()) {
+        bool rowSelected = selSet.find(iter.getKey().value) != selSet.end();
+        if (rowSelected) {
             tempspacer = (spacer + 1) * 2 - 1;
             if (m_view_monochrome) {
                 rgb = qRgb(0xff, 0, 0);
@@ -336,11 +339,11 @@ bool QPlotView::Output(QPainter *pDC, QGraphDoc *pDoc, bool screendraw) {
             pen2 = QPen(QBrush(QColor(rgb)), spacer, Qt::SolidLine, Qt::FlatCap);
             // pDC->setPen(QPen(QBrush(QColor(rgb)), spacer, Qt::SolidLine,
             // Qt::FlatCap));
-        } else if (sel_parity != (iter.getRow().isSelected() ? 1 : -1)) {
+        } else if (sel_parity != (rowSelected ? 1 : -1)) {
             pen2 = QPen(QBrush(QColor(rgb)), spacer, Qt::SolidLine, Qt::FlatCap);
             // pDC->setPen(QPen(QBrush(QColor(rgb)), spacer, Qt::SolidLine,
             // Qt::FlatCap));
-            sel_parity = (iter.getRow().isSelected() ? 1 : -1);
+            sel_parity = (rowSelected ? 1 : -1);
         }
         pDC->setPen(pen2);
         //

@@ -7,7 +7,7 @@
 #include "salalib/geometrygenerators.h"
 #include "salalib/linkutils.h"
 
-void GLPixelMap::loadGLObjects(PointMap &pointMap) {
+void GLPixelMap::loadGLObjects(PointMapDX &pointMap) {
     QtRegion region = pointMap.getRegion();
     m_pointMap.loadRegionData(region.bottom_left.x, region.bottom_left.y, region.top_right.x,
                               region.top_right.y);
@@ -29,7 +29,7 @@ void GLPixelMap::loadGLObjects(PointMap &pointMap) {
     }
     if (m_showLinks) {
         const std::vector<SimpleLine> &mergedPixelLines =
-            depthmapX::getMergedPixelsAsLines(pointMap);
+            depthmapX::getMergedPixelsAsLines(pointMap.getInternalMap());
         std::vector<Point2f> mergedPixelLocations;
         for (auto &mergeLine : mergedPixelLines) {
             mergedPixelLocations.push_back(mergeLine.start());
@@ -49,7 +49,7 @@ void GLPixelMap::loadGLObjects(PointMap &pointMap) {
         m_linkLines.loadLineData(linkFillPerimeters, qRgb(0, 255, 0));
     }
 }
-void GLPixelMap::loadGLObjectsRequiringGLContext(const PointMap &currentPointMap) {
+void GLPixelMap::loadGLObjectsRequiringGLContext(const PointMapDX &currentPointMap) {
     QImage data(currentPointMap.getCols(), currentPointMap.getRows(), QImage::Format_RGBA8888);
     data.fill(Qt::transparent);
 

@@ -24,11 +24,12 @@ inline void CMSCommunicator::CommPostMessage(size_t m, size_t x) const {
 }
 
 void CMSCommunicator::runAnalysis(QGraphDoc &graphDoc) {
-    bool success = m_analysis->run(this).completed;
-    if (success) {
+    auto analysisResult = m_analysis->run(this);
+    if (analysisResult.completed) {
         graphDoc.SetUpdateFlag(m_successUpdateFlagType, m_successUpdateFlagModified);
         graphDoc.SetRedrawFlag(m_successRedrawFlagViewType, m_successRedrawFlag,
                                m_successRedrawReason);
+        m_postAnalysisFunc(analysisResult);
     }
 }
 

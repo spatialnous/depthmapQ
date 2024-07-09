@@ -8,6 +8,7 @@
 #include "glshapemap.h"
 
 #include "salalib/shapegraph.h"
+#include "salaobj/shapegraphdx.h"
 
 class GLShapeGraph {
   public:
@@ -48,7 +49,7 @@ class GLShapeGraph {
         m_shapeMap.paintGL(m_mProj, m_mView, m_mModel);
     }
     void showLinks(bool showLinks) { m_showLinks = showLinks; }
-    void loadGLObjects(ShapeGraph &shapeGraph);
+    void loadGLObjects(ShapeGraphDX &shapeGraph);
 
   private:
     GLShapeMap m_shapeMap;

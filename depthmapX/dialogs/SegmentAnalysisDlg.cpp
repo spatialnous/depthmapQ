@@ -8,12 +8,12 @@
 
 #include <QMessageBox>
 
-CSegmentAnalysisDlg::CSegmentAnalysisDlg(MetaGraph *graph, QWidget *parent) : QDialog(parent) {
+CSegmentAnalysisDlg::CSegmentAnalysisDlg(MetaGraphDX *graph, QWidget *parent) : QDialog(parent) {
     setupUi(this);
     m_analysis_type = -1;
     m_radius = tr("");
     m_tulip_bins = 0;
-    m_radius_type = -1;
+    m_radius_type = RadiusType::NONE;
     m_choice = false;
     m_weighted = false;
     m_attribute = -1;
@@ -64,7 +64,7 @@ void CSegmentAnalysisDlg::OnAnalysisTulip(bool value) {
     // actually, not tulip -- they're switched, this is on analyse angular!!
     UpdateData(true);
     m_choice = false;
-    m_radius_type = 2;
+    m_radius_type = RadiusType::ANGULAR;
     m_analysis_type = 1;
     m_weighted = false;
     m_attribute = -1;
@@ -149,7 +149,7 @@ void CSegmentAnalysisDlg::OnOK() {
                         add_rn = true;
                     } else {
                         double radius;
-                        if (m_radius_type == 0) {
+                        if (m_radius_type == RadiusType::TOPOLOGICAL) {
                             radius = curr_radius.toDouble();
                             if (radius < 1 || radius > 99) {
                                 QMessageBox::warning(this, tr("Warning"),
@@ -224,13 +224,13 @@ void CSegmentAnalysisDlg::UpdateData(bool value) {
         m_tulip_bins = c_tulip_bins->text().toInt();
 
         if (c_radius_type->isChecked())
-            m_radius_type = 0;
+            m_radius_type = RadiusType::TOPOLOGICAL;
         else if (radioButton->isChecked())
-            m_radius_type = 1;
+            m_radius_type = RadiusType::METRIC;
         else if (c_radio3->isChecked())
-            m_radius_type = 2;
+            m_radius_type = RadiusType::ANGULAR;
         else
-            m_radius_type = -1;
+            m_radius_type = RadiusType::NONE;
 
         if (c_choice->checkState())
             m_choice = true;
@@ -255,16 +255,16 @@ void CSegmentAnalysisDlg::UpdateData(bool value) {
         c_radius->setText(m_radius);
         c_tulip_bins->setText(QString("%1").arg(m_tulip_bins));
         switch (m_radius_type) {
-        case 0:
+        case RadiusType::TOPOLOGICAL:
             c_radius_type->setChecked(true);
             break;
-        case 1:
+        case RadiusType::METRIC:
             radioButton->setChecked(true);
             break;
-        case 2:
+        case RadiusType::ANGULAR:
             c_radio3->setChecked(true);
             break;
-        default:
+        case RadiusType::NONE:
             break;
         }
 
@@ -282,15 +282,15 @@ void CSegmentAnalysisDlg::UpdateData(bool value) {
 }
 
 void CSegmentAnalysisDlg::showEvent(QShowEvent *event) {
-    const ShapeGraph &map = m_meta_graph->getDisplayedShapeGraph();
-    const AttributeTable &table = map.getAttributeTable();
+    const auto &map = m_meta_graph->getDisplayedShapeGraph();
+    const auto &table = map.getAttributeTable();
     for (int i = 0; i < table.getNumColumns(); i++) {
         c_attribute->addItem(QString(table.getColumnName(i).c_str()));
     }
 
     if (m_analysis_type == 1) {
         m_choice = false;
-        m_radius_type = 2;
+        m_radius_type = RadiusType::ANGULAR;
         m_weighted = false;
         UpdateData(false);
         c_tulip_bins->setEnabled(false);

@@ -17,7 +17,7 @@ void CAttributeSummary::OnOK() { accept(); }
 void CAttributeSummary::OnDblclkList(int row, int column) {
     if (row != -1) {
         CColumnPropertiesDlg dlg(&(m_pDoc->m_meta_graph->getAttributeTable()),
-                                 &(m_pDoc->getLayers()), row);
+                                 &(m_pDoc->getLayers()), m_pDoc->m_meta_graph->getSelSet(), row);
         dlg.exec();
     }
 }

@@ -4,14 +4,13 @@
 
 #pragma once
 
+#include "salaobj/metagraphdx.h"
 #include "ui_AxialAnalysisOptionsDlg.h"
-
-#include "salalib/mgraph.h"
 
 class CAxialAnalysisOptionsDlg : public QDialog, public Ui::CAxialAnalysisOptionsDlg {
     Q_OBJECT
   public:
-    CAxialAnalysisOptionsDlg(MetaGraph *graph, QWidget *parent = 0);
+    CAxialAnalysisOptionsDlg(MetaGraphDX *graph, QWidget *parent = 0);
     void UpdateData(bool value);
     QString m_radius;
     bool m_choice;
@@ -19,7 +18,7 @@ class CAxialAnalysisOptionsDlg : public QDialog, public Ui::CAxialAnalysisOption
     bool m_weighted;
     bool m_rra;
     bool m_local;
-    MetaGraph *m_meta_graph;
+    MetaGraphDX *m_meta_graph;
     void showEvent(QShowEvent *event);
 
   private slots:

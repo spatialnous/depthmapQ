@@ -6,19 +6,16 @@
 
 #include "genlib/stringutils.h"
 
-CColumnPropertiesDlg::CColumnPropertiesDlg(AttributeTable *table, LayerManagerImpl *layers, int col,
+CColumnPropertiesDlg::CColumnPropertiesDlg(AttributeTable *table, LayerManagerImpl *layers,
+                                           std::optional<const std::set<int>> selSet, int col,
                                            QWidget *parent)
-    : QDialog(parent) {
+    : QDialog(parent), m_table(table), m_layers(layers), m_selSet(selSet), m_col(col) {
     setupUi(this);
     m_formula = tr("");
     m_name = tr("");
     m_name_text = tr("");
     m_creator = tr("");
     m_formula_note = tr("");
-
-    m_table = table;
-    m_layers = layers;
-    m_col = col;
 
     AttributeColumn &column = m_table->getColumn(m_col);
     m_name = column.getName().c_str();
@@ -79,7 +76,7 @@ void CColumnPropertiesDlg::UpdateData(bool value) {
             if (summary_all[2] == -1.0 || val > summary_all[2]) {
                 summary_all[2] = val;
             }
-            if (row.isSelected()) {
+            if (m_selSet.has_value() && (m_selSet->find(iter->getKey().value) != m_selSet->end())) {
                 summary_sel[0] += val;
                 summary_sel[4] += 1.0;
                 if (summary_sel[1] == -1.0 || val < summary_sel[1]) {
@@ -134,7 +131,7 @@ void CColumnPropertiesDlg::UpdateData(bool value) {
                     pos = 9; // irritating exactly equal to max
                 summary_all[5 + pos] += 1;
             }
-            if (row.isSelected()) {
+            if (m_selSet.has_value() && (m_selSet->find(iter->getKey().value) != m_selSet->end())) {
                 var_sel += sqr(val - summary_sel[0]);
                 if (freqrows) {
                     // note: must use summary_all even on selected to make difference

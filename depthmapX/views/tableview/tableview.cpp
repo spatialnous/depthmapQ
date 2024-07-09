@@ -89,7 +89,8 @@ QSize TableView::sizeHint() const { return m_initialSize; }
 void TableView::PrepareCache(int to) {
     m_updating = true;
     QTableWidgetItem *Item;
-    const AttributeTableHandle &tableHandle = pDoc->getAttributeTableHandle();
+    const auto &tableHandle = pDoc->getAttributeTableHandle();
+    const auto &selSet = pDoc->m_meta_graph->getSelSet();
     auto &index = tableHandle.getTableIndex();
 
     int diff = PG_COUNT;
@@ -102,13 +103,13 @@ void TableView::PrepareCache(int to) {
             if (!j) {
                 Item = item(to + i, j);
                 if (Item) {
-                    if (indexItem.row->isSelected())
+                    if (selSet.find(indexItem.key.value) != selSet.end())
                         Item->setCheckState(Qt::Checked);
                     else
                         Item->setCheckState(Qt::Unchecked);
                 } else {
                     Item = new QTableWidgetItem(QString("%1").arg(indexItem.key.value));
-                    if (indexItem.row->isSelected())
+                    if (selSet.find(indexItem.key.value) != selSet.end())
                         Item->setCheckState(Qt::Checked);
                     else
                         Item->setCheckState(Qt::Unchecked);
@@ -131,9 +132,9 @@ void TableView::itemChanged(QTableWidgetItem *item) {
         return;
     int row = item->row();
     int col = item->column();
-    MetaGraph *graph = pDoc->m_meta_graph;
-    AttributeTable &table = graph->getAttributeTable();
-    AttributeTableHandle &tableHandle = pDoc->getAttributeTableHandle();
+    auto *graph = pDoc->m_meta_graph;
+    auto &table = graph->getAttributeTable();
+    auto &tableHandle = pDoc->getAttributeTableHandle();
     auto &index = tableHandle.getTableIndex();
     if (col == 0) {
         std::vector<int> x;

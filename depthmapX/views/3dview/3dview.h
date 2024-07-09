@@ -4,6 +4,7 @@
 
 #include "depthmapX/graphdoc.h"
 
+#include "salalib/agents/agent.h"
 #include "salalib/agents/agentprogram.h"
 
 #include <QOpenGLWidget>

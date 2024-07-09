@@ -156,7 +156,7 @@ void Q3DView::timerEvent(QTimerEvent *event) {
 
     if (m_animating && !pDoc->m_communicator && pDoc->m_meta_graph &&
         pDoc->m_meta_graph->viewingProcessedPoints()) {
-        PointMap &pointmap = pDoc->m_meta_graph->getDisplayedPointMap();
+        auto &pointmap = pDoc->m_meta_graph->getDisplayedPointMap();
         m_animating = false;
         for (size_t i = 0; i < m_mannequins.size(); i++) {
             m_mannequins[i].frame();
@@ -258,7 +258,7 @@ void Q3DView::DrawScene() {
         if (!m_animating) {
             if (pDoc->m_meta_graph && pDoc->m_meta_graph->viewingProcessedPoints()) {
                 // okay, you can go for it and draw all the squares in cutesy 3d:
-                PointMap &pointmap = pDoc->m_meta_graph->getDisplayedPointMap();
+                auto &pointmap = pDoc->m_meta_graph->getDisplayedPointMap();
                 AttributeTable &table = pointmap.getAttributeTable();
 
                 for (auto iter = table.begin(); iter != table.end(); iter++) {
@@ -344,35 +344,31 @@ void Q3DView::ReloadLineData() {
     }
     m_region = QtRegion();
 
-    if (pDoc->m_meta_graph && pDoc->m_meta_graph->getState() & MetaGraph::LINEDATA) {
+    if (pDoc->m_meta_graph && pDoc->m_meta_graph->getState() & MetaGraphDX::LINEDATA) {
         // should really check communicator is not open...
         auto mgraphLock = pDoc->getLock();
         std::unique_lock<std::mutex> drawLock(m_draw_mutex);
 
         std::vector<Line> lines;
-        for (const auto &pixelGroup : pDoc->m_meta_graph->m_drawingFiles) {
-            for (const auto &pixel : pixelGroup.m_spacePixels) {
-                if (pixel.isShown()) {
-                    if (m_region.atZero()) {
-                        m_region = pixel.getRegion();
-                    } else {
-                        m_region = runion(m_region, pixel.getRegion());
-                    }
+        auto shownDrawingMaps = pDoc->m_meta_graph->getShownDrawingMaps();
+        for (const auto &pixel : shownDrawingMaps) {
+            if (m_region.atZero()) {
+                m_region = pixel.first.get().getRegion();
+            } else {
+                m_region = runion(m_region, pixel.first.get().getRegion());
+            }
 
-                    auto refShapes = pixel.getAllShapes();
-                    for (const auto &refShape : refShapes) {
-                        const SalaShape &shape = refShape.second;
-                        if (shape.isLine()) {
-                            lines.push_back(shape.getLine());
-                        } else if (shape.isPolyLine() || shape.isPolygon()) {
-                            for (int n = 0; n < shape.m_points.size() - 1; n++) {
-                                lines.push_back(Line(shape.m_points[n], shape.m_points[n + 1]));
-                            }
-                            if (shape.isPolygon()) {
-                                lines.push_back(
-                                    Line(shape.m_points.back(), shape.m_points.front()));
-                            }
-                        }
+            const auto &refShapes = pixel.first.get().getAllShapes();
+            for (const auto &refShape : refShapes) {
+                const SalaShape &shape = refShape.second;
+                if (shape.isLine()) {
+                    lines.push_back(shape.getLine());
+                } else if (shape.isPolyLine() || shape.isPolygon()) {
+                    for (int n = 0; n < shape.m_points.size() - 1; n++) {
+                        lines.push_back(Line(shape.m_points[n], shape.m_points[n + 1]));
+                    }
+                    if (shape.isPolygon()) {
+                        lines.push_back(Line(shape.m_points.back(), shape.m_points.front()));
                     }
                 }
             }
@@ -437,8 +433,8 @@ void Q3DView::ReloadPointData() {
         }
         //
         m_pixels.clear();
-        PointMap &map = pDoc->m_meta_graph->getDisplayedPointMap();
-        AttributeTable &table = map.getAttributeTable();
+        auto &map = pDoc->m_meta_graph->getDisplayedPointMap();
+        auto &table = map.getAttributeTable();
         for (const auto &iter : table) {
             PixelRef pix = iter.getKey().value;
             Point2f p = map.depixelate(pix);
@@ -688,11 +684,11 @@ void Q3DView::CreateAgent(QPoint point) {
 
         if (pDoc->m_meta_graph && pDoc->m_meta_graph->viewingProcessedPoints()) {
             // okay, you can go for it and add an agent:
-            PointMap &pointmap = pDoc->m_meta_graph->getDisplayedPointMap();
+            auto &pointmap = pDoc->m_meta_graph->getDisplayedPointMap();
             p.denormalScale(m_region);
             PixelRef pix = pointmap.pixelate(p);
             if (pointmap.getPoint(pix).filled()) {
-                m_agents.push_back(Agent(&m_agent_program, &pointmap));
+                m_agents.push_back(Agent(&m_agent_program, &pointmap.getInternalMap()));
                 m_agents.back().onInit(pix);
                 Point2f p2 = m_agents.back().getLocation();
                 p2.normalScale(m_region);

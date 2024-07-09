@@ -14,7 +14,7 @@ COptionsDlg::COptionsDlg(QWidget *parent) : QDialog(parent) {
     m_local = false;
     m_radius = tr("");
     m_gates_only = false;
-    m_output_type = -1;
+    m_output_type = AnalysisType::NONE;
     m_radius2 = tr("");
 
     foreach (QWidget *widget, QApplication::topLevelWidgets()) {
@@ -29,7 +29,7 @@ COptionsDlg::COptionsDlg(QWidget *parent) : QDialog(parent) {
             if ((int)mainWin->m_options.radius == -1) {
                 m_radius = QString("n");
                 m_radius2 = QString("n");
-            } else if (m_output_type == Options::OUTPUT_VISUAL) {
+            } else if (m_output_type == AnalysisType::VISUAL) {
                 char number[2];
                 sprintf(number, "%d", (int)mainWin->m_options.radius);
                 m_radius = QString(number);
@@ -48,7 +48,7 @@ COptionsDlg::COptionsDlg(QWidget *parent) : QDialog(parent) {
 void COptionsDlg::OnOutputType(bool value) {
     UpdateData(true);
 
-    if (m_output_type == Options::OUTPUT_VISUAL) {
+    if (m_output_type == AnalysisType::VISUAL) {
         c_local->setEnabled(true);
         c_global->setEnabled(true);
         c_radius->setEnabled(true);
@@ -59,7 +59,7 @@ void COptionsDlg::OnOutputType(bool value) {
         c_radius->setText(tr("n")); // <- essentially, undo changes
     }
 
-    if (m_output_type == Options::OUTPUT_METRIC) {
+    if (m_output_type == AnalysisType::METRIC) {
         c_radius2->setEnabled(true);
     } else {
         c_radius2->setText(tr("n")); // <- essentially, undo changes
@@ -101,7 +101,7 @@ void COptionsDlg::OnOK() {
             mainWin->m_options.gates_only = m_gates_only;
             mainWin->m_options.gatelayer = c_layer_selector->currentIndex() - 1;
 
-            if (m_output_type == Options::OUTPUT_VISUAL) {
+            if (m_output_type == AnalysisType::VISUAL) {
                 if (m_radius.compare(tr("n")) == 0) { // 0 means identical
                     mainWin->m_options.radius = -1.0;
                 } else {
@@ -150,17 +150,17 @@ void COptionsDlg::UpdateData(bool value) {
         m_radius = c_radius->text();
 
         if (c_output_type->isChecked())
-            m_output_type = 0;
+            m_output_type = AnalysisType::ISOVIST;
         else if (c_radio1->isChecked())
-            m_output_type = 1;
+            m_output_type = AnalysisType::VISUAL;
         else if (c_radio2->isChecked())
-            m_output_type = 2;
+            m_output_type = AnalysisType::METRIC;
         else if (c_radio3->isChecked())
-            m_output_type = 3;
+            m_output_type = AnalysisType::ANGULAR;
         else if (c_radio4->isChecked())
-            m_output_type = 4;
+            m_output_type = AnalysisType::THRU_VISION;
         else
-            m_output_type = -1;
+            m_output_type = AnalysisType::NONE;
         m_radius2 = c_radius2->text();
     } else {
         if (m_global)
@@ -176,19 +176,19 @@ void COptionsDlg::UpdateData(bool value) {
         c_radius->setText(m_radius);
 
         switch (m_output_type) {
-        case 0:
+        case AnalysisType::ISOVIST:
             c_output_type->setChecked(true);
             break;
-        case 1:
+        case AnalysisType::VISUAL:
             c_radio1->setChecked(true);
             break;
-        case 2:
+        case AnalysisType::METRIC:
             c_radio2->setChecked(true);
             break;
-        case 3:
+        case AnalysisType::ANGULAR:
             c_radio3->setChecked(true);
             break;
-        case 4:
+        case AnalysisType::THRU_VISION:
             c_radio4->setChecked(true);
             break;
         default:

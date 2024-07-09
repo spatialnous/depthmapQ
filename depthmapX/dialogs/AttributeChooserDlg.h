@@ -11,10 +11,10 @@
 class CAttributeChooserDlg : public QDialog, public Ui::CAttributeChooserDlg {
     Q_OBJECT
   public:
-    CAttributeChooserDlg(AttributeTable &table, QWidget *parent = 0);
+    CAttributeChooserDlg(const AttributeTable &table, QWidget *parent = 0);
     int m_attribute;
     QString m_text;
-    AttributeTable *m_table;
+    const AttributeTable *m_table;
     void UpdateData(bool value);
     void showEvent(QShowEvent *event);
 

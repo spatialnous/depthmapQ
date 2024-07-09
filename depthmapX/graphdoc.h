@@ -5,9 +5,9 @@
 #pragma once
 
 #include "salalib/ianalysis.h"
-#include "salalib/mgraph.h"
 
 #include "genlib/comm.h"
+#include "salaobj/metagraphdx.h"
 
 #include <QApplication>
 #include <QElapsedTimer>
@@ -127,6 +127,9 @@ class CMSCommunicator : public Communicator {
         }
     }
     void setAnalysis(std::unique_ptr<IAnalysis> analysis) { m_analysis = std::move(analysis); }
+    void setPostAnalysisFunc(std::function<void(AnalysisResult &result)> func) {
+        m_postAnalysisFunc = func;
+    }
     void setSuccessUpdateFlags(int type, bool modified = true) {
         m_successUpdateFlagType = type;
         m_successUpdateFlagModified = modified;
@@ -148,6 +151,7 @@ class CMSCommunicator : public Communicator {
     // CImportedModule m_module;
     QString m_string; // for a generic string
     std::unique_ptr<IAnalysis> m_analysis;
+    std::function<void(AnalysisResult &result)> m_postAnalysisFunc;
     int m_successUpdateFlagType;
     bool m_successUpdateFlagModified = true;
     int m_successRedrawFlagViewType;
@@ -194,7 +198,7 @@ class QGraphDoc : public QWidget {
     int m_make_algorithm;  // algorithm to make graph
     double m_make_maxdist; // maximum distance you can see (set to -1.0 for infinite)
 
-    MetaGraph *m_meta_graph;
+    MetaGraphDX *m_meta_graph;
 
     QString m_base_title;
     QString m_opened_name;
@@ -311,8 +315,8 @@ class QGraphDoc : public QWidget {
     void OnMakeIsovist(const Point2f &seed, double angle = -1.0);
     void OnToolsAxialMap(const Point2f &seed);
     int RenameColumn(AttributeTable *tab, int col);
-    bool ReplaceColumnContents(PointMap *pointmap, ShapeMap *shapemap, int col);
-    bool SelectByQuery(PointMap *pointmap, ShapeMap *shapemap);
+    bool ReplaceColumnContents(PointMapDX *pointmap, ShapeMapDX *shapemap, int col);
+    bool SelectByQuery(PointMapDX *pointmap, ShapeMapDX *shapemap);
     void OnToolsTopomet();
 
     bool OnNewDocument();

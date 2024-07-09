@@ -9,13 +9,17 @@
 #include "salalib/attributetable.h"
 #include "salalib/layermanagerimpl.h"
 
+#include <set>
+
 class CColumnPropertiesDlg : public QDialog, public Ui::CColumnPropertiesDlg {
     Q_OBJECT
   public:
     CColumnPropertiesDlg(AttributeTable *table = NULL, LayerManagerImpl *layers = NULL,
-                         int col = -1, QWidget *parent = 0);
+                         std::optional<const std::set<int>> selSet = std::nullopt, int col = -1,
+                         QWidget *parent = 0);
     AttributeTable *m_table;
     LayerManagerImpl *m_layers;
+    std::optional<const std::set<int>> m_selSet;
     int m_col;
     QString m_formula;
     QString m_name;

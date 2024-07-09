@@ -168,4 +168,5 @@ endif()
 
 add_subdirectory(dialogs)
 add_subdirectory(views)
+add_subdirectory(salaobj)
 

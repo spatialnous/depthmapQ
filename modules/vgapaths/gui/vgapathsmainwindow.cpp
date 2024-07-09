@@ -68,7 +68,7 @@ void VGAPathsMainWindow::OnShortestPath(MainWindow *mainWindow, PathType pathTyp
                              QMessageBox::Ok);
         return;
     }
-    PointMap &pointMap = graphDoc->m_meta_graph->getDisplayedPointMap();
+    PointMapDX &pointMap = graphDoc->m_meta_graph->getDisplayedPointMap();
     if (pointMap.getSelSet().size() != 2) {
         QMessageBox::warning(mainWindow, tr("Warning"),
                              tr("Please select two cells to create a path between"),
@@ -80,21 +80,35 @@ void VGAPathsMainWindow::OnShortestPath(MainWindow *mainWindow, PathType pathTyp
 
     graphDoc->m_communicator = new CMSCommunicator();
     switch (pathType) {
-    case PathType::VISUAL:
-        graphDoc->m_communicator->setAnalysis(
-            std::unique_ptr<IAnalysis>(new VGAVisualShortestPath(pointMap, pixelFrom, pixelTo)));
+    case PathType::VISUAL: {
+        graphDoc->m_communicator->setAnalysis(std::unique_ptr<IAnalysis>(
+            new VGAVisualShortestPath(pointMap.getInternalMap(), pixelFrom, pixelTo)));
+        graphDoc->m_communicator->setPostAnalysisFunc([&pointMap](AnalysisResult &) {
+            pointMap.overrideDisplayedAttribute(-2);
+            pointMap.setDisplayedAttribute(VGAVisualShortestPath::Column::VISUAL_SHORTEST_PATH);
+        });
         break;
+    }
     case PathType::METRIC: {
         std::set<PixelRef> pixelsFrom;
         pixelsFrom.insert(pixelFrom);
-        graphDoc->m_communicator->setAnalysis(
-            std::unique_ptr<IAnalysis>(new VGAMetricShortestPath(pointMap, pixelsFrom, pixelTo)));
+        graphDoc->m_communicator->setAnalysis(std::unique_ptr<IAnalysis>(
+            new VGAMetricShortestPath(pointMap.getInternalMap(), pixelsFrom, pixelTo)));
+        graphDoc->m_communicator->setPostAnalysisFunc([&pointMap](AnalysisResult &) {
+            pointMap.overrideDisplayedAttribute(-2);
+            pointMap.setDisplayedAttribute(VGAMetricShortestPath::Column::METRIC_SHORTEST_PATH);
+        });
         break;
     }
-    case PathType::ANGULAR:
-        graphDoc->m_communicator->setAnalysis(
-            std::unique_ptr<IAnalysis>(new VGAAngularShortestPath(pointMap, pixelFrom, pixelTo)));
+    case PathType::ANGULAR: {
+        graphDoc->m_communicator->setAnalysis(std::unique_ptr<IAnalysis>(
+            new VGAAngularShortestPath(pointMap.getInternalMap(), pixelFrom, pixelTo)));
+        graphDoc->m_communicator->setPostAnalysisFunc([&pointMap](AnalysisResult &) {
+            pointMap.overrideDisplayedAttribute(-2);
+            pointMap.setDisplayedAttribute(VGAAngularShortestPath::Column::ANGULAR_SHORTEST_PATH);
+        });
         break;
+    }
     }
     graphDoc->m_communicator->SetFunction(CMSCommunicator::FROMCONNECTOR);
     graphDoc->m_communicator->setSuccessUpdateFlags(QGraphDoc::NEW_DATA);
@@ -124,7 +138,7 @@ void VGAPathsMainWindow::OnExtractLinkData(MainWindow *mainWindow) {
     }
 
     graphDoc->m_communicator->setAnalysis(std::unique_ptr<IAnalysis>(
-        new ExtractLinkData(graphDoc->m_meta_graph->getDisplayedPointMap())));
+        new ExtractLinkData(graphDoc->m_meta_graph->getDisplayedPointMap().getInternalMap())));
 
     graphDoc->m_communicator->SetFunction(CMSCommunicator::FROMCONNECTOR);
     graphDoc->m_communicator->setSuccessUpdateFlags(QGraphDoc::NEW_DATA);
@@ -156,8 +170,14 @@ void VGAPathsMainWindow::OnMakeIsovistZones(MainWindow *mainWindow) {
     std::map<std::string, std::set<PixelRef>> originPointSets;
     float restrictDistance = -1;
 
-    graphDoc->m_communicator->setAnalysis(std::unique_ptr<IAnalysis>(new VGAIsovistZone(
-        graphDoc->m_meta_graph->getDisplayedPointMap(), originPointSets, restrictDistance)));
+    auto &map = graphDoc->m_meta_graph->getDisplayedPointMap();
+    graphDoc->m_communicator->setAnalysis(std::unique_ptr<IAnalysis>(
+        new VGAIsovistZone(map.getInternalMap(), originPointSets, restrictDistance)));
+
+    graphDoc->m_communicator->setPostAnalysisFunc([&map](AnalysisResult &result) {
+        map.overrideDisplayedAttribute(-2);
+        map.setDisplayedAttribute(result.getAttributes()[0]);
+    });
 
     graphDoc->m_communicator->SetFunction(CMSCommunicator::FROMCONNECTOR);
     graphDoc->m_communicator->setSuccessUpdateFlags(QGraphDoc::NEW_DATA);
@@ -188,10 +208,14 @@ void VGAPathsMainWindow::OnMetricShortestPathsToMany(MainWindow *mainWindow) {
 
     std::set<PixelRef> pixelsFrom;
     std::set<PixelRef> pixelsTo;
+    auto &map = graphDoc->m_meta_graph->getDisplayedPointMap();
+    graphDoc->m_communicator->setAnalysis(std::unique_ptr<IAnalysis>(
+        new VGAMetricShortestPathToMany(map.getInternalMap(), pixelsFrom, pixelsTo)));
 
-    graphDoc->m_communicator->setAnalysis(
-        std::unique_ptr<IAnalysis>(new VGAMetricShortestPathToMany(
-            graphDoc->m_meta_graph->getDisplayedPointMap(), pixelsFrom, pixelsTo)));
+    graphDoc->m_communicator->setPostAnalysisFunc([&map](AnalysisResult &result) {
+        map.overrideDisplayedAttribute(-2);
+        map.setDisplayedAttribute(result.getAttributes()[0]);
+    });
 
     graphDoc->m_communicator->SetFunction(CMSCommunicator::FROMCONNECTOR);
     graphDoc->m_communicator->setSuccessUpdateFlags(QGraphDoc::NEW_DATA);

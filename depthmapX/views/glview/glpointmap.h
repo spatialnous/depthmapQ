@@ -8,7 +8,8 @@
 #include "glrastertexture.h"
 #include "gltrianglesuniform.h"
 
-#include "salalib/pointdata.h"
+#include "salalib/pointmap.h"
+#include "salaobj/pointmapdx.h"
 
 class GLPixelMap {
   public:
@@ -48,8 +49,8 @@ class GLPixelMap {
     void setGridColour(QRgb gridColour) { m_gridColour = gridColour; }
     void showLinks(bool showLinks) { m_showLinks = showLinks; }
     void showGrid(bool showGrid) { m_showGrid = showGrid; }
-    void loadGLObjects(PointMap &pointMap);
-    void loadGLObjectsRequiringGLContext(const PointMap &currentPointMap);
+    void loadGLObjects(PointMapDX &pointMap);
+    void loadGLObjectsRequiringGLContext(const PointMapDX &currentPointMap);
 
   private:
     GLLinesUniform m_grid;

@@ -189,7 +189,7 @@ class QDepthmapView : public MapView {
                     bool screendraw);
     bool DrawAxial(QPainter *pDC, QGraphDoc *pDoc, int spacer, unsigned long ticks,
                    bool screendraw);
-    bool DrawShapes(QPainter *pDC, ShapeMap &map, bool muted, int spacer, unsigned long ticks,
+    bool DrawShapes(QPainter *pDC, ShapeMapDX &map, bool muted, int spacer, unsigned long ticks,
                     bool screendraw);
 
     void DrawLink(QPainter *pDC, int spacer, const Line &logical);
@@ -197,15 +197,15 @@ class QDepthmapView : public MapView {
 
     //
     void OutputEPS(std::ofstream &stream, QGraphDoc *pDoc, bool includeScale = true);
-    void OutputEPSMap(std::ofstream &stream, ShapeMap &map, QtRegion &logicalviewport, QRect &rect,
-                      float spacer);
+    void OutputEPSMap(std::ofstream &stream, ShapeMapDX &map, QtRegion &logicalviewport,
+                      QRect &rect, float spacer);
     void OutputEPSLine(std::ofstream &stream, Line &line, int spacer, QtRegion &logicalviewport,
                        QRect &rect);
     void OutputEPSPoly(std::ofstream &stream, const SalaShape &shape, int spacer,
                        QtRegion &logicalviewport, QRect &rect);
 
     void OutputSVG(std::ofstream &stream, QGraphDoc *pDoc);
-    void OutputSVGMap(std::ofstream &stream, ShapeMap &map, QtRegion &logicalviewport, int h);
+    void OutputSVGMap(std::ofstream &stream, ShapeMapDX &map, QtRegion &logicalviewport, int h);
     void OutputSVGLine(std::ofstream &stream, Line &line, QtRegion &logicalviewport, int h);
     void OutputSVGPoly(std::ofstream &stream, const SalaShape &shape, QtRegion &logicalviewport,
                        int h);

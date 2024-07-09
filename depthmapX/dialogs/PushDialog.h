@@ -6,6 +6,8 @@
 
 #include "ui_PushDialog.h"
 
+#include "salalib/pushvalues.h"
+
 class CPushDialog : public QDialog, public Ui::CPushDialog {
     Q_OBJECT
   public:
@@ -14,7 +16,7 @@ class CPushDialog : public QDialog, public Ui::CPushDialog {
     QString m_origin_attribute;
     QString m_origin_layer;
     bool m_count_intersections;
-    int m_function;
+    PushValues::Func m_function;
     void UpdateData(bool value);
     void showEvent(QShowEvent *event);
 

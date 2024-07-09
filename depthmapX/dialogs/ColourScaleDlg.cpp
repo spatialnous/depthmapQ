@@ -258,16 +258,16 @@ void CColourScaleDlg::MyUpdateData(bool dir, bool apply_to_all) {
         if (m_viewDoc == NULL) {
             Clear();
         } else {
-            MetaGraph *graph = m_viewDoc->m_meta_graph;
+            auto *graph = m_viewDoc->m_meta_graph;
             if (graph->viewingProcessed()) {
-                if (graph->getViewClass() & MetaGraph::VIEWVGA) {
-                    PointMap &map = graph->getDisplayedPointMap();
+                if (graph->getViewClass() & MetaGraphDX::VIEWVGA) {
+                    auto &map = graph->getDisplayedPointMap();
                     m_display_min = map.getDisplayMinValue();
                     m_display_max = map.getDisplayMaxValue();
                     m_displayparams = map.getDisplayParams();
                     m_color = m_displayparams.colorscale;
-                } else if (graph->getViewClass() & MetaGraph::VIEWAXIAL) {
-                    ShapeGraph &map = graph->getDisplayedShapeGraph();
+                } else if (graph->getViewClass() & MetaGraphDX::VIEWAXIAL) {
+                    auto &map = graph->getDisplayedShapeGraph();
                     if (map.getShapeCount() > 0) {
                         m_display_min = map.getDisplayMinValue();
                         m_display_max = map.getDisplayMaxValue();
@@ -280,8 +280,8 @@ void CColourScaleDlg::MyUpdateData(bool dir, bool apply_to_all) {
                     m_show_lines = show_lines;
                     m_show_fill = show_fill;
                     m_show_centroids = show_centroids;
-                } else if (graph->getViewClass() & MetaGraph::VIEWDATA) {
-                    ShapeMap &map = graph->getDisplayedDataMap();
+                } else if (graph->getViewClass() & MetaGraphDX::VIEWDATA) {
+                    auto &map = graph->getDisplayedDataMap();
                     if (map.getShapeCount() > 0) {
                         m_display_min = map.getDisplayMinValue();
                         m_display_max = map.getDisplayMaxValue();
@@ -311,16 +311,16 @@ void CColourScaleDlg::MyUpdateData(bool dir, bool apply_to_all) {
         UpdateData(true);
 
         if (m_viewDoc != NULL) {
-            MetaGraph *graph = m_viewDoc->m_meta_graph;
+            auto *graph = m_viewDoc->m_meta_graph;
             m_color = m_color_type_map[c_color_type->currentIndex()];
             m_displayparams.colorscale = m_color;
-            if (graph->getViewClass() & MetaGraph::VIEWVGA) {
+            if (graph->getViewClass() & MetaGraphDX::VIEWVGA) {
                 graph->getDisplayedPointMap().setDisplayParams(m_displayparams, apply_to_all);
-            } else if (graph->getViewClass() & MetaGraph::VIEWAXIAL) {
+            } else if (graph->getViewClass() & MetaGraphDX::VIEWAXIAL) {
                 graph->getDisplayedShapeGraph().setDisplayParams(m_displayparams, apply_to_all);
                 graph->getDisplayedShapeGraph().setPolygonDisplay(m_show_lines, m_show_fill,
                                                                   m_show_centroids);
-            } else if (graph->getViewClass() & MetaGraph::VIEWDATA) {
+            } else if (graph->getViewClass() & MetaGraphDX::VIEWDATA) {
                 graph->getDisplayedDataMap().setDisplayParams(m_displayparams, apply_to_all);
                 graph->getDisplayedDataMap().setPolygonDisplay(m_show_lines, m_show_fill,
                                                                m_show_centroids);

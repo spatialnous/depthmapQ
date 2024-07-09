@@ -6,7 +6,7 @@
 
 #include "salalib/geometrygenerators.h"
 
-void GLShapeGraph::loadGLObjects(ShapeGraph &shapeGraph) {
+void GLShapeGraph::loadGLObjects(ShapeGraphDX &shapeGraph) {
     m_shapeMap.loadGLObjects(shapeGraph);
     const std::vector<SimpleLine> &linkLines = shapeGraph.getAllLinkLines();
     std::vector<Point2f> linkPointLocations;

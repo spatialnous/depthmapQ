@@ -6,6 +6,8 @@
 
 #include "ui_OptionsDlg.h"
 
+#include "salalib/analysistype.h"
+
 class COptionsDlg : public QDialog, public Ui::COptionsDlg {
     Q_OBJECT
   public:
@@ -14,7 +16,7 @@ class COptionsDlg : public QDialog, public Ui::COptionsDlg {
     bool m_local;
     QString m_radius;
     bool m_gates_only;
-    int m_output_type;
+    AnalysisType m_output_type;
     QString m_radius2;
     void UpdateData(bool value);
     void showEvent(QShowEvent *event);

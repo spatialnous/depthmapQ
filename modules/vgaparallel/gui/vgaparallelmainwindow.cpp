@@ -80,19 +80,36 @@ void VGAParallelMainWindow::OnVGAParallel(MainWindow *mainWindow,
             QLineEdit::Normal, "n", &ok);
         if (!ok)
             return;
+        auto &map = graphDoc->m_meta_graph->getDisplayedPointMap();
+        auto radius = ConvertForVisibility(radiusText.toStdString());
         graphDoc->m_communicator->setAnalysis(std::unique_ptr<IAnalysis>(
-            new VGAVisualGlobalOpenMP(graphDoc->m_meta_graph->getDisplayedPointMap(),
-                                      ConvertForVisibility(radiusText.toStdString()), false)));
+            new VGAVisualGlobalOpenMP(map.getInternalMap(), radius, false)));
+        graphDoc->m_communicator->setPostAnalysisFunc([&map, radius](AnalysisResult &) {
+            map.overrideDisplayedAttribute(-2);
+            map.setDisplayedAttribute(VGAVisualGlobalOpenMP::getColumnWithRadius(
+                VGAVisualGlobalOpenMP::Column::VISUAL_INTEGRATION_HH, radius));
+        });
         break;
     }
     case AnalysisType::VISUAL_LOCAL_OPENMP: {
-        graphDoc->m_communicator->setAnalysis(std::unique_ptr<IAnalysis>(
-            new VGAVisualLocalOpenMP(graphDoc->m_meta_graph->getDisplayedPointMap())));
+        auto &map = graphDoc->m_meta_graph->getDisplayedPointMap();
+        graphDoc->m_communicator->setAnalysis(
+            std::unique_ptr<IAnalysis>(new VGAVisualLocalOpenMP(map.getInternalMap())));
+        graphDoc->m_communicator->setPostAnalysisFunc([&map](AnalysisResult &) {
+            map.overrideDisplayedAttribute(-2);
+            map.setDisplayedAttribute(VGAVisualLocalOpenMP::Column::VISUAL_CLUSTERING_COEFFICIENT);
+        });
         break;
     }
     case AnalysisType::VISUAL_LOCAL_ADJMATRIX: {
-        graphDoc->m_communicator->setAnalysis(std::unique_ptr<IAnalysis>(
-            new VGAVisualLocalAdjMatrix(graphDoc->m_meta_graph->getDisplayedPointMap(), false)));
+        auto &map = graphDoc->m_meta_graph->getDisplayedPointMap();
+        graphDoc->m_communicator->setAnalysis(
+            std::unique_ptr<IAnalysis>(new VGAVisualLocalAdjMatrix(map.getInternalMap(), false)));
+        graphDoc->m_communicator->setPostAnalysisFunc([&map](AnalysisResult &) {
+            map.overrideDisplayedAttribute(-2);
+            map.setDisplayedAttribute(
+                VGAVisualLocalAdjMatrix::Column::VISUAL_CLUSTERING_COEFFICIENT);
+        });
         break;
     }
     case AnalysisType::METRIC_OPENMP: {
@@ -104,9 +121,16 @@ void VGAParallelMainWindow::OnVGAParallel(MainWindow *mainWindow,
             QLineEdit::Normal, "n", &ok);
         if (!ok)
             return;
-        graphDoc->m_communicator->setAnalysis(std::unique_ptr<IAnalysis>(
-            new VGAMetricOpenMP(graphDoc->m_meta_graph->getDisplayedPointMap(),
-                                ConvertForMetric(radiusText.toStdString()), false)));
+        auto &map = graphDoc->m_meta_graph->getDisplayedPointMap();
+        auto radius = ConvertForMetric(radiusText.toStdString());
+        graphDoc->m_communicator->setAnalysis(
+            std::unique_ptr<IAnalysis>(new VGAMetricOpenMP(map.getInternalMap(), radius, false)));
+        graphDoc->m_communicator->setPostAnalysisFunc([&map, radius](AnalysisResult &) {
+            map.overrideDisplayedAttribute(-2);
+            map.setDisplayedAttribute(VGAMetricOpenMP::getColumnWithRadius(
+                VGAMetricOpenMP::Column::METRIC_MEAN_SHORTEST_PATH_DISTANCE, radius,
+                map.getInternalMap().getRegion()));
+        });
         break;
     }
     case AnalysisType::ANGULAR_OPENMP: {
@@ -119,9 +143,16 @@ void VGAParallelMainWindow::OnVGAParallel(MainWindow *mainWindow,
             QLineEdit::Normal, "n", &ok);
         if (!ok)
             return;
-        graphDoc->m_communicator->setAnalysis(std::unique_ptr<IAnalysis>(
-            new VGAAngularOpenMP(graphDoc->m_meta_graph->getDisplayedPointMap(),
-                                 ConvertForMetric(radiusText.toStdString()), false)));
+        auto &map = graphDoc->m_meta_graph->getDisplayedPointMap();
+        auto radius = ConvertForMetric(radiusText.toStdString());
+        graphDoc->m_communicator->setAnalysis(
+            std::unique_ptr<IAnalysis>(new VGAAngularOpenMP(map.getInternalMap(), radius, false)));
+        graphDoc->m_communicator->setPostAnalysisFunc([&map, radius](AnalysisResult &) {
+            map.overrideDisplayedAttribute(-2);
+            map.setDisplayedAttribute(
+                VGAAngularOpenMP::getColumnWithRadius(VGAAngularOpenMP::Column::ANGULAR_MEAN_DEPTH,
+                                                      radius, map.getInternalMap().getRegion()));
+        });
         break;
     }
     case AnalysisType::NONE: {
