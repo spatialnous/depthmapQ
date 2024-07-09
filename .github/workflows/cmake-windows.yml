@@ -4,9 +4,9 @@ name: depthmapX on windows-latest
 
 on:
   push:
-    branches: [ "depthmapX" ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ "depthmapX" ]
+    branches: [ "main" ]
   workflow_dispatch:
 
 env:
