@@ -1867,6 +1867,14 @@ void QGraphDoc::OnToolsRun() {
         return;
     }
 
+    if (dlg.m_output_type == AnalysisType::ISOVIST && !m_meta_graph->hasVisibleDrawingShapes()) {
+        // isovists won't work without some lines visible
+        QMessageBox::warning(this, tr("Notice"),
+                             tr("No visible drawing shapes to create isovists on"), QMessageBox::Ok,
+                             QMessageBox::Ok);
+        return;
+    }
+
     // This is easy too... too easy... hmm... crossed-fingers, here goes:
     m_communicator = new CMSCommunicator();
     CreateWaitDialog(tr("Analysing graph..."));

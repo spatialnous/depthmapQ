@@ -200,6 +200,7 @@ class MetaGraphDX {
     bool getShowText() const { return m_showText; }
     bool makePoints(const Point2f &p, int semifilled,
                     Communicator *communicator = NULL); // override of PointMap
+    bool hasVisibleDrawingShapes();
     std::vector<std::pair<std::reference_wrapper<const ShapeMapDX>, int>> getShownDrawingMaps();
     std::vector<std::pair<std::reference_wrapper<const ShapeMap>, int>>
     getAsInternalMaps(std::vector<std::pair<std::reference_wrapper<const ShapeMapDX>, int>> maps);

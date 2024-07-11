@@ -201,6 +201,18 @@ bool MetaGraphDX::clearPoints() {
     return b_return;
 }
 
+bool MetaGraphDX::hasVisibleDrawingShapes() {
+    // tries to find at least one visible shape
+    for (const auto &pixelGroup : m_drawingFiles) {
+        for (const auto &pixel : pixelGroup.second) {
+            if (pixel.isShown() && !pixel.getAllShapes().empty()) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 std::vector<std::pair<std::reference_wrapper<const ShapeMapDX>, int>>
 MetaGraphDX::getShownDrawingMaps() {
     std::vector<std::pair<std::reference_wrapper<const ShapeMapDX>, int>> maps;
