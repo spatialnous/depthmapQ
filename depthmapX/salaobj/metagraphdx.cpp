@@ -2186,8 +2186,8 @@ MetaGraphReadWrite::ReadStatus MetaGraphDX::readFromStream(std::istream &stream,
                     newMapDX.setDisplayedAttribute(std::get<2>(*ddIt));
                     ddIt++;
                 }
+                gddIt++;
             }
-            gddIt++;
         }
         {
             auto ddIt = dd.perPointMap.begin();
