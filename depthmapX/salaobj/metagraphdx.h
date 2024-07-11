@@ -9,6 +9,8 @@
 // Interface: the meta graph loads and holds all sorts of arbitrary data...
 #include "options.h"
 #include "pointmapdx.h"
+#include "salalib/ianalysis.h"
+#include "salalib/metagraphreadwrite.h"
 #include "shapegraphdx.h"
 #include "shapemapdx.h"
 #include "shapemapgroupdatadx.h"
@@ -38,6 +40,8 @@ class MetaGraphDX {
   private:
     MetaGraph m_metaGraph;
 
+    MetaGraphReadWrite::ReadStatus m_readStatus = MetaGraphReadWrite::ReadStatus::OK;
+
     int m_state;
     int m_viewClass;
     bool m_showGrid;
@@ -54,16 +58,6 @@ class MetaGraphDX {
     BSPNodeTree m_bspNodeTree;
 
   public:
-    enum {
-        OK,
-        WARN_BUGGY_VERSION,
-        WARN_CONVERTED,
-        NOT_A_GRAPH,
-        DAMAGED_FILE,
-        DISK_ERROR,
-        NEWER_VERSION,
-        DEPRECATED_VERSION
-    };
     enum {
         SHOWHIDEVGA = 0x0100,
         SHOWVGATOP = 0x0200,
@@ -142,8 +136,13 @@ class MetaGraphDX {
 
   public:
     MetaGraphDX(std::string name = "");
-    ~MetaGraphDX();
-    //
+    MetaGraphDX(MetaGraphDX &&other)
+        : m_drawingFiles(std::move(other.m_drawingFiles)), m_dataMaps(std::move(other.m_dataMaps)),
+          m_shapeGraphs(std::move(other.m_shapeGraphs)), m_pointMaps(std::move(other.m_pointMaps)) {
+    }
+    MetaGraphDX &operator=(MetaGraphDX &&other) = default;
+    ~MetaGraphDX(){};
+
     int getVersion() {
         // note, if unsaved, m_file_version is -1
         return m_metaGraph.version;
@@ -190,7 +189,6 @@ class MetaGraphDX {
     void setState(int state) { m_state = state; }
 
     int loadLineData(Communicator *communicator, int load_type);
-    void writeMapShapesAsCat(ShapeMap &map, std::ostream &stream);
     ShapeMapDX &createNewShapeMap(depthmapX::ImportType mapType, std::string name);
     void deleteShapeMap(depthmapX::ImportType mapType, ShapeMapDX &shapeMap);
     void updateParentRegions(ShapeMap &shapeMap);
@@ -371,10 +369,6 @@ class MetaGraphDX {
     const ShapeMapDX &getLineLayer(size_t fileIdx, size_t layerIdx) const {
         return m_drawingFiles[fileIdx].second[layerIdx];
     }
-    std::set<std::string> setIsovistData(Isovist &isovist, AttributeTable &table, AttributeRow &row,
-                                         bool simple_version);
-
-    //
     int getViewClass() { return m_viewClass; }
     // These functions make specifying conditions to do things much easier:
     bool viewingNone() { return (m_viewClass == VIEWNONE); }
@@ -494,34 +488,31 @@ class MetaGraphDX {
         else // if (m_viewClass & VIEWDATA)
             return getDisplayedDataMap().getSelSet();
     }
-    //
+
   public:
-    void runAgentEngine(Communicator *comm);
-    //
-  public:
+    void runAgentEngine(Communicator *comm, std::unique_ptr<IAnalysis> &analysis);
     // thru vision
     bool analyseThruVision(Communicator *comm = NULL,
                            std::optional<size_t> gatelayer = std::nullopt);
-    // BSP tree for making isovists
 
-  public:
+  public: // BSP tree for making isovists
     bool makeBSPtree(BSPNodeTree &bspNodeTree, Communicator *communicator = NULL);
     void resetBSPtree() { m_bspNodeTree.resetBSPtree(); }
     // returns 0: fail, 1: made isovist, 2: made isovist and added new shapemap layer
     int makeIsovist(Communicator *communicator, const Point2f &p, double startangle = 0,
-                    double endangle = 0, bool simple_version = true);
+                    double endangle = 0, bool = true);
     // returns 0: fail, 1: made isovist, 2: made isovist and added new shapemap layer
-    int makeIsovistPath(Communicator *communicator, double fov_angle = 2.0 * M_PI,
-                        bool simple_version = true);
+    int makeIsovistPath(Communicator *communicator, double fov_angle = 2.0 * M_PI, bool = true);
     bool makeIsovist(const Point2f &p, Isovist &iso);
 
   protected:
     // properties
   public:
     // likely to use communicator if too slow...
-    int readFromFile(const std::string &filename);
-    int readFromStream(std::istream &stream, const std::string &);
-    int write(const std::string &filename, int version, bool currentlayer = false);
+    MetaGraphReadWrite::ReadStatus readFromFile(const std::string &filename);
+    MetaGraphReadWrite::ReadStatus readFromStream(std::istream &stream, const std::string &);
+    MetaGraphReadWrite::ReadStatus write(const std::string &filename, int version,
+                                         bool currentlayer = false);
 
     std::vector<SimpleLine> getVisibleDrawingLines();
 

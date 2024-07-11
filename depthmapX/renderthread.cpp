@@ -477,7 +477,7 @@ void RenderThread::run() {
 
         case CMSCommunicator::AGENTANALYSIS: {
             try {
-                pDoc->m_meta_graph->runAgentEngine(comm);
+                pDoc->m_meta_graph->runAgentEngine(comm, comm->getAnalysis());
                 pDoc->SetUpdateFlag(QGraphDoc::NEW_TABLE);
                 pDoc->SetRedrawFlag(QGraphDoc::VIEW_ALL, QGraphDoc::REDRAW_POINTS,
                                     QGraphDoc::NEW_DATA);

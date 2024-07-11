@@ -58,7 +58,7 @@ bool PointMapDX::write(std::ostream &stream) {
 }
 
 void PointMapDX::copy(const PointMapDX &sourcemap, bool copypoints, bool copyattributes) {
-    getInternalMap().copy(sourcemap.getInternalMap());
+    getInternalMap().copy(sourcemap.getInternalMap(), copypoints, copyattributes);
 
     // -2 follows axial map convention, where -1 is the reference number
     m_displayed_attribute = sourcemap.m_displayed_attribute;

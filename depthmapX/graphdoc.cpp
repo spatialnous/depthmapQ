@@ -26,10 +26,13 @@
 #include "dialogs/RenameObjectDlg.h"
 #include "dialogs/SegmentAnalysisDlg.h"
 #include "dialogs/TopoMetDlg.h"
+#include "salalib/agents/agentanalysis.h"
 #include "views/depthmapview/depthmapview.h"
 #include "views/viewhelpers.h"
 
+#include "salalib/agents/agentprogram.h"
 #include "salalib/entityparsing.h"
+#include "salalib/exportutils.h"
 #include "salalib/importutils.h"
 #include "salalib/linkutils.h"
 #include "salalib/salaprogram.h"
@@ -777,7 +780,7 @@ void QGraphDoc::OnFileExport() {
         }
 
         if (m_meta_graph->write(outfile.toStdString(), METAGRAPH_VERSION, true) !=
-            MetaGraphDX::OK) { // <- true writes current layer only
+            MetaGraphReadWrite::ReadStatus::OK) { // <- true writes current layer only
             QMessageBox::warning(this, tr("Notice"), tr("Sorry, unable to open file for export"),
                                  QMessageBox::Ok, QMessageBox::Ok);
         }
@@ -902,12 +905,12 @@ void QGraphDoc::OnFileExportMapGeometry() {
 
         switch (mode) {
         case 0:
-            m_meta_graph->writeMapShapesAsCat(
+            exportUtils::writeMapShapesAsCat(
                 m_meta_graph->getDisplayedShapeGraph().getInternalMap(), stream);
             break;
         case 1:
-            m_meta_graph->writeMapShapesAsCat(m_meta_graph->getDisplayedDataMap().getInternalMap(),
-                                              stream);
+            exportUtils::writeMapShapesAsCat(m_meta_graph->getDisplayedDataMap().getInternalMap(),
+                                             stream);
             break;
         default:
             break;
@@ -1655,78 +1658,71 @@ void QGraphDoc::OnToolsAgentRun() {
         return;
     }
 
-    //    AgentEngine &eng = m_meta_graph->getAgentEngine();
+    CAgentAnalysisDlg dlg;
+    dlg.m_timesteps = 5000;
+    dlg.m_release_rate = 0.1;
+    dlg.m_release_location = 0;
+    dlg.m_frames = 1000;
+    dlg.m_fov = 15;
+    dlg.m_steps = 3;
+    dlg.m_record_trails = false;
+    dlg.m_trail_count = 50;
+    dlg.m_names.push_back("<None>");
+    for (size_t i = 0; i < m_meta_graph->getDataMaps().size(); i++) {
+        dlg.m_names.push_back(m_meta_graph->getDataMaps()[i].getName());
+    }
+    dlg.m_gatelayer = -1;
 
-    //    // set up eng here...
-    //    if (!eng.agentSets.size()) {
-    //        eng.agentSets.push_back(AgentSet());
-    //    }
+    if (QDialog::Accepted != dlg.exec()) {
+        return;
+    }
 
-    //    CAgentAnalysisDlg dlg;
-    //    dlg.m_timesteps = eng.m_timesteps;
-    //    dlg.m_release_rate = eng.agentSets.back().m_release_rate;
-    //    dlg.m_release_location = eng.agentSets.back().m_release_locations.size() ? 1 : 0;
-    //    dlg.m_frames = eng.agentSets.back().m_lifetime;
-    //    if (eng.agentSets.back().m_vbin == -1) {
-    //        dlg.m_fov = 32;
-    //    } else {
-    //        dlg.m_fov = eng.agentSets.back().m_vbin * 2 + 1;
-    //    }
-    //    dlg.m_steps = eng.agentSets.back().m_steps;
-    //    dlg.m_record_trails = eng.m_record_trails;
-    //    dlg.m_trail_count = eng.m_trail_count;
-    //    dlg.m_names.push_back("<None>");
-    //    for (size_t i = 0; i < m_meta_graph->getDataMaps().size(); i++) {
-    //        dlg.m_names.push_back(m_meta_graph->getDataMaps()[i].getName());
-    //    }
-    //    dlg.m_gatelayer = eng.m_gatelayer.has_value() ? eng.m_gatelayer.value() : -1;
+    int agentAlgorithm = AgentProgram::SEL_STANDARD;
+    if (dlg.m_occlusion == 1) {
+        agentAlgorithm = AgentProgram::SEL_LOS;
+    } else if (dlg.m_occlusion == 2) {
+        agentAlgorithm = AgentProgram::SEL_LOS_OCC;
+    } else {
+        // (dlg.m_occlusion - 2) should be from 1...8
+        agentAlgorithm = AgentProgram::SEL_OCCLUSION + (dlg.m_occlusion - 2);
+    }
 
-    //    if (QDialog::Accepted != dlg.exec()) {
-    //        return;
-    //    }
+    std::vector<Point2f> releasePoints;
+    int randomReleaseLocationSeed = -1;
 
-    //    eng.m_timesteps = dlg.m_timesteps;
-    //    eng.agentSets.back().m_release_rate = dlg.m_release_rate;
-    //    eng.agentSets.back().m_lifetime = dlg.m_frames;
-    //    if (dlg.m_fov == 32) {
-    //        eng.agentSets.back().m_vbin = -1;
-    //    } else {
-    //        eng.agentSets.back().m_vbin = (dlg.m_fov - 1) / 2;
-    //    }
-    //    eng.agentSets.back().m_steps = dlg.m_steps;
-    //    if (dlg.m_occlusion == 0) {
-    //        eng.agentSets.back().m_sel_type = AgentProgram::SEL_STANDARD;
-    //    } else if (dlg.m_occlusion == 1) {
-    //        eng.agentSets.back().m_sel_type = AgentProgram::SEL_LOS;
-    //    } else if (dlg.m_occlusion == 2) {
-    //        eng.agentSets.back().m_sel_type = AgentProgram::SEL_LOS_OCC;
-    //    } else {
-    //        // (dlg.m_occlusion - 2) should be from 1...8
-    //        eng.agentSets.back().m_sel_type = AgentProgram::SEL_OCCLUSION + (dlg.m_occlusion - 2);
-    //    }
-    //    if (dlg.m_release_location == 1) {
-    //        std::set<int> selected = m_meta_graph->getSelSet();
-    //        std::copy(selected.begin(), selected.end(),
-    //                  std::back_inserter(eng.agentSets.back().m_release_locations));
-    //        ;
-    //    } else {
-    //        eng.agentSets.back().m_release_locations.clear();
-    //    }
-    //    eng.m_gatelayer = dlg.m_gatelayer;
+    std::optional<std::pair<size_t, std::reference_wrapper<ShapeMap>>> recordTrails = std::nullopt;
 
-    //    // note, trails currently per run, but output per engine
-    //    if (dlg.m_record_trails) {
-    //        eng.m_record_trails = true;
-    //        eng.m_trail_count = dlg.m_trail_count;
-    //    }
+    if (dlg.m_record_trails) {
+        auto &agentmap =
+            m_meta_graph->createNewShapeMap(depthmapX::ImportType::DATAMAP, "Agent trails");
+        recordTrails = std::make_pair(dlg.m_trail_count, std::ref(agentmap.getInternalMap()));
+    }
 
-    //    // then go:
+    if (dlg.m_release_location == 1) {
+        randomReleaseLocationSeed = 0;
+        std::set<int> selected = m_meta_graph->getDisplayedPointMap().getSelSet();
+        for (auto sel : selected) {
+            releasePoints.push_back(
+                m_meta_graph->getDisplayedPointMap().getPoint(sel).getLocation());
+        }
+    }
 
-    //    m_communicator = new CMSCommunicator();
-    //    CreateWaitDialog(tr("Performing agent analysis..."));
-    //    m_communicator->SetFunction(CMSCommunicator::AGENTANALYSIS);
+    // then go:
 
-    //    m_thread.render(this);
+    m_communicator->setAnalysis(std::unique_ptr<IAnalysis>(new AgentAnalysis(
+        m_meta_graph->getDisplayedPointMap().getInternalMap(), dlg.m_timesteps, dlg.m_release_rate,
+        dlg.m_frames, dlg.m_fov, dlg.m_steps, agentAlgorithm, randomReleaseLocationSeed,
+        releasePoints,
+        dlg.m_gatelayer == -1 ? std::nullopt
+                              : std::make_optional(std::ref(
+                                    m_meta_graph->getDataMaps()[dlg.m_gatelayer].getInternalMap())),
+        recordTrails)));
+
+    m_communicator = new CMSCommunicator();
+    CreateWaitDialog(tr("Performing agent analysis..."));
+    m_communicator->SetFunction(CMSCommunicator::AGENTANALYSIS);
+
+    m_thread.render(this);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1979,25 +1975,25 @@ int QGraphDoc::OnOpenDocument(char *lpszPathName) {
 
     m_opened_name = QString(lpszPathName);
 
-    int ok = m_meta_graph->readFromFile(lpszPathName);
+    auto ok = m_meta_graph->readFromFile(lpszPathName);
     QFilePath path(m_opened_name);
 
     SetUpdateFlag(QGraphDoc::NEW_FILE, false);
     int ret = FALSE;
 
     switch (ok) {
-    case MetaGraphDX::OK:
+    case MetaGraphReadWrite::ReadStatus::OK:
         m_base_title = path.m_name;
         ret = TRUE;
         break;
-    case MetaGraphDX::WARN_BUGGY_VERSION:
+    case MetaGraphReadWrite::ReadStatus::WARN_BUGGY_VERSION:
         QMessageBox::warning(this, tr("Warning"),
                              tr("this graph was made with a version of depthmapX "
                                 "that contained slight errors"),
                              QMessageBox::Ok, QMessageBox::Ok);
         ret = TRUE;
         break;
-    case MetaGraphDX::WARN_CONVERTED:
+    case MetaGraphReadWrite::ReadStatus::WARN_CONVERTED:
         QMessageBox::warning(this, tr("Warning"),
                              tr("Warning: this graph was made with an older version of depthmapX.\n"
                                 "Some aspects of the graph may not have been translated to the new "
@@ -2005,36 +2001,36 @@ int QGraphDoc::OnOpenDocument(char *lpszPathName) {
                              QMessageBox::Ok, QMessageBox::Ok);
         ret = TRUE;
         break;
-    case MetaGraphDX::NOT_A_GRAPH:
+    case MetaGraphReadWrite::ReadStatus::NOT_A_GRAPH:
         QMessageBox::warning(this, tr("Warning"),
                              tr("Unable to open graph: not recognised as a graph file."),
                              QMessageBox::Ok, QMessageBox::Ok);
         break;
-    case MetaGraphDX::DAMAGED_FILE:
+    case MetaGraphReadWrite::ReadStatus::DAMAGED_FILE:
         QMessageBox::warning(this, tr("Warning"),
                              tr("Unable to open graph: the graph file is damaged."),
                              QMessageBox::Ok, QMessageBox::Ok);
         break;
-    case MetaGraphDX::DISK_ERROR:
+    case MetaGraphReadWrite::ReadStatus::DISK_ERROR:
         QMessageBox::warning(this, tr("Warning"),
                              tr("Unable to open graph: an error occurred while "
                                 "trying to read from the disk."),
                              QMessageBox::Ok, QMessageBox::Ok);
         break;
-    case MetaGraphDX::NEWER_VERSION:
+    case MetaGraphReadWrite::ReadStatus::NEWER_VERSION:
         QMessageBox::warning(this, tr("Warning"),
                              tr("Unable to open graph: this graph has been written "
                                 "by a newer version of depthmapX."),
                              QMessageBox::Ok, QMessageBox::Ok);
         break;
-    case MetaGraphDX::DEPRECATED_VERSION:
+    case MetaGraphReadWrite::ReadStatus::DEPRECATED_VERSION:
         QMessageBox::warning(this, tr("Warning"),
                              tr("Unable to open graph: this is a graph file format "
                                 "not supported by this version of depthmapX."),
                              QMessageBox::Ok, QMessageBox::Ok);
         break;
     default: {
-        std::string err = dXstring::formatString(ok);
+        std::string err = MetaGraphReadWrite::getReadMessage(ok);
         QMessageBox::warning(this, tr("Warning"), tr("Unable to open graph: error number "),
                              QMessageBox::Ok, QMessageBox::Ok);
     } break;
@@ -2135,11 +2131,11 @@ int QGraphDoc::OnSaveDocument(QString lpszPathName, int version) {
 
     modifiedFlag = true;
 
-    int ok = m_meta_graph->write(lpszPathName.toStdString(), version);
-    if (ok == MetaGraphDX::OK) {
+    auto ok = m_meta_graph->write(lpszPathName.toStdString(), version);
+    if (ok == MetaGraphReadWrite::ReadStatus::OK) {
         modifiedFlag = false;
         return TRUE;
-    } else if (ok == MetaGraphDX::DISK_ERROR) {
+    } else if (ok == MetaGraphReadWrite::ReadStatus::DISK_ERROR) {
         QMessageBox::warning(this, tr("Warning"),
                              tr("Unable to save graph: is there enough disk space?"),
                              QMessageBox::Ok, QMessageBox::Ok);

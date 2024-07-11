@@ -38,15 +38,15 @@ class ShapeMapGroupDataDX {
     ShapeMapGroupDataDX(const ShapeMapGroupDataDX &) = delete;
     ShapeMapGroupDataDX &operator=(const ShapeMapGroupDataDX &) = delete;
 
-    void setName(const std::string &name) { m_mapGroupData.setName(name); }
-    const std::string &getName() const { return m_mapGroupData.getName(); }
+    void setName(const std::string &name) { m_mapGroupData.name = name; }
+    const std::string &getName() const { return m_mapGroupData.name; }
 
     QtRegion &getRegion() const { return (QtRegion &)m_region; }
 
     const ShapeMapGroupData &getInternalData() const { return m_mapGroupData; }
 
     bool hasCurrentLayer() const { return m_currentLayer.has_value(); }
-    const int getCurrentLayer() const { return m_currentLayer.has_value() ? *m_currentLayer : -1; }
+    int getCurrentLayer() const { return m_currentLayer.has_value() ? *m_currentLayer : -1; }
     void invalidateCurrentLayer() const { m_currentLayer = std::nullopt; }
     void setCurrentLayer(int currentLayer) const { m_currentLayer = currentLayer; }
 

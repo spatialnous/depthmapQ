@@ -66,6 +66,11 @@ class ShapeMapDX : public AttributeMapDX {
     void copy(const ShapeMapDX &other, int copyflags = 0, bool copyMapType = false) {
         getInternalMap().copy(other.getInternalMap(), copyflags, copyMapType);
     }
+    virtual ~ShapeMapDX() {}
+    ShapeMapDX() = delete;
+    ShapeMapDX(const ShapeMapDX &other) = delete;
+    ShapeMapDX(ShapeMapDX &&other) = default;
+    ShapeMapDX &operator=(ShapeMapDX &&other) = default;
 
   public: // methods
     bool valid() const { return !m_invalidate; }
@@ -197,7 +202,9 @@ class ShapeMapDX : public AttributeMapDX {
     auto getAllPointsWithColour() {
         return getInternalMap().getAllPointsWithColour(m_selectionSet);
     }
-    auto getAllLinesWithColour() { return getInternalMap().getAllLinesWithColour(m_selectionSet); }
+    auto getAllLinesWithColour() {
+        return getInternalMap().getAllSimpleLinesWithColour(m_selectionSet);
+    }
     auto getAllPolygonsWithColour() {
         return getInternalMap().getAllPolygonsWithColour(m_selectionSet);
     }

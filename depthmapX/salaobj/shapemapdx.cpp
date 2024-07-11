@@ -276,6 +276,7 @@ bool ShapeMapDX::removeSelected() {
 
         return true;
     }
+    return false;
 }
 
 void ShapeMapDX::removeShape(int shaperef, bool undoing) {
@@ -388,7 +389,7 @@ void ShapeMapDX::setPolygonDisplay(bool show_lines, bool show_fill, bool show_ce
 
 std::vector<std::pair<SimpleLine, PafColor>>
 ShapeMapDX::getAllLinesWithColour(const std::set<int> &selSet) {
-    return getInternalMap().getAllLinesWithColour(selSet);
+    return getInternalMap().getAllSimpleLinesWithColour(selSet);
 }
 
 std::vector<std::pair<std::vector<Point2f>, PafColor>>

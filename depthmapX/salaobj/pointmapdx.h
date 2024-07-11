@@ -63,6 +63,11 @@ class PointMapDX : public AttributeMapDX {
         s_bl = NoPixel;
         s_tr = NoPixel;
     };
+    virtual ~PointMapDX() {}
+    PointMapDX() = delete;
+    PointMapDX(const PointMapDX &other) = delete;
+    PointMapDX(PointMapDX &&other) = default;
+    PointMapDX &operator=(PointMapDX &&other) = default;
 
   public: // methods
     PointMap &getInternalMap() { return *static_cast<PointMap *>(m_map.get()); }

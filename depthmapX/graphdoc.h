@@ -126,7 +126,9 @@ class CMSCommunicator : public Communicator {
             m_fileset.push_back(strings[i].toStdString());
         }
     }
-    void setAnalysis(std::unique_ptr<IAnalysis> analysis) { m_analysis = std::move(analysis); }
+    void setAnalysis(std::unique_ptr<IAnalysis> &&analysis) { m_analysis = std::move(analysis); }
+    std::unique_ptr<IAnalysis> &getAnalysis() { return m_analysis; }
+
     void setPostAnalysisFunc(std::function<void(AnalysisResult &result)> func) {
         m_postAnalysisFunc = func;
     }

@@ -15,6 +15,7 @@
 #include "salalib/axialmodules/axialstepdepth.h"
 #include "salalib/importutils.h"
 #include "salalib/isovist.h"
+#include "salalib/isovistutils.h"
 #include "salalib/mapconverter.h"
 #include "salalib/metagraphreadwrite.h"
 #include "salalib/segmmodules/segmangular.h"
@@ -232,7 +233,8 @@ std::vector<Line> MetaGraphDX::getShownDrawingFilesAsLines() {
     std::vector<Line> lines;
     auto shownMaps = getShownDrawingMaps();
     for (const auto &map : shownMaps) {
-        std::vector<SimpleLine> newLines = map.first.get().getInternalMap().getAllShapesAsLines();
+        std::vector<SimpleLine> newLines =
+            map.first.get().getInternalMap().getAllShapesAsSimpleLines();
         for (const auto &line : newLines) {
             lines.emplace_back(line.start(), line.end());
         }
@@ -304,7 +306,10 @@ bool MetaGraphDX::analyseGraph(Communicator *communicator, Options options,
         if (options.point_depth_selection == 1) {
             if (m_viewClass & VIEWVGA) {
                 auto &map = getDisplayedPointMap();
-                analysisCompleted = VGAVisualGlobalDepth(map.getSelSet())
+                std::set<PixelRef> origins;
+                for (auto &sel : map.getSelSet())
+                    origins.insert(sel);
+                analysisCompleted = VGAVisualGlobalDepth(origins)
                                         .run(communicator, map.getInternalMap(), false)
                                         .completed;
 
@@ -334,7 +339,10 @@ bool MetaGraphDX::analyseGraph(Communicator *communicator, Options options,
         } else if (options.point_depth_selection == 2) {
             if (m_viewClass & VIEWVGA) {
                 auto &map = getDisplayedPointMap();
-                analysisCompleted = VGAMetricDepth(map.getSelSet())
+                std::set<PixelRef> origins;
+                for (auto &sel : map.getSelSet())
+                    origins.insert(sel);
+                analysisCompleted = VGAMetricDepth(origins)
                                         .run(communicator, map.getInternalMap(), false)
                                         .completed;
                 map.setDisplayedAttribute(-2);
@@ -350,9 +358,11 @@ bool MetaGraphDX::analyseGraph(Communicator *communicator, Options options,
             }
         } else if (options.point_depth_selection == 3) {
             auto &map = getDisplayedPointMap();
-            analysisCompleted = VGAAngularDepth(map.getSelSet())
-                                    .run(communicator, map.getInternalMap(), false)
-                                    .completed;
+            std::set<PixelRef> origins;
+            for (auto &sel : map.getSelSet())
+                origins.insert(sel);
+            analysisCompleted =
+                VGAAngularDepth(origins).run(communicator, map.getInternalMap(), false).completed;
             map.setDisplayedAttribute(-2);
             map.setDisplayedAttribute(VGAAngularDepth::Column::ANGULAR_STEP_DEPTH);
         } else if (options.point_depth_selection == 4) {
@@ -537,7 +547,7 @@ bool MetaGraphDX::moveSelShape(const Line &line) {
 // returns 0: fail, 1: made isovist, 2: made isovist and added new shapemap
 // layer
 int MetaGraphDX::makeIsovist(Communicator *communicator, const Point2f &p, double startangle,
-                             double endangle, bool simple_version) {
+                             double endangle, bool) {
     int isovistMade = 0;
     // first make isovist
     Isovist iso;
@@ -566,7 +576,7 @@ int MetaGraphDX::makeIsovist(Communicator *communicator, const Point2f &p, doubl
         setViewClass(SHOWSHAPETOP);
         AttributeTable &table = map.getInternalMap().getAttributeTable();
         AttributeRow &row = table.getRow(AttributeKey(polyref));
-        MetaGraphDX::setIsovistData(iso, table, row, simple_version);
+        IsovistUtils::setIsovistData(iso, table, row);
     }
     return isovistMade;
 }
@@ -586,7 +596,7 @@ static std::pair<double, double> startendangle(Point2f vec, double fov) {
 
 // returns 0: fail, 1: made isovist, 2: made isovist and added new shapemap
 // layer
-int MetaGraphDX::makeIsovistPath(Communicator *communicator, double fov, bool simple_version) {
+int MetaGraphDX::makeIsovistPath(Communicator *communicator, double fov, bool) {
     int pathMade = 0;
 
     // must be showing a suitable map -- that is, one which may have polylines or
@@ -651,7 +661,7 @@ int MetaGraphDX::makeIsovistPath(Communicator *communicator, double fov, bool si
                     isovists->getInternalMap().getAllShapes()[polyref].setCentroid(start);
                     AttributeTable &table = isovists->getInternalMap().getAttributeTable();
                     AttributeRow &row = table.getRow(AttributeKey(polyref));
-                    MetaGraphDX::setIsovistData(iso, table, row, simple_version);
+                    IsovistUtils::setIsovistData(iso, table, row);
                 } else {
                     for (size_t i = 0; i < path.m_points.size() - 1; i++) {
                         Line li = Line(path.m_points[i], path.m_points[i + 1]);
@@ -668,7 +678,7 @@ int MetaGraphDX::makeIsovistPath(Communicator *communicator, double fov, bool si
                             start);
                         AttributeTable &table = isovists->getInternalMap().getAttributeTable();
                         AttributeRow &row = table.getRow(AttributeKey(polyref));
-                        MetaGraphDX::setIsovistData(iso, table, row, simple_version);
+                        IsovistUtils::setIsovistData(iso, table, row);
                     }
                 }
             }
@@ -697,7 +707,7 @@ bool MetaGraphDX::makeBSPtree(BSPNodeTree &bspNodeTree, Communicator *communicat
         return true;
     }
 
-    std::vector<TaggedLine> partitionlines;
+    std::vector<Line> partitionlines;
     auto shownMaps = getShownDrawingMaps();
     for (const auto &mapLayer : shownMaps) {
         auto refShapes = mapLayer.first.get().getInternalMap().getAllShapes();
@@ -710,7 +720,7 @@ bool MetaGraphDX::makeBSPtree(BSPNodeTree &bspNodeTree, Communicator *communicat
             // to must check it is not a zero length line:
             for (const Line &line : newLines) {
                 if (line.length() > 0.0) {
-                    partitionlines.push_back(TaggedLine(line, k));
+                    partitionlines.push_back(line);
                 }
             }
         }
@@ -720,7 +730,7 @@ bool MetaGraphDX::makeBSPtree(BSPNodeTree &bspNodeTree, Communicator *communicat
         //
         // Now we'll try the BSP tree:
         //
-        bspNodeTree.makeNewRoot(true);
+        bspNodeTree.makeNewRoot(/* destroyIfBuilt = */ true);
 
         time_t atime = 0;
         if (communicator) {
@@ -1573,7 +1583,7 @@ int MetaGraphDX::loadLineData(Communicator *communicator, int load_type) {
     // separate the stream and the communicator, allowing non-file streams read
     maps = depthmapX::importFile(communicator->getInFileStream(), communicator,
                                  communicator->GetMBInfileName(), depthmapX::ImportType::DRAWINGMAP,
-                                 depthmapX::ImportFileType::DXF);
+                                 importType);
 
     m_drawingFiles.push_back(std::make_pair(ShapeMapGroupDataDX(communicator->GetMBInfileName()),
                                             std::vector<ShapeMapDX>()));
@@ -1595,28 +1605,6 @@ int MetaGraphDX::loadLineData(Communicator *communicator, int load_type) {
     m_state |= LINEDATA;
 
     return 1;
-}
-
-// From: Alasdair Turner (2004) - Depthmap 4: a researcher's handbook (p. 6):
-// [..] CAT, which stands for Chiron and Alasdair Transfer Format [..]
-
-void MetaGraphDX::writeMapShapesAsCat(ShapeMap &map, std::ostream &stream) {
-    stream << "CAT" << std::endl;
-    for (auto &refShape : map.getAllShapes()) {
-        SalaShape &shape = refShape.second;
-        if (shape.isPolyLine() || shape.isPolygon()) {
-            stream << "Begin " << (shape.isPolyLine() ? "Polyline" : "Polygon") << std::endl;
-            for (Point2f p : shape.m_points) {
-                stream << p.x << " " << p.y << std::endl;
-            }
-            stream << "End " << (shape.isPolyLine() ? "Polyline" : "Polygon") << std::endl;
-        } else if (shape.isLine()) {
-            stream << "Begin Polyline" << std::endl;
-            stream << shape.getLine().ax() << " " << shape.getLine().ay() << std::endl;
-            stream << shape.getLine().bx() << " " << shape.getLine().by() << std::endl;
-            stream << "End Polyline" << std::endl;
-        }
-    }
 }
 
 ShapeMapDX &MetaGraphDX::createNewShapeMap(depthmapX::ImportType mapType, std::string name) {
@@ -1721,7 +1709,6 @@ bool MetaGraphDX::pushValuesToLayer(int desttype, size_t destlayer, PushValues::
 bool MetaGraphDX::pushValuesToLayer(int sourcetype, size_t sourcelayer, int desttype,
                                     size_t destlayer, std::optional<size_t> colIn, size_t colOut,
                                     PushValues::Func pushFunc, bool createCountCol) {
-    AttributeTable &table_in = getAttributeTable(sourcetype, sourcelayer);
     AttributeTable &table_out = getAttributeTable(desttype, destlayer);
 
     std::optional<std::string> countColName = std::nullopt;
@@ -1833,12 +1820,24 @@ bool MetaGraphDX::pushValuesToLayer(int sourcetype, size_t sourcelayer, int dest
 // Agent functionality: some of it still kept here with the metagraph
 // (to allow push value to layer and back again)
 
-void MetaGraphDX::runAgentEngine(Communicator *comm) {
+void MetaGraphDX::runAgentEngine(Communicator *comm, std::unique_ptr<IAnalysis> &analysis) {
     if (!hasDisplayedPointMap()) {
         throw(depthmapX::RuntimeException("No Pointmap on display"));
     }
+    auto &map = getDisplayedPointMap();
+    auto agentAnalysis = dynamic_cast<AgentAnalysis *>(analysis.get());
+    if (!agentAnalysis) {
+        throw(depthmapX::RuntimeException("No agent analysis provided to runAgentEngine function"));
+    }
+    agentAnalysis->run(comm);
 
-    AgentAnalysis().run(comm, getDisplayedPointMap().getInternalMap());
+    if (agentAnalysis->setTooRecordTrails()) {
+        m_state |= DATAMAPS;
+    }
+    map.overrideDisplayedAttribute(-2);
+    auto displaycol =
+        map.getInternalMap().getAttributeTable().getColumnIndex(AgentAnalysis::Column::GATE_COUNTS);
+    map.setDisplayedAttribute(displaycol);
 }
 
 // Thru vision
@@ -2131,10 +2130,10 @@ const AttributeTable &MetaGraphDX::getAttributeTable(std::optional<size_t> type,
     return *tab;
 }
 
-int MetaGraphDX::readFromFile(const std::string &filename) {
+MetaGraphReadWrite::ReadStatus MetaGraphDX::readFromFile(const std::string &filename) {
 
     if (filename.empty()) {
-        return NOT_A_GRAPH;
+        return MetaGraphReadWrite::ReadStatus::NOT_A_GRAPH;
     }
 
 #ifdef _WIN32
@@ -2142,12 +2141,13 @@ int MetaGraphDX::readFromFile(const std::string &filename) {
 #else
     std::ifstream stream(filename.c_str(), std::ios::in);
 #endif
-    int result = readFromStream(stream, filename);
+    auto result = readFromStream(stream, filename);
     stream.close();
     return result;
 }
 
-int MetaGraphDX::readFromStream(std::istream &stream, const std::string &) {
+MetaGraphReadWrite::ReadStatus MetaGraphDX::readFromStream(std::istream &stream,
+                                                           const std::string &) {
     m_state = 0; // <- clear the state out
 
     // clear BSP tree if it exists:
@@ -2155,6 +2155,7 @@ int MetaGraphDX::readFromStream(std::istream &stream, const std::string &) {
 
     try {
         auto mgd = MetaGraphReadWrite::readFromStream(stream);
+        m_readStatus = mgd.readStatus;
         auto &dd = mgd.displayData;
 
         m_metaGraph = mgd.metaGraph;
@@ -2225,10 +2226,11 @@ int MetaGraphDX::readFromStream(std::istream &stream, const std::string &) {
     } catch (MetaGraphReadWrite::MetaGraphReadError &e) {
         std::cerr << "MetaGraph reading failed: " << e.what() << std::endl;
     }
-    return OK;
+    return MetaGraphReadWrite::ReadStatus::OK;
 }
 
-int MetaGraphDX::write(const std::string &filename, int version, bool currentlayer) {
+MetaGraphReadWrite::ReadStatus MetaGraphDX::write(const std::string &filename, int version,
+                                                  bool currentlayer) {
     std::ofstream stream;
 
     int oldstate = m_state;
@@ -2275,7 +2277,7 @@ int MetaGraphDX::write(const std::string &filename, int version, bool currentlay
             std::make_tuple(mapDX->isEditable(), mapDX->isShown(), mapDX->getDisplayedAttribute()));
     }
 
-    int tempState, tempViewClass;
+    int tempState = 0, tempViewClass = 0;
     if (currentlayer) {
         if (m_viewClass & VIEWVGA) {
             tempState = POINTMAPS;
@@ -2308,7 +2310,7 @@ int MetaGraphDX::write(const std::string &filename, int version, bool currentlay
         perShapeGraph);
 
     m_state = oldstate;
-    return OK;
+    return MetaGraphReadWrite::ReadStatus::OK;
 }
 
 std::streampos MetaGraphDX::skipVirtualMem(std::istream &stream) {
@@ -2333,7 +2335,7 @@ std::vector<SimpleLine> MetaGraphDX::getVisibleDrawingLines() {
     auto shownMaps = getShownDrawingMaps();
     for (const auto &pixel : shownMaps) {
         const std::vector<SimpleLine> &newLines =
-            pixel.first.get().getInternalMap().getAllShapesAsLines();
+            pixel.first.get().getInternalMap().getAllShapesAsSimpleLines();
         lines.insert(std::end(lines), std::begin(newLines), std::end(newLines));
     }
     return lines;
@@ -2412,55 +2414,4 @@ bool MetaGraphDX::findNextShape(bool &nextlayer) const {
         }
     }
     return true;
-}
-
-std::set<std::string> MetaGraphDX::setIsovistData(Isovist &isovist, AttributeTable &table,
-                                                  AttributeRow &row, bool simple_version) {
-    std::set<std::string> newColumns;
-    auto [centroid, area] = isovist.getCentroidArea();
-    auto [driftmag, driftang] = isovist.getDriftData();
-    double perimeter = isovist.getPerimeter();
-
-    std::string colText = "Isovist Area";
-    auto col = table.getOrInsertColumn(colText);
-    newColumns.insert(colText);
-    row.setValue(col, float(area));
-
-    if (!simple_version) {
-        colText = "Isovist Compactness";
-        col = table.getOrInsertColumn(colText);
-        newColumns.insert(colText);
-        row.setValue(col, float(4.0 * M_PI * area / (perimeter * perimeter)));
-
-        colText = "Isovist Drift Angle";
-        col = table.getOrInsertColumn(colText);
-        newColumns.insert(colText);
-        row.setValue(col, float(180.0 * driftang / M_PI));
-
-        colText = "Isovist Drift Magnitude";
-        col = table.getOrInsertColumn(colText);
-        newColumns.insert(colText);
-        row.setValue(col, float(driftmag));
-
-        colText = "Isovist Min Radial";
-        col = table.getOrInsertColumn(colText);
-        newColumns.insert(colText);
-        row.setValue(col, float(isovist.getMinRadial()));
-
-        colText = "Isovist Max Radial";
-        col = table.getOrInsertColumn(colText);
-        newColumns.insert(colText);
-        row.setValue(col, float(isovist.getMaxRadial()));
-
-        colText = "Isovist Occlusivity";
-        col = table.getOrInsertColumn(colText);
-        newColumns.insert(colText);
-        row.setValue(col, float(isovist.getOccludedPerimeter()));
-
-        colText = "Isovist Perimeter";
-        col = table.getOrInsertColumn(colText);
-        newColumns.insert(colText);
-        row.setValue(col, float(perimeter));
-    }
-    return newColumns;
 }
