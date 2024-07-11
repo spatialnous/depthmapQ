@@ -1688,7 +1688,7 @@ void QGraphDoc::OnToolsAgentRun() {
     }
 
     std::vector<Point2f> releasePoints;
-    int randomReleaseLocationSeed = -1;
+    std::optional<size_t> randomReleaseLocationSeed = 0;
 
     std::optional<std::pair<size_t, std::reference_wrapper<ShapeMap>>> recordTrails = std::nullopt;
 
@@ -1699,7 +1699,7 @@ void QGraphDoc::OnToolsAgentRun() {
     }
 
     if (dlg.m_release_location == 1) {
-        randomReleaseLocationSeed = 0;
+        randomReleaseLocationSeed = std::nullopt;
         std::set<int> selected = m_meta_graph->getDisplayedPointMap().getSelSet();
         for (auto sel : selected) {
             releasePoints.push_back(
@@ -1708,17 +1708,18 @@ void QGraphDoc::OnToolsAgentRun() {
     }
 
     // then go:
-
-    m_communicator->setAnalysis(std::unique_ptr<IAnalysis>(new AgentAnalysis(
+    std::unique_ptr<IAnalysis> analysis(new AgentAnalysis(
         m_meta_graph->getDisplayedPointMap().getInternalMap(), dlg.m_timesteps, dlg.m_release_rate,
         dlg.m_frames, dlg.m_fov, dlg.m_steps, agentAlgorithm, randomReleaseLocationSeed,
         releasePoints,
         dlg.m_gatelayer == -1 ? std::nullopt
                               : std::make_optional(std::ref(
                                     m_meta_graph->getDataMaps()[dlg.m_gatelayer].getInternalMap())),
-        recordTrails)));
+        recordTrails));
 
     m_communicator = new CMSCommunicator();
+
+    m_communicator->setAnalysis(std::move(analysis));
     CreateWaitDialog(tr("Performing agent analysis..."));
     m_communicator->SetFunction(CMSCommunicator::AGENTANALYSIS);
 
