@@ -18,12 +18,12 @@ class ShapeMapDX : public AttributeMapDX {
     mutable bool m_show; // used when shape map is a drawing layer
     bool m_editable;
 
-    mutable int m_current_shape;
+    mutable int m_current_shape = -1;
     mutable std::vector<size_t> m_display_shapes;
 
-    mutable bool m_newshape; // if a new shape has been added
+    mutable bool m_newshape = false; // if a new shape has been added
 
-    mutable int m_curlinkline;
+    mutable int m_curlinkline = -1;
     mutable int m_curunlinkpoint;
 
     mutable bool m_showLines;

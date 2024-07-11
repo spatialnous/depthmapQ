@@ -630,7 +630,7 @@ int MetaGraphDX::makeIsovistPath(Communicator *communicator, double fov, bool) {
         return 0;
     }
 
-    ShapeMapDX *isovists;
+    ShapeMapDX *isovists = nullptr;
 
     bool first = true;
     if (makeBSPtree(m_bspNodeTree, communicator)) {
@@ -723,13 +723,9 @@ bool MetaGraphDX::makeBSPtree(BSPNodeTree &bspNodeTree, Communicator *communicat
     auto shownMaps = getShownDrawingMaps();
     for (const auto &mapLayer : shownMaps) {
         auto refShapes = mapLayer.first.get().getInternalMap().getAllShapes();
-        int k = -1;
         for (const auto &refShape : refShapes) {
-            k++;
             std::vector<Line> newLines = refShape.second.getAsLines();
-            // I'm not sure what the tagging was meant for any more,
-            // tagging at the moment tags the *polygon* it was original attached
-            // to must check it is not a zero length line:
+            // must check it is not a zero length line:
             for (const Line &line : newLines) {
                 if (line.length() > 0.0) {
                     partitionlines.push_back(line);
