@@ -81,7 +81,7 @@ void SegmentPathsMainWindow::OnShortestPath(MainWindow *mainWindow, PathType pat
         graphDoc->m_communicator->setAnalysis(std::unique_ptr<IAnalysis>(
             new SegmentMetricShortestPath(map.getInternalMap(), refFrom, refTo)));
         map.overrideDisplayedAttribute(-2);
-        map.setDisplayedAttribute(SegmentMetricShortestPath::Column::METRIC_SHORTEST_PATH_DEPTH);
+        map.setDisplayedAttribute(SegmentMetricShortestPath::Column::METRIC_SHORTEST_PATH_DISTANCE);
         break;
     }
     case PathType::TOPOLOGICAL: {

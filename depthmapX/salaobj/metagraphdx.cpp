@@ -2238,15 +2238,9 @@ MetaGraphReadWrite::ReadStatus MetaGraphDX::readFromStream(std::istream &stream,
         m_viewClass = dd.viewClass;
         m_showGrid = dd.showGrid;
         m_showText = dd.showText;
-        m_displayedPointmap = dd.displayedPointMap == static_cast<unsigned int>(-1)
-                                  ? std::nullopt
-                                  : std::make_optional(dd.displayedPointMap);
-        m_displayedDatamap = dd.displayedDataMap == static_cast<unsigned int>(-1)
-                                 ? std::nullopt
-                                 : std::make_optional(dd.displayedDataMap);
-        m_displayedShapegraph = static_cast<int>(dd.displayedShapeGraph) < 0
-                                    ? std::nullopt
-                                    : std::make_optional(dd.displayedShapeGraph);
+        m_displayedPointmap = dd.displayedPointMap;
+        m_displayedDatamap = dd.displayedDataMap;
+        m_displayedShapegraph = dd.displayedShapeGraph;
     } catch (MetaGraphReadWrite::MetaGraphReadError &e) {
         std::cerr << "MetaGraph reading failed: " << e.what() << std::endl;
     }
@@ -2323,16 +2317,8 @@ MetaGraphReadWrite::ReadStatus MetaGraphDX::write(const std::string &filename, i
         version, m_metaGraph.name, m_metaGraph.region, m_metaGraph.fileProperties, drawingFiles,
         pointMaps, dataMaps, shapeGraphs, m_allLineMapData,
         // display data
-        tempState, tempViewClass, m_showGrid, m_showText, perDrawingMap,
-        m_displayedPointmap.has_value() ? static_cast<unsigned int>(*m_displayedPointmap)
-                                        : static_cast<unsigned int>(-1),
-        perPointMap,
-        m_displayedDatamap.has_value() ? static_cast<unsigned int>(*m_displayedDatamap)
-                                       : static_cast<unsigned int>(-1),
-        perDataMap,
-        m_displayedShapegraph.has_value() ? static_cast<unsigned int>(*m_displayedShapegraph)
-                                          : static_cast<unsigned int>(-1),
-        perShapeGraph);
+        tempState, tempViewClass, m_showGrid, m_showText, perDrawingMap, m_displayedPointmap,
+        perPointMap, m_displayedDatamap, perDataMap, m_displayedShapegraph, perShapeGraph);
 
     m_state = oldstate;
     return MetaGraphReadWrite::ReadStatus::OK;
