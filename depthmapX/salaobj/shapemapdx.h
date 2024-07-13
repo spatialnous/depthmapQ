@@ -197,7 +197,8 @@ class ShapeMapDX : public AttributeMapDX {
     bool write(std::ostream &stream);
 
     // Simple wrappers
-    auto getName() { return getInternalMap().getName(); }
+    auto &getName() { return getInternalMap().getName(); }
+    const auto &getName() const { return getInternalMap().getName(); }
     auto getMapType() { return getInternalMap().getMapType(); }
     auto getAllPointsWithColour() {
         return getInternalMap().getAllPointsWithColour(m_selectionSet);

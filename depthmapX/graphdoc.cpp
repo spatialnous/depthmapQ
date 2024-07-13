@@ -206,7 +206,7 @@ LayerManagerImpl &QGraphDoc::getLayers(int type, std::optional<size_t> layer) {
         break;
     case MetaGraphDX::VIEWAXIAL:
         tab = (!layer.has_value()) ? &(m_meta_graph->getDisplayedShapeGraph().getLayers())
-                                   : &(m_meta_graph->getShapeGraphs()[layer.value()]->getLayers());
+                                   : &(m_meta_graph->getShapeGraphs()[layer.value()].getLayers());
         break;
     case MetaGraphDX::VIEWDATA:
         tab = (!layer.has_value()) ? &(m_meta_graph->getDisplayedDataMap().getLayers()) //
@@ -228,7 +228,7 @@ const LayerManagerImpl &QGraphDoc::getLayers(int type, std::optional<size_t> lay
         break;
     case MetaGraphDX::VIEWAXIAL:
         tab = (!layer.has_value()) ? &(m_meta_graph->getDisplayedShapeGraph().getLayers())
-                                   : &(m_meta_graph->getShapeGraphs()[layer.value()]->getLayers());
+                                   : &(m_meta_graph->getShapeGraphs()[layer.value()].getLayers());
         break;
     case MetaGraphDX::VIEWDATA:
         tab = (!layer.has_value()) ? &(m_meta_graph->getDisplayedDataMap().getLayers()) //
@@ -252,7 +252,7 @@ AttributeTableHandle &QGraphDoc::getAttributeTableHandle(int type, std::optional
     case MetaGraphDX::VIEWAXIAL:
         tab = (!layer.has_value())
                   ? &(m_meta_graph->getDisplayedShapeGraph().getAttributeTableHandle())
-                  : &(m_meta_graph->getShapeGraphs()[layer.value()]->getAttributeTableHandle());
+                  : &(m_meta_graph->getShapeGraphs()[layer.value()].getAttributeTableHandle());
         break;
     case MetaGraphDX::VIEWDATA:
         tab = (!layer.has_value())
@@ -278,7 +278,7 @@ const AttributeTableHandle &QGraphDoc::getAttributeTableHandle(int type,
     case MetaGraphDX::VIEWAXIAL:
         tab = (!layer.has_value())
                   ? &(m_meta_graph->getDisplayedShapeGraph().getAttributeTableHandle())
-                  : &(m_meta_graph->getShapeGraphs()[layer.value()]->getAttributeTableHandle());
+                  : &(m_meta_graph->getShapeGraphs()[layer.value()].getAttributeTableHandle());
         break;
     case MetaGraphDX::VIEWDATA:
         tab = (!layer.has_value())
@@ -307,15 +307,15 @@ void QGraphDoc::OnLayerNew() {
         } else if (dlg.m_layer_type == 1) {
             int ref = m_meta_graph->addShapeGraph(dlg.m_name.toStdString(), ShapeMap::CONVEXMAP);
             m_meta_graph->setDisplayedShapeGraphRef(ref);
-            map = m_meta_graph->getShapeGraphs()[size_t(ref)].get();
+            map = &m_meta_graph->getShapeGraphs()[size_t(ref)];
         } else if (dlg.m_layer_type == 2) {
             int ref = m_meta_graph->addShapeGraph(dlg.m_name.toStdString(), ShapeMap::AXIALMAP);
             m_meta_graph->setDisplayedShapeGraphRef(ref);
-            map = m_meta_graph->getShapeGraphs()[size_t(ref)].get();
+            map = &m_meta_graph->getShapeGraphs()[size_t(ref)];
         } else if (dlg.m_layer_type == 3) {
             int ref = m_meta_graph->addShapeGraph(dlg.m_name.toStdString(), ShapeMap::PESHMAP);
             m_meta_graph->setDisplayedShapeGraphRef(ref);
-            map = m_meta_graph->getShapeGraphs()[size_t(ref)].get();
+            map = &m_meta_graph->getShapeGraphs()[size_t(ref)];
         }
 
         QtRegion r = m_meta_graph->getBoundingBox();
@@ -2243,7 +2243,7 @@ void QGraphDoc::OnPushToLayer() {
                 i != m_meta_graph->getDisplayedShapeGraphRef()) {
                 names.insert(
                     std::make_pair(std::pair<int, int>(MetaGraphDX::VIEWAXIAL, int(i)),
-                                   std::string("Shape Graphs: ") + shapegraphs[i]->getName()));
+                                   std::string("Shape Graphs: ") + shapegraphs[i].getName()));
             }
         }
         for (i = 0; i < m_meta_graph->getPointMaps().size(); i++) {

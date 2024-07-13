@@ -49,7 +49,7 @@ class MetaGraphDX {
 
     std::vector<std::pair<ShapeMapGroupDataDX, std::vector<ShapeMapDX>>> m_drawingFiles;
     std::vector<ShapeMapDX> m_dataMaps;
-    std::vector<std::unique_ptr<ShapeGraphDX>> m_shapeGraphs;
+    std::vector<ShapeGraphDX> m_shapeGraphs;
     std::vector<PointMapDX> m_pointMaps;
     std::optional<size_t> m_displayedDatamap = std::nullopt;
     std::optional<size_t> m_displayedPointmap = std::nullopt;
@@ -171,7 +171,7 @@ class MetaGraphDX {
 
   private:
     // helpful to know this for creating fewest line maps, although has to be reread at input
-    std::optional<size_t> m_allLineMapIdx = std::nullopt;
+    std::optional<AllLine::MapData> m_allLineMapData = std::nullopt;
 
     void removePointMap(size_t i) {
         if (m_displayedPointmap.has_value()) {
@@ -224,8 +224,7 @@ class MetaGraphDX {
     bool polyClose(int shape_ref);
     bool polyCancel(int shape_ref);
     //
-    size_t addShapeGraph(std::unique_ptr<ShapeGraphDX> &&shapeGraph);
-    size_t addShapeGraph(std::unique_ptr<ShapeGraph> &&shapeGraph);
+    size_t addShapeGraph(ShapeGraphDX &&shapeGraph);
     size_t addShapeGraph(ShapeGraph &&shapeGraph);
     size_t addShapeGraph(const std::string &name, int type);
     size_t addShapeMap(const std::string &name);
@@ -260,13 +259,13 @@ class MetaGraphDX {
     bool analyseTopoMet(Communicator *communicator,
                         Options options); // <- options copied to keep thread safe
     //
-    bool hasAllLineMap() { return m_allLineMapIdx.has_value(); }
+    bool hasAllLineMap() { return m_allLineMapData.has_value(); }
     bool hasFewestLineMaps() {
         for (const auto &shapeGraph : m_shapeGraphs) {
-            if (shapeGraph->getName() == "Fewest-Line Map (Subsets)" ||
-                shapeGraph->getName() == "Fewest Line Map (Subsets)" ||
-                shapeGraph->getName() == "Fewest-Line Map (Minimal)" ||
-                shapeGraph->getName() == "Fewest Line Map (Minimal)") {
+            if (shapeGraph.getName() == "Fewest-Line Map (Subsets)" ||
+                shapeGraph.getName() == "Fewest Line Map (Subsets)" ||
+                shapeGraph.getName() == "Fewest-Line Map (Minimal)" ||
+                shapeGraph.getName() == "Fewest Line Map (Minimal)") {
                 return true;
             }
         }
@@ -316,12 +315,13 @@ class MetaGraphDX {
         return std::nullopt;
     }
 
-    std::vector<std::unique_ptr<ShapeGraphDX>> &getShapeGraphs() { return m_shapeGraphs; }
+    std::vector<ShapeGraphDX> &getShapeGraphs() { return m_shapeGraphs; }
     bool hasDisplayedShapeGraph() const { return m_displayedShapegraph.has_value(); }
-    ShapeGraphDX &getDisplayedShapeGraph() { return *m_shapeGraphs[m_displayedShapegraph.value()]; }
+    ShapeGraphDX &getDisplayedShapeGraph() { return m_shapeGraphs[m_displayedShapegraph.value()]; }
     const ShapeGraphDX &getDisplayedShapeGraph() const {
-        return *m_shapeGraphs[m_displayedShapegraph.value()];
+        return m_shapeGraphs[m_displayedShapegraph.value()];
     }
+    void unsetDisplayedShapeGraphRef() { m_displayedShapegraph = std::nullopt; }
     void setDisplayedShapeGraphRef(size_t map) {
         if (m_displayedShapegraph.has_value() && m_displayedShapegraph != map)
             getDisplayedShapeGraph().clearSel();
@@ -333,7 +333,7 @@ class MetaGraphDX {
         if (m_displayedShapegraph.has_value()) {
             if (m_shapeGraphs.size() == 1)
                 m_displayedShapegraph = std::nullopt;
-            else if (m_displayedShapegraph.value() != 0 && m_displayedShapegraph.value() >= i)
+            else if (m_displayedShapegraph.value() > 0 && m_displayedShapegraph.value() >= i)
                 m_displayedShapegraph.value()--;
         }
         m_shapeGraphs.erase(std::next(m_shapeGraphs.begin(), static_cast<int>(i)));
