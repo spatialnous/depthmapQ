@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include "depthmapX/salaobj/metagraphdx.h"
+#include "depthmapX/dxinterface/metagraphdx.h"
 
 #include "catch_amalgamated.hpp"
 

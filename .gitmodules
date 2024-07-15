@@ -4,3 +4,6 @@
 [submodule "genlib"]
 	path = genlib
 	url = git@github.com:spatialnous/genlib
+[submodule "depthmapX/dxinterface"]
+	path = depthmapX/dxinterface
+	url = git@github.com:spatialnous/dxinterface.git

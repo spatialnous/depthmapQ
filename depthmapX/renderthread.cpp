@@ -75,7 +75,7 @@ void RenderThread::run() {
         int ok;
         switch (comm->GetFunction()) {
         case CMSCommunicator::IMPORT:
-            ok = pDoc->m_meta_graph->loadLineData(comm, comm->GetOption());
+            ok = pDoc->m_meta_graph->loadLineData(comm, comm->GetMBInfileName(), comm->GetOption());
             if (ok == 1) {
                 pDoc->modifiedFlag = true;
             } else if (ok == -1) {

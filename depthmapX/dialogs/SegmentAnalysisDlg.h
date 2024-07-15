@@ -6,8 +6,9 @@
 
 #include "ui_SegmentAnalysisDlg.h"
 
+#include "dxinterface/metagraphdx.h"
+
 #include "salalib/radiustype.h"
-#include "salaobj/metagraphdx.h"
 
 class CSegmentAnalysisDlg : public QDialog, public Ui::CSegmentAnalysisDlg {
     Q_OBJECT

@@ -4,10 +4,11 @@
 
 #pragma once
 
+#include "dxinterface/metagraphdx.h"
+
 #include "salalib/ianalysis.h"
 
 #include "genlib/comm.h"
-#include "salaobj/metagraphdx.h"
 
 #include <QApplication>
 #include <QElapsedTimer>

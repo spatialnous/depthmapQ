@@ -3,7 +3,7 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-set(depthmapX depthmapX)
+set(dxproject depthmapX)
 
 # Find includes in corresponding build directories
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -91,7 +91,7 @@ qt_wrap_ui(UI_HDRS
 qt_add_resources(DM_RSRC resource.qrc dialogs/settings/settingsdialog.qrc)
 
 if (WIN32)
-        add_executable(${depthmapX} WIN32 ${depthmapX_SRCS} ${UI_HDRS} ${DM_RSRC} icons.rc)
+        add_executable(${dxproject} WIN32 ${depthmapX_SRCS} ${UI_HDRS} ${DM_RSRC} icons.rc)
         if(MINGW)
             # https://stackoverflow.com/a/18138926
             # MinGW compilation does not bring in the required DLLs to make the executable self-contained
@@ -106,13 +106,13 @@ if (WIN32)
         endif(MINGW)
 endif(WIN32)
 if(UNIX AND NOT APPLE)
-        add_executable(${depthmapX} ${depthmapX_SRCS} ${UI_HDRS} ${DM_RSRC})
+        add_executable(${dxproject} ${depthmapX_SRCS} ${UI_HDRS} ${DM_RSRC})
         if (Qt5_POSITION_INDEPENDENT_CODE)
             SET(CMAKE_POSITION_INDEPENDENT_CODE ON)
         endif()
 
         # remove all warnings from depthmapX
-        set_target_properties(${depthmapX} PROPERTIES COMPILE_FLAGS "-w")
+        set_target_properties(${dxproject} PROPERTIES COMPILE_FLAGS "-w")
 endif()
 if(APPLE)
         set(MACOSX_BUNDLE_ICON_FILE depthmapX.icns)
@@ -123,13 +123,13 @@ if(APPLE)
         set_source_files_properties(${graph_ICON} PROPERTIES
                MACOSX_PACKAGE_LOCATION "Resources")
         add_definitions(-DGL_SILENCE_DEPRECATION)
-        add_executable(${depthmapX} MACOSX_BUNDLE ${depthmapX_ICON} ${graph_ICON}
+        add_executable(${dxproject} MACOSX_BUNDLE ${depthmapX_ICON} ${graph_ICON}
             ${depthmapX_SRCS} ${UI_HDRS} ${DM_RSRC})
-        set_target_properties(${depthmapX} PROPERTIES
+        set_target_properties(${dxproject} PROPERTIES
             MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/resources/Info.plist)
 endif(APPLE)
 
-target_compile_options(${depthmapX} PRIVATE ${COMPILE_WARNINGS})
+target_compile_options(${dxproject} PRIVATE ${COMPILE_WARNINGS})
 
 find_package(OpenGL REQUIRED)
 
@@ -157,16 +157,16 @@ elseif()
     message("OpenMP not found, building without")
 endif()
 
-target_link_libraries(${depthmapX} salalib genlib ${LIBRARIES} ${modules_gui} ${modules_core})
+target_link_libraries(${dxproject} salalib genlib ${LIBRARIES} ${modules_gui} ${modules_core})
 
 if ((MSVC) AND (MSVC_VERSION GREATER_EQUAL 1914))
     # new option required from MSVC, but not yet implemented in CMake
     # see: https://gitlab.kitware.com/cmake/cmake/-/issues/18837
-    target_compile_options(${depthmapX} PUBLIC "/Zc:__cplusplus" "-permissive-")
-    target_compile_options(${depthmapX} PRIVATE ${COMPILE_WARNINGS})
+    target_compile_options(${dxproject} PUBLIC "/Zc:__cplusplus" "-permissive-")
+    target_compile_options(${dxproject} PRIVATE ${COMPILE_WARNINGS})
 endif()
 
 add_subdirectory(dialogs)
 add_subdirectory(views)
-add_subdirectory(salaobj)
+add_subdirectory(dxinterface)
 

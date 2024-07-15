@@ -4,11 +4,9 @@
 
 #pragma once
 
+#include "dxinterface/shapegraphdx.h"
 #include "gllinesuniform.h"
 #include "glshapemap.h"
-
-#include "salalib/shapegraph.h"
-#include "salaobj/shapegraphdx.h"
 
 class GLShapeGraph {
   public:

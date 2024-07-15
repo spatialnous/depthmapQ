@@ -41,10 +41,10 @@ set(depthmapXTest_SRCS
     testsettings.cpp
     testmetagraphdx.cpp
     ../depthmapX/settingsimpl.cpp
-    ../depthmapX/salaobj/shapemapdx.cpp
-    ../depthmapX/salaobj/pointmapdx.cpp
-    ../depthmapX/salaobj/shapegraphdx.cpp
-    ../depthmapX/salaobj/metagraphdx.cpp
+    ../depthmapX/dxinterface/shapemapdx.cpp
+    ../depthmapX/dxinterface/pointmapdx.cpp
+    ../depthmapX/dxinterface/shapegraphdx.cpp
+    ../depthmapX/dxinterface/metagraphdx.cpp
     ../depthmapX/views/viewhelpers.cpp
     ../depthmapX/views/glview/gllines.h
     ../depthmapX/views/glview/gllines.cpp

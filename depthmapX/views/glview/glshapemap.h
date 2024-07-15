@@ -4,12 +4,10 @@
 
 #pragma once
 
+#include "dxinterface/shapemapdx.h"
 #include "gllines.h"
 #include "glpolygons.h"
 #include "glregularpolygons.h"
-
-#include "salalib/shapemap.h"
-#include "salaobj/shapemapdx.h"
 
 class GLShapeMap {
   public:

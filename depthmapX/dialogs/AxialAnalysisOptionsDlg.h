@@ -4,8 +4,9 @@
 
 #pragma once
 
-#include "salaobj/metagraphdx.h"
 #include "ui_AxialAnalysisOptionsDlg.h"
+
+#include "dxinterface/metagraphdx.h"
 
 class CAxialAnalysisOptionsDlg : public QDialog, public Ui::CAxialAnalysisOptionsDlg {
     Q_OBJECT
