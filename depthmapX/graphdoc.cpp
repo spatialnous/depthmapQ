@@ -1690,13 +1690,16 @@ void QGraphDoc::OnToolsAgentRun() {
     std::vector<Point2f> releasePoints;
     std::optional<size_t> randomReleaseLocationSeed = 0;
 
-    std::optional<std::pair<size_t, std::reference_wrapper<ShapeMap>>> recordTrails = std::nullopt;
-
-    if (dlg.m_record_trails) {
-        auto &agentmap =
-            m_meta_graph->createNewShapeMap(depthmapX::ImportType::DATAMAP, "Agent trails");
-        recordTrails = std::make_pair(dlg.m_trail_count, std::ref(agentmap.getInternalMap()));
-    }
+    std::optional<AgentAnalysis::TrailRecordOptions> recordTrails =
+        dlg.m_record_trails
+            ? std::make_optional(AgentAnalysis::TrailRecordOptions{
+                  dlg.m_trail_count == 0
+                      ? std::nullopt
+                      : std::make_optional(static_cast<size_t>(dlg.m_trail_count)),
+                  std::ref(m_meta_graph
+                               ->createNewShapeMap(depthmapX::ImportType::DATAMAP, "Agent trails")
+                               .getInternalMap())})
+            : std::nullopt;
 
     if (dlg.m_release_location == 1) {
         randomReleaseLocationSeed = std::nullopt;
