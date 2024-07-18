@@ -72,7 +72,7 @@ void SegmentPathsMainWindow::OnShortestPath(MainWindow *mainWindow, PathType pat
     switch (pathType) {
     case PathType::ANGULAR:
         graphDoc->m_communicator->setAnalysis(std::unique_ptr<IAnalysis>(
-            new SegmentTulipShortestPath(map.getInternalMap(), refFrom, refTo)));
+            new SegmentTulipShortestPath(map.getInternalMap(), 1024, refFrom, refTo)));
         map.overrideDisplayedAttribute(-2); // <- override if it's already showing
         map.setDisplayedAttribute(SegmentTulipShortestPath::Column::ANGULAR_SHORTEST_PATH_ANGLE);
         break;
