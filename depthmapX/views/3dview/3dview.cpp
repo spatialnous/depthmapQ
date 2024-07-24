@@ -283,7 +283,7 @@ void Q3DView::DrawScene() {
             for (auto pixel : m_pixels) {
                 int &value = pixel.second.m_value;
                 if (value != -1) {
-                    if (pafrand() % 10000 == 0) {
+                    if (pafmath::pafrand() % 10000 == 0) {
                         value--;
                     }
                     PafColor color;

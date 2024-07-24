@@ -412,7 +412,7 @@ bool QPlotView::Output(QPainter *pDC, QGraphDoc *pDoc, bool screendraw) {
     if (m_view_rsquared) {
         // set text formating
         // hope ascii superscript 2 in place!
-        string = QString(tr("R\xb2 = %1").arg(sqr(m_regression.r())));
+        string = QString(tr("R\xb2 = %1").arg(pafmath::sqr(m_regression.r())));
         pDC->drawText(QPointF(rect.width() - string.length() * 7, textpos), string);
         textpos += texth;
     }

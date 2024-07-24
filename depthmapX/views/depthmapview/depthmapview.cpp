@@ -1925,7 +1925,7 @@ void QDepthmapView::OutputEPSLine(std::ofstream &stream, Line &line, int spacer,
         QPoint start = PhysicalUnits(line.start());
         QPoint end = PhysicalUnits(line.end());
         // 10 units corresponds to 1 pixel on the screen
-        if (sqrt(sqr(start.x() - end.x()) + sqr(start.y() - end.y())) > 5.0) {
+        if (sqrt(pafmath::sqr(start.x() - end.x()) + pafmath::sqr(start.y() - end.y())) > 5.0) {
             stream << (start.x() / 10.0) << " " << (rect.height() - start.y()) / 10.0 << " M ";
             stream << (end.x() / 10.0) << " " << (rect.height() - end.y()) / 10.0 << " L"
                    << std::endl;
@@ -1947,7 +1947,7 @@ void QDepthmapView::OutputEPSPoly(std::ofstream &stream, const SalaShape &shape,
             QPoint start = PhysicalUnits(line.t_start());
             QPoint end = PhysicalUnits(line.t_end());
             // 5.0 is about 1/2 pixel width
-            if (sqrt(sqr(start.x() - end.x()) + sqr(start.y() - end.y())) > 5.0) {
+            if (sqrt(pafmath::sqr(start.x() - end.x()) + pafmath::sqr(start.y() - end.y())) > 5.0) {
                 if (starter) {
                     stream << start.x() / 10.0 << " " << (rect.height() - start.y()) / 10.0
                            << " M ";
