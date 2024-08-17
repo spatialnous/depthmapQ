@@ -7,7 +7,6 @@
 #include "salalib/vgamodules/extractlinkdata.h"
 #include "salalib/vgamodules/vgaangularshortestpath.h"
 #include "salalib/vgamodules/vgaisovistzone.h"
-#include "salalib/vgamodules/vgametricdepthlinkcost.h"
 #include "salalib/vgamodules/vgametricshortestpath.h"
 #include "salalib/vgamodules/vgametricshortestpathtomany.h"
 #include "salalib/vgamodules/vgavisualshortestpath.h"
@@ -83,10 +82,15 @@ void VGAPathsMainWindow::OnShortestPath(MainWindow *mainWindow, PathType pathTyp
     case PathType::VISUAL: {
         graphDoc->m_communicator->setAnalysis(std::unique_ptr<IAnalysis>(
             new VGAVisualShortestPath(pointMap.getInternalMap(), pixelFrom, pixelTo)));
-        graphDoc->m_communicator->setPostAnalysisFunc([&pointMap](AnalysisResult &) {
-            pointMap.overrideDisplayedAttribute(-2);
-            pointMap.setDisplayedAttribute(VGAVisualShortestPath::Column::VISUAL_SHORTEST_PATH);
-        });
+        graphDoc->m_communicator->setPostAnalysisFunc(
+            [&pointMap](std::unique_ptr<IAnalysis> &analysis, AnalysisResult &analysisResult) {
+                auto vgaAnalysis = dynamic_cast<VGAVisualShortestPath *>(analysis.get());
+                vgaAnalysis->copyResultToMap(analysisResult.getAttributes(),
+                                             analysisResult.getAttributeData(),
+                                             pointMap.getInternalMap(), analysisResult.columnStats);
+                pointMap.overrideDisplayedAttribute(-2);
+                pointMap.setDisplayedAttribute(VGAVisualShortestPath::Column::VISUAL_SHORTEST_PATH);
+            });
         break;
     }
     case PathType::METRIC: {
@@ -94,19 +98,30 @@ void VGAPathsMainWindow::OnShortestPath(MainWindow *mainWindow, PathType pathTyp
         pixelsFrom.insert(pixelFrom);
         graphDoc->m_communicator->setAnalysis(std::unique_ptr<IAnalysis>(
             new VGAMetricShortestPath(pointMap.getInternalMap(), pixelsFrom, pixelTo)));
-        graphDoc->m_communicator->setPostAnalysisFunc([&pointMap](AnalysisResult &) {
-            pointMap.overrideDisplayedAttribute(-2);
-            pointMap.setDisplayedAttribute(VGAMetricShortestPath::Column::METRIC_SHORTEST_PATH);
-        });
+        graphDoc->m_communicator->setPostAnalysisFunc(
+            [&pointMap](std::unique_ptr<IAnalysis> &analysis, AnalysisResult &analysisResult) {
+                auto vgaAnalysis = dynamic_cast<VGAMetricShortestPath *>(analysis.get());
+                vgaAnalysis->copyResultToMap(analysisResult.getAttributes(),
+                                             analysisResult.getAttributeData(),
+                                             pointMap.getInternalMap(), analysisResult.columnStats);
+                pointMap.overrideDisplayedAttribute(-2);
+                pointMap.setDisplayedAttribute(VGAMetricShortestPath::Column::METRIC_SHORTEST_PATH);
+            });
         break;
     }
     case PathType::ANGULAR: {
         graphDoc->m_communicator->setAnalysis(std::unique_ptr<IAnalysis>(
             new VGAAngularShortestPath(pointMap.getInternalMap(), pixelFrom, pixelTo)));
-        graphDoc->m_communicator->setPostAnalysisFunc([&pointMap](AnalysisResult &) {
-            pointMap.overrideDisplayedAttribute(-2);
-            pointMap.setDisplayedAttribute(VGAAngularShortestPath::Column::ANGULAR_SHORTEST_PATH);
-        });
+        graphDoc->m_communicator->setPostAnalysisFunc(
+            [&pointMap](std::unique_ptr<IAnalysis> &analysis, AnalysisResult &analysisResult) {
+                auto vgaAnalysis = dynamic_cast<VGAAngularShortestPath *>(analysis.get());
+                vgaAnalysis->copyResultToMap(analysisResult.getAttributes(),
+                                             analysisResult.getAttributeData(),
+                                             pointMap.getInternalMap(), analysisResult.columnStats);
+                pointMap.overrideDisplayedAttribute(-2);
+                pointMap.setDisplayedAttribute(
+                    VGAAngularShortestPath::Column::ANGULAR_SHORTEST_PATH);
+            });
         break;
     }
     }
@@ -174,10 +189,11 @@ void VGAPathsMainWindow::OnMakeIsovistZones(MainWindow *mainWindow) {
     graphDoc->m_communicator->setAnalysis(std::unique_ptr<IAnalysis>(
         new VGAIsovistZone(map.getInternalMap(), originPointSets, restrictDistance)));
 
-    graphDoc->m_communicator->setPostAnalysisFunc([&map](AnalysisResult &result) {
-        map.overrideDisplayedAttribute(-2);
-        map.setDisplayedAttribute(result.getAttributes()[0]);
-    });
+    graphDoc->m_communicator->setPostAnalysisFunc(
+        [&map](std::unique_ptr<IAnalysis> &analysis, AnalysisResult &result) {
+            map.overrideDisplayedAttribute(-2);
+            map.setDisplayedAttribute(result.getAttributes()[0]);
+        });
 
     graphDoc->m_communicator->SetFunction(CMSCommunicator::FROMCONNECTOR);
     graphDoc->m_communicator->setSuccessUpdateFlags(QGraphDoc::NEW_DATA);
@@ -212,10 +228,11 @@ void VGAPathsMainWindow::OnMetricShortestPathsToMany(MainWindow *mainWindow) {
     graphDoc->m_communicator->setAnalysis(std::unique_ptr<IAnalysis>(
         new VGAMetricShortestPathToMany(map.getInternalMap(), pixelsFrom, pixelsTo)));
 
-    graphDoc->m_communicator->setPostAnalysisFunc([&map](AnalysisResult &result) {
-        map.overrideDisplayedAttribute(-2);
-        map.setDisplayedAttribute(result.getAttributes()[0]);
-    });
+    graphDoc->m_communicator->setPostAnalysisFunc(
+        [&map](std::unique_ptr<IAnalysis> &analysis, AnalysisResult &result) {
+            map.overrideDisplayedAttribute(-2);
+            map.setDisplayedAttribute(result.getAttributes()[0]);
+        });
 
     graphDoc->m_communicator->SetFunction(CMSCommunicator::FROMCONNECTOR);
     graphDoc->m_communicator->setSuccessUpdateFlags(QGraphDoc::NEW_DATA);

@@ -26,10 +26,10 @@ inline void CMSCommunicator::CommPostMessage(size_t m, size_t x) const {
 void CMSCommunicator::runAnalysis(QGraphDoc &graphDoc) {
     auto analysisResult = m_analysis->run(this);
     if (analysisResult.completed) {
+        m_postAnalysisFunc(m_analysis, analysisResult);
         graphDoc.SetUpdateFlag(m_successUpdateFlagType, m_successUpdateFlagModified);
         graphDoc.SetRedrawFlag(m_successRedrawFlagViewType, m_successRedrawFlag,
                                m_successRedrawReason);
-        m_postAnalysisFunc(analysisResult);
     }
 }
 

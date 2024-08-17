@@ -43,7 +43,7 @@ class RenderThread : public QThread {
     void closeWaitDialog();
 
   protected:
-    void run();
+    void run() override;
 
   private:
     bool restart;
@@ -130,7 +130,8 @@ class CMSCommunicator : public Communicator {
     void setAnalysis(std::unique_ptr<IAnalysis> &&analysis) { m_analysis = std::move(analysis); }
     std::unique_ptr<IAnalysis> &getAnalysis() { return m_analysis; }
 
-    void setPostAnalysisFunc(std::function<void(AnalysisResult &result)> func) {
+    void setPostAnalysisFunc(
+        std::function<void(std::unique_ptr<IAnalysis> &analysis, AnalysisResult &result)> func) {
         m_postAnalysisFunc = func;
     }
     void setSuccessUpdateFlags(int type, bool modified = true) {
@@ -154,7 +155,8 @@ class CMSCommunicator : public Communicator {
     // CImportedModule m_module;
     QString m_string; // for a generic string
     std::unique_ptr<IAnalysis> m_analysis;
-    std::function<void(AnalysisResult &result)> m_postAnalysisFunc;
+    std::function<void(std::unique_ptr<IAnalysis> &analysis, AnalysisResult &result)>
+        m_postAnalysisFunc;
     int m_successUpdateFlagType;
     bool m_successUpdateFlagModified = true;
     int m_successRedrawFlagViewType;
