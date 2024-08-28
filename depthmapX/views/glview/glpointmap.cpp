@@ -9,21 +9,21 @@
 
 void GLPixelMap::loadGLObjects(PointMapDX &pointMap) {
     QtRegion region = pointMap.getRegion();
-    m_pointMap.loadRegionData(region.bottom_left.x, region.bottom_left.y, region.top_right.x,
-                              region.top_right.y);
+    m_pointMap.loadRegionData(region.bottomLeft.x, region.bottomLeft.y, region.topRight.x,
+                              region.topRight.y);
 
     if (m_showGrid) {
         std::vector<SimpleLine> gridData;
         double spacing = pointMap.getSpacing();
-        double offsetX = region.bottom_left.x;
-        double offsetY = region.bottom_left.y;
+        double offsetX = region.bottomLeft.x;
+        double offsetY = region.bottomLeft.y;
         for (int x = 1; x < pointMap.getCols(); x++) {
-            gridData.push_back(SimpleLine(offsetX + x * spacing, region.bottom_left.y,
-                                          offsetX + x * spacing, region.top_right.y));
+            gridData.push_back(SimpleLine(offsetX + x * spacing, region.bottomLeft.y,
+                                          offsetX + x * spacing, region.topRight.y));
         }
         for (int y = 1; y < pointMap.getRows(); y++) {
-            gridData.push_back(SimpleLine(region.bottom_left.x, offsetY + y * spacing,
-                                          region.top_right.x, offsetY + y * spacing));
+            gridData.push_back(SimpleLine(region.bottomLeft.x, offsetY + y * spacing,
+                                          region.topRight.x, offsetY + y * spacing));
         }
         m_grid.loadLineData(gridData, m_gridColour);
     }

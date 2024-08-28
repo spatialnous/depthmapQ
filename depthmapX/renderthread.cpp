@@ -427,7 +427,7 @@ void RenderThread::run() {
             // Set up for options step depth selection
             Options options;
             options.global = 0;
-            options.point_depth_selection = 1;
+            options.pointDepthSelection = 1;
 
             ok = pDoc->m_meta_graph->analyseGraph(comm, options, comm->simple_version);
             if (ok) {
@@ -440,7 +440,7 @@ void RenderThread::run() {
             // Set up for options metric point depth selection
             Options options;
             options.global = 0;
-            options.point_depth_selection = 2;
+            options.pointDepthSelection = 2;
 
             ok = pDoc->m_meta_graph->analyseGraph(comm, options, comm->simple_version);
             if (ok) {
@@ -453,7 +453,7 @@ void RenderThread::run() {
             // Set up for options angular point depth selection
             Options options;
             options.global = 0;
-            options.point_depth_selection = 3;
+            options.pointDepthSelection = 3;
 
             ok = pDoc->m_meta_graph->analyseGraph(comm, options, comm->simple_version);
             if (ok) {
@@ -466,7 +466,7 @@ void RenderThread::run() {
             // Set up for options topological point depth selection (segment maps only)
             Options options;
             options.global = 0;
-            options.point_depth_selection = 4;
+            options.pointDepthSelection = 4;
 
             ok = pDoc->m_meta_graph->analyseGraph(comm, options, comm->simple_version);
             if (ok) {

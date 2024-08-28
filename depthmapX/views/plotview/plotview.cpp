@@ -48,25 +48,25 @@ QPlotView::QPlotView() {
 int QPlotView::screenX(double x) {
     return m_screen_bounds.left() +
            m_screen_bounds.width() *
-               (m_data_bounds.width() ? (x - m_data_bounds.bottom_left.x) / m_data_bounds.width()
+               (m_data_bounds.width() ? (x - m_data_bounds.bottomLeft.x) / m_data_bounds.width()
                                       : 0.5);
 }
 
 int QPlotView::screenY(double y) {
     return m_screen_bounds.top() -
            (abs(m_screen_bounds.height()) *
-            (m_data_bounds.height() ? (y - m_data_bounds.bottom_left.y) / m_data_bounds.height()
+            (m_data_bounds.height() ? (y - m_data_bounds.bottomLeft.y) / m_data_bounds.height()
                                     : 0.5));
 }
 
 double QPlotView::dataX(int x) {
-    return m_data_bounds.bottom_left.x + m_data_bounds.width() *
+    return m_data_bounds.bottomLeft.x + m_data_bounds.width() *
                                              double(x - m_screen_bounds.left()) /
                                              double(m_screen_bounds.width());
 }
 
 double QPlotView::dataY(int y) {
-    return m_data_bounds.bottom_left.y + m_data_bounds.height() *
+    return m_data_bounds.bottomLeft.y + m_data_bounds.height() *
                                              double(m_screen_bounds.top() - y) /
                                              double(abs(m_screen_bounds.height()));
 }
@@ -233,10 +233,10 @@ bool QPlotView::Output(QPainter *pDC, QGraphDoc *pDoc, bool screendraw) {
     float minx, miny, maxx, maxy;
     QString str_minx, str_miny, str_maxx, str_maxy;
 
-    minx = m_data_bounds.bottom_left.x = m_view_origin ? 0.0 : minVisibleX;
-    miny = m_data_bounds.bottom_left.y = m_view_origin ? 0.0 : minVisibleY;
-    maxx = m_data_bounds.top_right.x = maxVisibleX;
-    maxy = m_data_bounds.top_right.y = maxVisibleY;
+    minx = m_data_bounds.bottomLeft.x = m_view_origin ? 0.0 : minVisibleX;
+    miny = m_data_bounds.bottomLeft.y = m_view_origin ? 0.0 : minVisibleY;
+    maxx = m_data_bounds.topRight.x = maxVisibleX;
+    maxy = m_data_bounds.topRight.y = maxVisibleY;
 
     str_minx = QString(tr("%1")).arg(minx);
     str_miny = QString(tr("%1")).arg(miny);
@@ -359,48 +359,48 @@ bool QPlotView::Output(QPainter *pDC, QGraphDoc *pDoc, bool screendraw) {
     if (m_view_trend_line) {
         QPoint bl, tr;
         QString string;
-        if (m_regression.model(m_data_bounds.bottom_left.x) < m_data_bounds.bottom_left.y) {
+        if (m_regression.model(m_data_bounds.bottomLeft.x) < m_data_bounds.bottomLeft.y) {
             // check line is on page
-            if (m_regression.model(m_data_bounds.top_right.x) > m_data_bounds.bottom_left.y) {
-                bl = QPoint(screenX(m_regression.invmodel(m_data_bounds.bottom_left.y)),
+            if (m_regression.model(m_data_bounds.topRight.x) > m_data_bounds.bottomLeft.y) {
+                bl = QPoint(screenX(m_regression.invmodel(m_data_bounds.bottomLeft.y)),
                             m_screen_bounds.top());
-                if (m_regression.model(m_data_bounds.top_right.x) < m_data_bounds.top_right.y) {
+                if (m_regression.model(m_data_bounds.topRight.x) < m_data_bounds.topRight.y) {
                     tr = QPoint(m_screen_bounds.right(),
-                                screenY(m_regression.model(m_data_bounds.top_right.x)));
+                                screenY(m_regression.model(m_data_bounds.topRight.x)));
                 } else {
-                    tr = QPoint(screenX(m_regression.invmodel(m_data_bounds.top_right.y)),
+                    tr = QPoint(screenX(m_regression.invmodel(m_data_bounds.topRight.y)),
                                 m_screen_bounds.bottom());
                 }
                 pDC->drawLine(bl, tr);
             }
-        } else if (m_regression.model(m_data_bounds.bottom_left.x) > m_data_bounds.top_right.y) {
+        } else if (m_regression.model(m_data_bounds.bottomLeft.x) > m_data_bounds.topRight.y) {
             // check line is on page
-            if (m_regression.model(m_data_bounds.top_right.x) < m_data_bounds.top_right.y) {
-                bl = QPoint(screenX(m_regression.invmodel(m_data_bounds.bottom_left.x)),
+            if (m_regression.model(m_data_bounds.topRight.x) < m_data_bounds.topRight.y) {
+                bl = QPoint(screenX(m_regression.invmodel(m_data_bounds.bottomLeft.x)),
                             m_screen_bounds.bottom());
-                if (m_regression.model(m_data_bounds.top_right.x) > m_data_bounds.bottom_left.x) {
+                if (m_regression.model(m_data_bounds.topRight.x) > m_data_bounds.bottomLeft.x) {
                     tr = QPoint(m_screen_bounds.right(),
-                                screenY(m_regression.model(m_data_bounds.top_right.x)));
+                                screenY(m_regression.model(m_data_bounds.topRight.x)));
                 } else {
-                    tr = QPoint(screenX(m_regression.invmodel(m_data_bounds.top_right.y)),
+                    tr = QPoint(screenX(m_regression.invmodel(m_data_bounds.topRight.y)),
                                 m_screen_bounds.top());
                 }
                 pDC->drawLine(bl, tr);
             }
         } else {
             bl = QPoint(m_screen_bounds.left(),
-                        screenY(m_regression.model(m_data_bounds.bottom_left.x)));
-            double trv = m_regression.model(m_data_bounds.top_right.x);
-            if (trv >= m_data_bounds.bottom_left.y && trv <= m_data_bounds.top_right.y) {
+                        screenY(m_regression.model(m_data_bounds.bottomLeft.x)));
+            double trv = m_regression.model(m_data_bounds.topRight.x);
+            if (trv >= m_data_bounds.bottomLeft.y && trv <= m_data_bounds.topRight.y) {
                 string += " v1";
                 tr = QPoint(m_screen_bounds.right(), screenY(trv));
             } else if (m_regression.b() > 0) { // upward inclined
                 string += " v2";
-                tr = QPoint(screenX(m_regression.invmodel(m_data_bounds.top_right.y)),
+                tr = QPoint(screenX(m_regression.invmodel(m_data_bounds.topRight.y)),
                             m_screen_bounds.bottom());
             } else { // downward inclined
                 string += " v3";
-                tr = QPoint(screenX(m_regression.invmodel(m_data_bounds.bottom_left.y)),
+                tr = QPoint(screenX(m_regression.invmodel(m_data_bounds.bottomLeft.y)),
                             m_screen_bounds.top());
             }
             pDC->drawLine(bl, tr);

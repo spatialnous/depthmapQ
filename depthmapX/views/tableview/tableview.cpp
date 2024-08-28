@@ -157,7 +157,7 @@ void TableView::itemChanged(QTableWidgetItem *item) {
             // go for the change:
             double value2 = index[row].row->getValue(col - 1);
             if (value2 == 0 || fabs((value / value2) - 1.0) > 1e-5) {
-                index[row].mutable_row->setValue(col - 1, value);
+                index[row].mutableRow->setValue(col - 1, value);
                 pDoc->modifiedFlag = true;
             }
 

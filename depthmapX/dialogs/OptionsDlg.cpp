@@ -20,11 +20,11 @@ COptionsDlg::COptionsDlg(QWidget *parent) : QDialog(parent) {
     foreach (QWidget *widget, QApplication::topLevelWidgets()) {
         MainWindow *mainWin = qobject_cast<MainWindow *>(widget);
         if (mainWin) {
-            m_output_type = mainWin->m_options.output_type;
+            m_output_type = mainWin->m_options.outputType;
 
             m_local = mainWin->m_options.local;
             m_global = mainWin->m_options.global;
-            m_gates_only = mainWin->m_options.gates_only;
+            m_gates_only = mainWin->m_options.gatesOnly;
 
             if ((int)mainWin->m_options.radius == -1) {
                 m_radius = QString("n");
@@ -97,8 +97,8 @@ void COptionsDlg::OnOK() {
         if (mainWin) {
             mainWin->m_options.local = m_local;
             mainWin->m_options.global = m_global;
-            mainWin->m_options.output_type = m_output_type;
-            mainWin->m_options.gates_only = m_gates_only;
+            mainWin->m_options.outputType = m_output_type;
+            mainWin->m_options.gatesOnly = m_gates_only;
             mainWin->m_options.gatelayer = c_layer_selector->currentIndex() - 1;
 
             if (m_output_type == AnalysisType::VISUAL) {

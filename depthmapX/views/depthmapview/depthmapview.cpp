@@ -778,8 +778,8 @@ void QDepthmapView::mousePressEvent(QMouseEvent *e) {
 void QDepthmapView::BeginJoin() {
     if (m_pDoc.m_meta_graph->getSelCount() > 1 && m_pDoc.m_meta_graph->viewingProcessedPoints()) {
         QtRegion r = m_pDoc.m_meta_graph->getDisplayedPointMap().getSelBounds();
-        QRect rect(PhysicalUnits(Point2f(r.bottom_left.x, r.top_right.y)),
-                   PhysicalUnits(Point2f(r.top_right.x, r.bottom_left.y)));
+        QRect rect(PhysicalUnits(Point2f(r.bottomLeft.x, r.topRight.y)),
+                   PhysicalUnits(Point2f(r.topRight.x, r.bottomLeft.y)));
         int spacer = int(
             ceil(5.0 * m_pDoc.m_meta_graph->getDisplayedPointMap().getSpacing() / (m_unit * 10.0)));
         m_mouse_point = this->rect().center();
@@ -1251,13 +1251,13 @@ bool QDepthmapView::Output(QPainter *pDC, QGraphDoc *pDoc, bool screendraw) {
                 }
             } else {
                 size_t i;
-                for (i = 1; i < shape.m_points.size(); i++) {
-                    pDC->drawLine(PhysicalUnits(shape.m_points[i - 1]),
-                                  PhysicalUnits(shape.m_points[i]));
+                for (i = 1; i < shape.points.size(); i++) {
+                    pDC->drawLine(PhysicalUnits(shape.points[i - 1]),
+                                  PhysicalUnits(shape.points[i]));
                 }
                 if (shape.isClosed()) {
-                    pDC->drawLine(PhysicalUnits(shape.m_points[i - 1]),
-                                  PhysicalUnits(shape.m_points[0]));
+                    pDC->drawLine(PhysicalUnits(shape.points[i - 1]),
+                                  PhysicalUnits(shape.points[0]));
                 }
             }
         }
@@ -1448,11 +1448,11 @@ bool QDepthmapView::DrawShapes(QPainter *pDC, ShapeMapDX &map, bool muted, int s
         const SalaShape &poly = map.getNextShape();
         QPoint *points = NULL;
         int drawable = 0;
-        if (!poly.isPoint() && !poly.isLine() && !poly.m_points.empty()) {
-            points = new QPoint[poly.m_points.size()];
-            if (poly.m_points.size() > 0)
+        if (!poly.isPoint() && !poly.isLine() && !poly.points.empty()) {
+            points = new QPoint[poly.points.size()];
+            if (poly.points.size() > 0)
                 drawable++;
-            for (auto &point : poly.m_points) {
+            for (auto &point : poly.points) {
                 points[drawable] = PhysicalUnits(point);
                 if (points[drawable] != points[drawable - 1]) {
                     drawable++;
@@ -1936,11 +1936,11 @@ void QDepthmapView::OutputEPSLine(std::ofstream &stream, Line &line, int spacer,
 void QDepthmapView::OutputEPSPoly(std::ofstream &stream, const SalaShape &shape, int spacer,
                                   QtRegion &logicalviewport, QRect &rect) {
     bool starter = true;
-    Point2f lastpoint = shape.m_points[0];
-    int count = shape.isClosed() ? shape.m_points.size() + 1 : shape.m_points.size();
-    int size = shape.m_points.size();
+    Point2f lastpoint = shape.points[0];
+    int count = shape.isClosed() ? shape.points.size() + 1 : shape.points.size();
+    int size = shape.points.size();
     for (int i = 1; i < count; i++) {
-        Line line(lastpoint, shape.m_points[i % size]);
+        Line line(lastpoint, shape.points[i % size]);
         if (line.crop(logicalviewport)) {
             // note: use t_start and t_end so that this line moves in the correct
             // direction
@@ -1960,7 +1960,7 @@ void QDepthmapView::OutputEPSPoly(std::ofstream &stream, const SalaShape &shape,
                 starter = false;
             }
         } else {
-            lastpoint = shape.m_points[i];
+            lastpoint = shape.points[i];
             starter = true;
         }
     }
@@ -2382,8 +2382,8 @@ static std::string SVGColor(PafColor color) {
 
 static QPoint SVGPhysicalUnits(const Point2f &p, const QtRegion &r, int h) {
     // converts to a 4800 unit wide QtRegion
-    return QPoint(int(4800.0 * ((p.x - r.bottom_left.x) / r.width())),
-                  h - int(4800.0 * ((p.y - r.bottom_left.y) / r.width())));
+    return QPoint(int(4800.0 * ((p.x - r.bottomLeft.x) / r.width())),
+                  h - int(4800.0 * ((p.y - r.bottomLeft.y) / r.width())));
 }
 
 void QDepthmapView::OutputSVG(std::ofstream &stream, QGraphDoc *pDoc) {
@@ -2593,8 +2593,8 @@ void QDepthmapView::OutputSVGLine(std::ofstream &stream, Line &line, QtRegion &l
 
 void QDepthmapView::OutputSVGPoly(std::ofstream &stream, const SalaShape &shape,
                                   QtRegion &logicalviewport, int h) {
-    QPoint bl = SVGPhysicalUnits(shape.getBoundingBox().bottom_left, logicalviewport, h);
-    QPoint tr = SVGPhysicalUnits(shape.getBoundingBox().top_right, logicalviewport, h);
+    QPoint bl = SVGPhysicalUnits(shape.getBoundingBox().bottomLeft, logicalviewport, h);
+    QPoint tr = SVGPhysicalUnits(shape.getBoundingBox().topRight, logicalviewport, h);
     if (dist(Point2f(bl.x(), bl.y()), Point2f(tr.x(), tr.y())) < 2.0f) {
         // 2.0 is about 0.1mm in standard SVG output size -- if this is too small,
         // we won't bother trying to draw it at all
@@ -2604,10 +2604,10 @@ void QDepthmapView::OutputSVGPoly(std::ofstream &stream, const SalaShape &shape,
         // open lines are fairly easy: simply chop lines as they enter and exit
         stream << "<polyline points=\"";
         bool starter = true, drawn = false;
-        Point2f lastpoint = shape.m_points.front();
-        auto iter = shape.m_points.begin();
+        Point2f lastpoint = shape.points.front();
+        auto iter = shape.points.begin();
         iter++;
-        for (; iter != shape.m_points.end(); iter++) {
+        for (; iter != shape.points.end(); iter++) {
             Line line(lastpoint, *iter);
             if (line.crop(logicalviewport)) {
                 // note: use t_start and t_end so that this line moves in the correct
@@ -2622,7 +2622,7 @@ void QDepthmapView::OutputSVGPoly(std::ofstream &stream, const SalaShape &shape,
                 }
                 // 2.0 is about 0.1mm in a standard SVG output size
                 if (dist(Point2f(start.x(), start.y()), Point2f(end.x(), end.y())) >= 2.0f ||
-                    iter == shape.m_points.end() - 1) {
+                    iter == shape.points.end() - 1) {
                     // also, always draw the very last point regardless of distance
                     stream << end.x() << "," << end.y() << " ";
                     drawn = true;
@@ -2644,11 +2644,11 @@ void QDepthmapView::OutputSVGPoly(std::ofstream &stream, const SalaShape &shape,
         std::vector<SalaEdgeU> eus = shape.getClippingSet(logicalviewport);
         if (eus.size() == 0) {
             // this should be a shape that is entirely within the viewport:
-            QPoint last = SVGPhysicalUnits(shape.m_points[0], logicalviewport, h);
+            QPoint last = SVGPhysicalUnits(shape.points[0], logicalviewport, h);
             stream << last.x() << "," << last.y() << " ";
-            auto iter = shape.m_points.begin();
+            auto iter = shape.points.begin();
             iter++;
-            for (; iter != shape.m_points.end(); iter++) {
+            for (; iter != shape.points.end(); iter++) {
                 QPoint next = SVGPhysicalUnits(*iter, logicalviewport, h);
                 if (dist(Point2f(last.x(), last.y()), Point2f(next.x(), next.y())) >= 2.0f) {
                     stream << next.x() << "," << next.y() << " ";
@@ -2670,10 +2670,10 @@ void QDepthmapView::OutputSVGPoly(std::ofstream &stream, const SalaShape &shape,
                 QPoint next;
                 stream << last.x() << "," << last.y() << " ";
                 for (size_t i = eus[entry].index + 1; i != eus[exit].index; i++) {
-                    if (i >= shape.m_points.size()) {
+                    if (i >= shape.points.size()) {
                         i = 0;
                     }
-                    next = SVGPhysicalUnits(shape.m_points[i], logicalviewport, h);
+                    next = SVGPhysicalUnits(shape.points[i], logicalviewport, h);
                     if (dist(Point2f(last.x(), last.y()), Point2f(next.x(), next.y())) >= 2.0f) {
                         stream << next.x() << "," << next.y() << " ";
                         last = next;

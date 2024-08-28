@@ -1634,9 +1634,9 @@ void QGraphDoc::OnToolsTopomet() {
 
     if (QDialog::Accepted == dlg.exec()) {
         m_communicator = new CMSCommunicator();
-        ((MainWindow *)m_mainFrame)->m_options.output_type = dlg.m_analysisType;
+        ((MainWindow *)m_mainFrame)->m_options.outputType = dlg.m_analysisType;
         ((MainWindow *)m_mainFrame)->m_options.radius = dlg.m_dradius;
-        ((MainWindow *)m_mainFrame)->m_options.sel_only = dlg.m_selected_only;
+        ((MainWindow *)m_mainFrame)->m_options.selOnly = dlg.m_selected_only;
         if (dlg.isAnalysisTopological()) {
             CreateWaitDialog(tr("Performing topological analysis..."));
         } else {

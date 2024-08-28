@@ -364,11 +364,11 @@ void Q3DView::ReloadLineData() {
                 if (shape.isLine()) {
                     lines.push_back(shape.getLine());
                 } else if (shape.isPolyLine() || shape.isPolygon()) {
-                    for (int n = 0; n < shape.m_points.size() - 1; n++) {
-                        lines.push_back(Line(shape.m_points[n], shape.m_points[n + 1]));
+                    for (int n = 0; n < shape.points.size() - 1; n++) {
+                        lines.push_back(Line(shape.points[n], shape.points[n + 1]));
                     }
                     if (shape.isPolygon()) {
-                        lines.push_back(Line(shape.m_points.back(), shape.m_points.front()));
+                        lines.push_back(Line(shape.points.back(), shape.points.front()));
                     }
                 }
             }
@@ -379,12 +379,12 @@ void Q3DView::ReloadLineData() {
             // now scale up to a nice square region around midpoint:
             if (m_region.width() > m_region.height()) {
                 double oldheight = m_region.height();
-                m_region.bottom_left.y -= (m_region.width() - oldheight) / 2;
-                m_region.top_right.y += (m_region.width() - oldheight) / 2;
+                m_region.bottomLeft.y -= (m_region.width() - oldheight) / 2;
+                m_region.topRight.y += (m_region.width() - oldheight) / 2;
             } else {
                 double oldwidth = m_region.width();
-                m_region.bottom_left.x -= (m_region.height() - oldwidth) / 2;
-                m_region.top_right.x += (m_region.height() - oldwidth) / 2;
+                m_region.bottomLeft.x -= (m_region.height() - oldwidth) / 2;
+                m_region.topRight.x += (m_region.height() - oldwidth) / 2;
             }
 
             m_points = new GLfloat[m_pointcount * 3];

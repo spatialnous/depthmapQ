@@ -28,7 +28,7 @@ CAxialAnalysisOptionsDlg::CAxialAnalysisOptionsDlg(MetaGraphDX *graph, QWidget *
 
             m_radius = QString(tr("n"));
 
-            if (mainWin->m_options.weighted_measure_col == -1) {
+            if (mainWin->m_options.weightedMeasureCol == -1) {
                 m_weighted = false;
                 m_attribute = -1;
             } else {
@@ -117,7 +117,7 @@ void CAxialAnalysisOptionsDlg::OnOK() {
     foreach (QWidget *widget, QApplication::topLevelWidgets()) {
         MainWindow *mainWin = qobject_cast<MainWindow *>(widget);
         if (mainWin) {
-            mainWin->m_options.radius_set.clear();
+            mainWin->m_options.radiusSet.clear();
             QString curr_radius;
             int curr_comma = -1, last_comma = 0;
             bool add_rn = false;
@@ -142,12 +142,12 @@ void CAxialAnalysisOptionsDlg::OnOK() {
                             c_radius->setFocus(Qt::OtherFocusReason);
                             return;
                         }
-                        mainWin->m_options.radius_set.insert(static_cast<double>(radius));
+                        mainWin->m_options.radiusSet.insert(static_cast<double>(radius));
                     }
                 }
             } while (curr_comma != -1);
-            if (mainWin->m_options.radius_set.size() == 0 || add_rn) {
-                mainWin->m_options.radius_set.insert(-1);
+            if (mainWin->m_options.radiusSet.size() == 0 || add_rn) {
+                mainWin->m_options.radiusSet.insert(-1);
             }
 
             mainWin->m_options.choice = m_choice;
@@ -156,9 +156,9 @@ void CAxialAnalysisOptionsDlg::OnOK() {
 
             // attributes:
             if (!m_weighted) {
-                mainWin->m_options.weighted_measure_col = -1;
+                mainWin->m_options.weightedMeasureCol = -1;
             } else {
-                mainWin->m_options.weighted_measure_col = m_attribute;
+                mainWin->m_options.weightedMeasureCol = m_attribute;
             }
             break;
         }

@@ -216,16 +216,16 @@ void GLView::mouseReleaseEvent(QMouseEvent *event) {
     if (!m_pDoc.m_communicator) {
         QtRegion r;
         if (m_mouseDragRect.isNull()) {
-            r.bottom_left = worldPoint;
-            r.top_right = worldPoint;
+            r.bottomLeft = worldPoint;
+            r.topRight = worldPoint;
         } else {
-            r.bottom_left.x =
+            r.bottomLeft.x =
                 std::min(m_mouseDragRect.bottomRight().x(), m_mouseDragRect.topLeft().x());
-            r.bottom_left.y =
+            r.bottomLeft.y =
                 std::min(m_mouseDragRect.bottomRight().y(), m_mouseDragRect.topLeft().y());
-            r.top_right.x =
+            r.topRight.x =
                 std::max(m_mouseDragRect.bottomRight().x(), m_mouseDragRect.topLeft().x());
-            r.top_right.y =
+            r.topRight.y =
                 std::max(m_mouseDragRect.bottomRight().y(), m_mouseDragRect.topLeft().y());
         }
         bool selected = false;
@@ -344,8 +344,8 @@ void GLView::mouseReleaseEvent(QMouseEvent *event) {
                 Point2f selectionCentre;
                 if (selectedCount > 1) {
                     QtRegion selBounds = m_pDoc.m_meta_graph->getSelBounds();
-                    selectionCentre.x = (selBounds.bottom_left.x + selBounds.top_right.x) * 0.5;
-                    selectionCentre.y = (selBounds.bottom_left.y + selBounds.top_right.y) * 0.5;
+                    selectionCentre.x = (selBounds.bottomLeft.x + selBounds.topRight.x) * 0.5;
+                    selectionCentre.y = (selBounds.bottomLeft.y + selBounds.topRight.y) * 0.5;
                 } else {
                     if (m_pDoc.m_meta_graph->getViewClass() & MetaGraphDX::VIEWVGA) {
                         auto &map = m_pDoc.m_meta_graph->getDisplayedPointMap();
@@ -490,13 +490,13 @@ void GLView::mouseMoveEvent(QMouseEvent *event) {
         m_mouseDragRect.setHeight(worldPoint.y - m_mouseDragRect.y());
 
         QtRegion hoverRegion;
-        hoverRegion.bottom_left.x =
+        hoverRegion.bottomLeft.x =
             std::min(m_mouseDragRect.bottomRight().x(), m_mouseDragRect.topLeft().x());
-        hoverRegion.bottom_left.y =
+        hoverRegion.bottomLeft.y =
             std::min(m_mouseDragRect.bottomRight().y(), m_mouseDragRect.topLeft().y());
-        hoverRegion.top_right.x =
+        hoverRegion.topRight.x =
             std::max(m_mouseDragRect.bottomRight().x(), m_mouseDragRect.topLeft().x());
-        hoverRegion.top_right.y =
+        hoverRegion.topRight.y =
             std::max(m_mouseDragRect.bottomRight().y(), m_mouseDragRect.topLeft().y());
         highlightHoveredItems(hoverRegion);
         update();
@@ -508,7 +508,7 @@ void GLView::mouseMoveEvent(QMouseEvent *event) {
             QtRegion selectionBounds = map.getSelBounds();
             PixelRef worldPixel = map.pixelate(worldPoint, true);
             PixelRef boundsPixel = map.pixelate(
-                Point2f(selectionBounds.top_right.x, selectionBounds.bottom_left.y), true);
+                Point2f(selectionBounds.topRight.x, selectionBounds.bottomLeft.y), true);
             std::set<int> &selection = map.getSelSet();
             std::set<PixelRef> offsetSelection;
             for (int ref : selection) {
@@ -588,8 +588,8 @@ void GLView::highlightHoveredItems(const QtRegion &region) {
 
 void GLView::highlightHoveredPixels(const PointMapDX &map, const QtRegion &region) {
     // n.b., assumes constrain set to true (for if you start the selection off the grid)
-    PixelRef s_bl = map.pixelate(region.bottom_left, true);
-    PixelRef s_tr = map.pixelate(region.top_right, true);
+    PixelRef s_bl = map.pixelate(region.bottomLeft, true);
+    PixelRef s_tr = map.pixelate(region.topRight, true);
     std::vector<Point> points;
     PixelRef hoverPixel = -1;
     for (short i = s_bl.x; i <= s_tr.x; i++) {
@@ -709,17 +709,17 @@ void GLView::highlightHoveredShapes(const ShapeMapDX &map, const QtRegion &regio
             if (shape.isLine()) {
                 colouredLines.push_back(std::make_pair(SimpleLine(shape.getLine()), colour));
             } else if (shape.isPolyLine()) {
-                for (size_t n = 0; n < shape.m_points.size() - 1; n++) {
-                    colouredLines.push_back(std::make_pair(
-                        SimpleLine(shape.m_points[n], shape.m_points[n + 1]), colour));
+                for (size_t n = 0; n < shape.points.size() - 1; n++) {
+                    colouredLines.push_back(
+                        std::make_pair(SimpleLine(shape.points[n], shape.points[n + 1]), colour));
                 }
             } else if (shape.isPolygon()) {
-                for (size_t n = 0; n < shape.m_points.size() - 1; n++) {
+                for (size_t n = 0; n < shape.points.size() - 1; n++) {
                     colouredLines.push_back(std::make_pair(
-                        SimpleLine(shape.m_points[n], shape.m_points[n + 1]), PafColor(1, 1, 0)));
+                        SimpleLine(shape.points[n], shape.points[n + 1]), PafColor(1, 1, 0)));
                 }
                 colouredLines.push_back(std::make_pair(
-                    SimpleLine(shape.m_points.back(), shape.m_points.front()), PafColor(1, 1, 0)));
+                    SimpleLine(shape.points.back(), shape.points.front()), PafColor(1, 1, 0)));
             } else {
                 if (shape.isPoint()) {
                     colouredPoints.push_back(
@@ -797,16 +797,16 @@ void GLView::matchViewToCurrentMetaGraph() {
 }
 
 void GLView::OnViewZoomToRegion(QtRegion region) {
-    if ((region.top_right.x == 0 && region.bottom_left.x == 0) ||
-        (region.top_right.y == 0 && region.bottom_left.y == 0))
+    if ((region.topRight.x == 0 && region.bottomLeft.x == 0) ||
+        (region.topRight.y == 0 && region.bottomLeft.y == 0))
         // region is unset, don't try to change the view to it
         return;
-    m_eyePosX = -(region.top_right.x + region.bottom_left.x) * 0.5f;
-    m_eyePosY = -(region.top_right.y + region.bottom_left.y) * 0.5f;
+    m_eyePosX = -(region.topRight.x + region.bottomLeft.x) * 0.5f;
+    m_eyePosY = -(region.topRight.y + region.bottomLeft.y) * 0.5f;
     if (region.width() > region.height()) {
-        m_zoomFactor = region.top_right.x - region.bottom_left.x;
+        m_zoomFactor = region.topRight.x - region.bottomLeft.x;
     } else {
-        m_zoomFactor = region.top_right.y - region.bottom_left.y;
+        m_zoomFactor = region.topRight.y - region.bottomLeft.y;
     }
     m_minZoomFactor = m_zoomFactor * 0.001;
     m_maxZoomFactor = m_zoomFactor * 10;

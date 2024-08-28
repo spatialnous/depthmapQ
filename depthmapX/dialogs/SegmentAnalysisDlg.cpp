@@ -22,15 +22,15 @@ CSegmentAnalysisDlg::CSegmentAnalysisDlg(MetaGraphDX *graph, QWidget *parent) : 
     foreach (QWidget *widget, QApplication::topLevelWidgets()) {
         MainWindow *mainWin = qobject_cast<MainWindow *>(widget);
         if (mainWin) {
-            if (mainWin->m_options.tulip_bins == 0) {
+            if (mainWin->m_options.tulipBins == 0) {
                 m_analysis_type = 1;
                 m_tulip_bins = 1024;
             } else {
                 m_analysis_type = 0;
-                m_tulip_bins = mainWin->m_options.tulip_bins;
+                m_tulip_bins = mainWin->m_options.tulipBins;
             }
             m_choice = mainWin->m_options.choice;
-            m_radius_type = mainWin->m_options.radius_type;
+            m_radius_type = mainWin->m_options.radiusType;
             if ((int)mainWin->m_options.radius == -1) {
                 m_radius = QString("n");
             } else {
@@ -38,7 +38,7 @@ CSegmentAnalysisDlg::CSegmentAnalysisDlg(MetaGraphDX *graph, QWidget *parent) : 
                 sprintf(number, "%g", mainWin->m_options.radius);
                 m_radius = QString(number);
             }
-            if (mainWin->m_options.weighted_measure_col == -1) {
+            if (mainWin->m_options.weightedMeasureCol == -1) {
                 m_weighted = false;
                 m_attribute = -1;
             } else {
@@ -130,7 +130,7 @@ void CSegmentAnalysisDlg::OnOK() {
     foreach (QWidget *widget, QApplication::topLevelWidgets()) {
         MainWindow *mainWin = qobject_cast<MainWindow *>(widget);
         if (mainWin) {
-            mainWin->m_options.radius_set.clear();
+            mainWin->m_options.radiusSet.clear();
             QString curr_radius;
             int curr_comma = -1, last_comma = 0;
             bool add_rn = false;
@@ -171,12 +171,12 @@ void CSegmentAnalysisDlg::OnOK() {
                                 return;
                             }
                         }
-                        mainWin->m_options.radius_set.insert(double(radius));
+                        mainWin->m_options.radiusSet.insert(double(radius));
                     }
                 }
             } while (curr_comma != -1);
-            if (mainWin->m_options.radius_set.size() == 0 || add_rn) {
-                mainWin->m_options.radius_set.insert(-1);
+            if (mainWin->m_options.radiusSet.size() == 0 || add_rn) {
+                mainWin->m_options.radiusSet.insert(-1);
             }
 
             if (m_tulip_bins % 2 != 0) {
@@ -187,19 +187,19 @@ void CSegmentAnalysisDlg::OnOK() {
             }
 
             mainWin->m_options.choice = m_choice;
-            mainWin->m_options.radius_type = m_radius_type;
+            mainWin->m_options.radiusType = m_radius_type;
 
             if (m_analysis_type == 1) {
-                mainWin->m_options.tulip_bins = 0;
+                mainWin->m_options.tulipBins = 0;
             } else {
-                mainWin->m_options.tulip_bins = m_tulip_bins;
+                mainWin->m_options.tulipBins = m_tulip_bins;
             }
 
             // attributes:
             if (!m_weighted) {
-                mainWin->m_options.weighted_measure_col = -1;
+                mainWin->m_options.weightedMeasureCol = -1;
             } else {
-                mainWin->m_options.weighted_measure_col = m_attribute;
+                mainWin->m_options.weightedMeasureCol = m_attribute;
             }
             break;
         }
