@@ -6,7 +6,7 @@
 
 #include "depthmapX/mainwindow.h"
 
-#include "genlib/xmlparse.h"
+#include "salalib/genlib/xmlparse.h"
 
 #include <QMessageBox>
 #include <QTimer>

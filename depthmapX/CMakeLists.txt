@@ -157,7 +157,7 @@ elseif()
     message("OpenMP not found, building without")
 endif()
 
-target_link_libraries(${dxproject} salalib genlib ${LIBRARIES} ${modules_gui} ${modules_core})
+target_link_libraries(${dxproject} salalib ${LIBRARIES} ${modules_gui} ${modules_core})
 
 if ((MSVC) AND (MSVC_VERSION GREATER_EQUAL 1914))
     # new option required from MSVC, but not yet implemented in CMake

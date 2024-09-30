@@ -8,7 +8,7 @@
 
 #include "salalib/pafcolor.h"
 
-#include "genlib/p2dpoly.h"
+#include "salalib/genlib/p2dpoly.h"
 
 #include <QOpenGLBuffer>
 #include <QOpenGLFunctions>

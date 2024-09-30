@@ -4,7 +4,7 @@
 
 #include "ColumnPropertiesDlg.h"
 
-#include "genlib/stringutils.h"
+#include "salalib/genlib/stringutils.h"
 
 CColumnPropertiesDlg::CColumnPropertiesDlg(AttributeTable *table, LayerManagerImpl *layers,
                                            std::optional<const std::set<int>> selSet, int col,

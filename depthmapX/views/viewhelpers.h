@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "genlib/p2dpoly.h"
+#include "salalib/genlib/p2dpoly.h"
 
 #include <QPoint>
 #include <string>

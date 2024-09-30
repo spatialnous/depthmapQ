@@ -56,7 +56,7 @@ set(depthmapXTest_SRCS
 
 include_directories("../ThirdParty/Catch")
 
-set(LINK_LIBS salalib genlib)
+set(LINK_LIBS salalib)
 
 if(APPLE)
         add_definitions(-DGL_SILENCE_DEPRECATION)
@@ -74,5 +74,5 @@ endif()
 
 find_package(OpenGL REQUIRED)
 
-target_link_libraries(${depthmapXTest} Qt6::OpenGL salalib genlib OpenGL::GL)
+target_link_libraries(${depthmapXTest} Qt6::OpenGL salalib OpenGL::GL)
 

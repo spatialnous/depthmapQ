@@ -6,9 +6,8 @@
 
 #include "dxinterface/metagraphdx.h"
 
+#include "salalib/genlib/comm.h"
 #include "salalib/ianalysis.h"
-
-#include "genlib/comm.h"
 
 #include <QApplication>
 #include <QElapsedTimer>
