@@ -824,9 +824,12 @@ void QGraphDoc::OnFileExport() {
 
         std::ofstream midfile(outfile2.toLatin1());
         if (midfile.fail() || midfile.bad()) {
-            QMessageBox::warning(this, tr("Notice"),
-                                 tr("Sorry, unable to open associated .mid file for export"),
-                                 QMessageBox::Ok, QMessageBox::Ok);
+            QMessageBox::warning(
+                this, tr("Notice"),
+                tr("Sorry, unable to open associated .mid file (%1) for export (%2)")
+                    .arg(outfile2.toLatin1())
+                    .arg(midfile.fail() ? "failed reading" : "bad file"),
+                QMessageBox::Ok, QMessageBox::Ok);
             mode = -1;
         }
 
