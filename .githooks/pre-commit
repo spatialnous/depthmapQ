@@ -21,7 +21,7 @@ echo "Running clang-format..."
 for FILE in $(git diff --cached --name-only --diff-filter=d | grep -E '.*\.(c|cpp|h|hpp)$')
 do
     if beginswith ThirdParty "$FILE"; then
-        echo "Skippint file: $FILE"
+        echo "Skipping file: $FILE"
     else
         echo "Checking file: $FILE"
         clang-format --dry-run --Werror -style=file:.clang-format $FILE
