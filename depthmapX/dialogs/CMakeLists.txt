@@ -5,37 +5,37 @@
 
 target_sources(depthmapX
     PUBLIC
-        TopoMetDlg.h
-        SegmentAnalysisDlg.h
-        RenameObjectDlg.h
-        PushDialog.h
-        PromptReplace.h
-        OptionsDlg.h
-        NewLayerDlg.h
-        MakeOptionsDlg.h
-        MakeLayerDlg.h
-        LicenceDialog.h
-        LayerChooserDlg.h
-        IsovistPathDlg.h
-        InsertColumnDlg.h
-        GridDialog.h
-        FindLocDlg.h
-        FilePropertiesDlg.h
-        FewestLineOptionsDlg.h
-        EditConnectionsDlg.h
-        ConvertShapesDlg.h
-        ColumnPropertiesDlg.h
-        ColourScaleDlg.h
-        AxialAnalysisOptionsDlg.h
-        AttributeSummary.h
-        AttributeChooserDlg.h
-        AgentAnalysisDlg.h
-        AboutDlg.h
-        licenseagreement.h
-        settings/generalpage.h
-        settings/interfacepage.h
-        settings/settingspage.h
-        settings/settingsdialog.h
+        TopoMetDlg.hpp
+        SegmentAnalysisDlg.hpp
+        RenameObjectDlg.hpp
+        PushDialog.hpp
+        PromptReplace.hpp
+        OptionsDlg.hpp
+        NewLayerDlg.hpp
+        MakeOptionsDlg.hpp
+        MakeLayerDlg.hpp
+        LicenceDialog.hpp
+        LayerChooserDlg.hpp
+        IsovistPathDlg.hpp
+        InsertColumnDlg.hpp
+        GridDialog.hpp
+        FindLocDlg.hpp
+        FilePropertiesDlg.hpp
+        FewestLineOptionsDlg.hpp
+        EditConnectionsDlg.hpp
+        ConvertShapesDlg.hpp
+        ColumnPropertiesDlg.hpp
+        ColourScaleDlg.hpp
+        AxialAnalysisOptionsDlg.hpp
+        AttributeSummary.hpp
+        AttributeChooserDlg.hpp
+        AgentAnalysisDlg.hpp
+        AboutDlg.hpp
+        licenseagreement.hpp
+        settings/generalpage.hpp
+        settings/interfacepage.hpp
+        settings/settingspage.hpp
+        settings/settingsdialog.hpp
     PRIVATE
         TopoMetDlg.cpp
         SegmentAnalysisDlg.cpp

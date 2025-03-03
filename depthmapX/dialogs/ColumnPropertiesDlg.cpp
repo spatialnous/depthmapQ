@@ -2,9 +2,9 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include "ColumnPropertiesDlg.h"
+#include "ColumnPropertiesDlg.hpp"
 
-#include "salalib/genlib/stringutils.h"
+#include "salalib/genlib/stringutils.hpp"
 
 CColumnPropertiesDlg::CColumnPropertiesDlg(AttributeTable *table, LayerManagerImpl *layers,
                                            std::optional<const std::set<int>> selSet, int col,

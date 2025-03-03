@@ -2,10 +2,10 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include "plotview.h"
-#include "mainwindow.h"
+#include "plotview.hpp"
+#include "mainwindow.hpp"
 
-#include "salalib/attributetablehelpers.h"
+#include "salalib/attributetablehelpers.hpp"
 
 #include <QCloseEvent>
 #include <QPainter>
@@ -47,9 +47,9 @@ QPlotView::QPlotView() {
 
 int QPlotView::screenX(double x) {
     return m_screen_bounds.left() +
-           m_screen_bounds.width() *
-               (m_data_bounds.width() ? (x - m_data_bounds.bottomLeft.x) / m_data_bounds.width()
-                                      : 0.5);
+           m_screen_bounds.width() * (m_data_bounds.width()
+                                          ? (x - m_data_bounds.bottomLeft.x) / m_data_bounds.width()
+                                          : 0.5);
 }
 
 int QPlotView::screenY(double y) {
@@ -60,15 +60,13 @@ int QPlotView::screenY(double y) {
 }
 
 double QPlotView::dataX(int x) {
-    return m_data_bounds.bottomLeft.x + m_data_bounds.width() *
-                                             double(x - m_screen_bounds.left()) /
-                                             double(m_screen_bounds.width());
+    return m_data_bounds.bottomLeft.x + m_data_bounds.width() * double(x - m_screen_bounds.left()) /
+                                            double(m_screen_bounds.width());
 }
 
 double QPlotView::dataY(int y) {
-    return m_data_bounds.bottomLeft.y + m_data_bounds.height() *
-                                             double(m_screen_bounds.top() - y) /
-                                             double(abs(m_screen_bounds.height()));
+    return m_data_bounds.bottomLeft.y + m_data_bounds.height() * double(m_screen_bounds.top() - y) /
+                                            double(abs(m_screen_bounds.height()));
 }
 
 QSize QPlotView::sizeHint() const { return QSize(2000, 2000); }
@@ -184,7 +182,7 @@ bool QPlotView::Output(QPainter *pDC, QGraphDoc *pDoc, bool screendraw) {
     auto &selSet = pDoc->m_meta_graph->getSelSet();
 
     QRect rect = QRect(0, 0, width(), height());
-    int mindim = __min(rect.width(), rect.height());
+    int mindim = std::min(rect.width(), rect.height());
 
     // TODO: the calculations are done here for the moment
     // but should be placed in their own helper method

@@ -3,9 +3,9 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include "AxialAnalysisOptionsDlg.h"
+#include "AxialAnalysisOptionsDlg.hpp"
 
-#include "mainwindow.h"
+#include "mainwindow.hpp"
 
 #include <QMessageBox>
 

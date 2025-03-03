@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "mainwindow.h"
+#include "mainwindow.hpp"
 
 #include <QApplication>
 #include <QFileOpenEvent>

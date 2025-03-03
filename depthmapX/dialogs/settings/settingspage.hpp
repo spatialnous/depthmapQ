@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "depthmapX/settings.h"
+#include "depthmapX/settings.hpp"
 
 #include <QWidget>
 

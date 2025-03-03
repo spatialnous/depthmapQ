@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include "depthmapX/views/glview/glrastertexture.h"
+#include "depthmapX/views/glview/glrastertexture.hpp"
 
 #include "catch_amalgamated.hpp"
 

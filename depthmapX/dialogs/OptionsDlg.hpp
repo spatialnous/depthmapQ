@@ -6,7 +6,7 @@
 
 #include "ui_OptionsDlg.h"
 
-#include "salalib/analysistype.h"
+#include "salalib/analysistype.hpp"
 
 class COptionsDlg : public QDialog, public Ui::COptionsDlg {
     Q_OBJECT

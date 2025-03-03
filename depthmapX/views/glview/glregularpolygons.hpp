@@ -4,11 +4,9 @@
 
 #pragma once
 
-#include "gltriangles.h"
+#include "gltriangles.hpp"
 
-#include "salalib/pafcolor.h"
-
-#include "salalib/genlib/p2dpoly.h"
+#include "salalib/pafcolor.hpp"
 
 #include <QOpenGLBuffer>
 #include <QOpenGLFunctions>

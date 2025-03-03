@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include "gldynamicrect.h"
+#include "gldynamicrect.hpp"
 
 static const char *vertexShaderSourceCore = // auto-format hack
     "#version 150\n"

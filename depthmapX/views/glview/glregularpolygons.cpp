@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include "glregularpolygons.h"
+#include "glregularpolygons.hpp"
 
 #include <math.h>
 

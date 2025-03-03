@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include "depthmapX/views/mapview.h"
+#include "depthmapX/views/mapview.hpp"
 
 #include <QPixmap>
 #include <QPoint>
@@ -81,7 +81,7 @@ class QDepthmapView : public MapView {
     virtual void postLoadFile() override;
     virtual void OnEditCopy() override;
     virtual void OnEditSave() override;
-    virtual void OnViewZoomToRegion(QtRegion regionToZoomAt) override;
+    virtual void OnViewZoomToRegion(Region4f regionToZoomAt) override;
 
   protected:
     virtual void timerEvent(QTimerEvent *event) override;
@@ -152,8 +152,8 @@ class QDepthmapView : public MapView {
     int m_repaint_tag;
 
     // Line start and end (must be in map units in case you zoom out / pan while you're drawing!
-    Line m_line;
-    Line m_old_line;
+    Line4f m_line;
+    Line4f m_old_line;
     std::vector<QRgb> m_line_pixels;
     std::vector<Point2f> m_point_handles;
     int m_active_point_handle;
@@ -180,7 +180,7 @@ class QDepthmapView : public MapView {
     void ZoomTowards(double ratio, const Point2f &point);
 
     void InitViewport(const QRect &phys_bounds, QGraphDoc *pDoc);
-    QtRegion LogicalViewport(const QRect &phys_bounds, QGraphDoc *pDoc);
+    Region4f LogicalViewport(const QRect &phys_bounds, QGraphDoc *pDoc);
 
     int GetSpacer(QGraphDoc *pDoc);
     void PrintBaby(QPainter *pDC, QGraphDoc *pDoc);
@@ -192,22 +192,22 @@ class QDepthmapView : public MapView {
     bool DrawShapes(QPainter *pDC, ShapeMapDX &map, bool muted, int spacer, unsigned long ticks,
                     bool screendraw);
 
-    void DrawLink(QPainter *pDC, int spacer, const Line &logical);
+    void DrawLink(QPainter *pDC, int spacer, const Line4f &logical);
     void DrawPointHandle(QPainter *pDC, QPoint pt);
 
     //
     void OutputEPS(std::ofstream &stream, QGraphDoc *pDoc, bool includeScale = true);
-    void OutputEPSMap(std::ofstream &stream, ShapeMapDX &map, QtRegion &logicalviewport,
+    void OutputEPSMap(std::ofstream &stream, ShapeMapDX &map, Region4f &logicalviewport,
                       QRect &rect, float spacer);
-    void OutputEPSLine(std::ofstream &stream, Line &line, int spacer, QtRegion &logicalviewport,
+    void OutputEPSLine(std::ofstream &stream, Line4f &line, int spacer, Region4f &logicalviewport,
                        QRect &rect);
     void OutputEPSPoly(std::ofstream &stream, const SalaShape &shape, int spacer,
-                       QtRegion &logicalviewport, QRect &rect);
+                       Region4f &logicalviewport, QRect &rect);
 
     void OutputSVG(std::ofstream &stream, QGraphDoc *pDoc);
-    void OutputSVGMap(std::ofstream &stream, ShapeMapDX &map, QtRegion &logicalviewport, int h);
-    void OutputSVGLine(std::ofstream &stream, Line &line, QtRegion &logicalviewport, int h);
-    void OutputSVGPoly(std::ofstream &stream, const SalaShape &shape, QtRegion &logicalviewport,
+    void OutputSVGMap(std::ofstream &stream, ShapeMapDX &map, Region4f &logicalviewport, int h);
+    void OutputSVGLine(std::ofstream &stream, Line4f &line, Region4f &logicalviewport, int h);
+    void OutputSVGPoly(std::ofstream &stream, const SalaShape &shape, Region4f &logicalviewport,
                        int h);
 
     void FillLocation(QPainter *pDC, QPoint &p, int spacer, unsigned int blocked, QRgb color);

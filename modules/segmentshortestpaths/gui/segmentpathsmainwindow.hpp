@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "depthmapX/imainwindowmodule.h"
+#include "depthmapX/imainwindowmodule.hpp"
 
 class SegmentPathsMainWindow : public IMainWindowModule {
 

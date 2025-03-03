@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include "mapview.h"
+#include "mapview.hpp"
 
 MapView::MapView(QGraphDoc &pDoc, Settings &settings, QWidget *parent)
     : QOpenGLWidget(parent), m_pDoc(pDoc), m_settings(settings) {}

@@ -4,7 +4,7 @@
 
 set(module vgaparallel)
 set(module_SRCS
-    vgaparallelmainwindow.h
+    vgaparallelmainwindow.hpp
     vgaparallelmainwindow.cpp)
 set(modules_gui "${modules_gui}" ${module} CACHE INTERNAL "modules_gui" FORCE)
 
@@ -31,7 +31,7 @@ add_definitions(${Qt6OpenGLWidgets_DEFINITIONS})
 add_compile_definitions(VGAPARALLEL_GUI_LIBRARY)
 
 add_library(${module} OBJECT ${module_SRCS}
-    ../../../depthmapX/imainwindowmodule.h)
+    ../../../depthmapX/imainwindowmodule.hpp)
 
 if ((MSVC) AND (MSVC_VERSION GREATER_EQUAL 1914))
     # new option required from MSVC, but not yet implemented in CMake

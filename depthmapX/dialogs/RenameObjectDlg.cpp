@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include "RenameObjectDlg.h"
+#include "RenameObjectDlg.hpp"
 
 CRenameObjectDlg::CRenameObjectDlg(const QString &object_type, const QString &existing_name,
                                    QWidget *parent)

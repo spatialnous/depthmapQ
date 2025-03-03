@@ -2,17 +2,17 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include "mainwindow.h"
+#include "mainwindow.hpp"
 
-#include "depthmapX/views/3dview/3dview.h"
-#include "depthmapX/views/depthmapview/depthmapview.h"
-#include "depthmapX/views/plotview/plotview.h"
-#include "depthmapX/views/tableview/tableview.h"
-#include "dialogs/AboutDlg.h"
-#include "dialogs/ColourScaleDlg.h"
-#include "dialogs/settings/settingsdialog.h"
-#include "interfaceversion.h"
-#include "views/glview/glview.h"
+#include "depthmapX/views/3dview/3dview.hpp"
+#include "depthmapX/views/depthmapview/depthmapview.hpp"
+#include "depthmapX/views/plotview/plotview.hpp"
+#include "depthmapX/views/tableview/tableview.hpp"
+#include "dialogs/AboutDlg.hpp"
+#include "dialogs/ColourScaleDlg.hpp"
+#include "dialogs/settings/settingsdialog.hpp"
+#include "interfaceversion.hpp"
+#include "views/glview/glview.hpp"
 
 #include <QDesktopServices>
 #include <QtGui>
@@ -1173,41 +1173,41 @@ void MainWindow::OnSelchangingTree(QTreeWidgetItem *hItem, int col) {
             if (entry.m_subcat == -1 && m_indexWidget->isMapColumn(col)) {
                 switch (entry.m_type) {
                 case 0:
-                    if (graph->getViewClass() & MetaGraphDX::VIEWVGA) {
+                    if (graph->getViewClass() & MetaGraphDX::DX_VIEWVGA) {
                         if (graph->getDisplayedPointMapRef() == entry.m_cat) {
-                            graph->setViewClass(MetaGraphDX::SHOWHIDEVGA);
+                            graph->setViewClass(MetaGraphDX::DX_SHOWHIDEVGA);
                         } else {
                             graph->setDisplayedPointMapRef(entry.m_cat);
                         }
                     } else {
                         graph->setDisplayedPointMapRef(entry.m_cat);
-                        graph->setViewClass(MetaGraphDX::SHOWVGATOP);
+                        graph->setViewClass(MetaGraphDX::DX_SHOWVGATOP);
                     }
                     remenu = true;
                     break;
                 case 1:
-                    if (graph->getViewClass() & MetaGraphDX::VIEWAXIAL) {
+                    if (graph->getViewClass() & MetaGraphDX::DX_VIEWAXIAL) {
                         if (graph->getDisplayedShapeGraphRef() == entry.m_cat) {
-                            graph->setViewClass(MetaGraphDX::SHOWHIDEAXIAL);
+                            graph->setViewClass(MetaGraphDX::DX_SHOWHIDEAXIAL);
                         } else {
                             graph->setDisplayedShapeGraphRef(entry.m_cat);
                         }
                     } else {
                         graph->setDisplayedShapeGraphRef(entry.m_cat);
-                        graph->setViewClass(MetaGraphDX::SHOWAXIALTOP);
+                        graph->setViewClass(MetaGraphDX::DX_SHOWAXIALTOP);
                     }
                     remenu = true;
                     break;
                 case 2:
-                    if (graph->getViewClass() & MetaGraphDX::VIEWDATA) {
+                    if (graph->getViewClass() & MetaGraphDX::DX_VIEWDATA) {
                         if (graph->getDisplayedDataMapRef() == entry.m_cat) {
-                            graph->setViewClass(MetaGraphDX::SHOWHIDESHAPE);
+                            graph->setViewClass(MetaGraphDX::DX_SHOWHIDESHAPE);
                         } else {
                             graph->setDisplayedDataMapRef(entry.m_cat);
                         }
                     } else {
                         graph->setDisplayedDataMapRef(entry.m_cat);
-                        graph->setViewClass(MetaGraphDX::SHOWSHAPETOP);
+                        graph->setViewClass(MetaGraphDX::DX_SHOWSHAPETOP);
                     }
                     remenu = true;
                     break;
@@ -1295,33 +1295,33 @@ void MainWindow::SetGraphTreeChecks() {
                 // this is the main type box hit
                 switch (entry.m_type) {
                 case 0:
-                    if (viewclass & MetaGraphDX::VIEWVGA &&
+                    if (viewclass & MetaGraphDX::DX_VIEWVGA &&
                         graph->getDisplayedPointMapRef() == entry.m_cat) {
                         checkstyle = 5;
                         m_topgraph = key;
-                    } else if (viewclass & MetaGraphDX::VIEWBACKVGA &&
+                    } else if (viewclass & MetaGraphDX::DX_VIEWBACKVGA &&
                                graph->getDisplayedPointMapRef() == entry.m_cat) {
                         checkstyle = 6;
                         m_backgraph = key;
                     }
                     break;
                 case 1:
-                    if (viewclass & MetaGraphDX::VIEWAXIAL &&
+                    if (viewclass & MetaGraphDX::DX_VIEWAXIAL &&
                         graph->getDisplayedShapeGraphRef() == entry.m_cat) {
                         checkstyle = 5;
                         m_topgraph = key;
-                    } else if (viewclass & MetaGraphDX::VIEWBACKAXIAL &&
+                    } else if (viewclass & MetaGraphDX::DX_VIEWBACKAXIAL &&
                                graph->getDisplayedShapeGraphRef() == entry.m_cat) {
                         checkstyle = 6;
                         m_backgraph = key;
                     }
                     break;
                 case 2:
-                    if (viewclass & MetaGraphDX::VIEWDATA &&
+                    if (viewclass & MetaGraphDX::DX_VIEWDATA &&
                         graph->getDisplayedDataMapRef() == entry.m_cat) {
                         checkstyle = 5;
                         m_topgraph = key;
-                    } else if (viewclass & MetaGraphDX::VIEWBACKDATA &&
+                    } else if (viewclass & MetaGraphDX::DX_VIEWBACKDATA &&
                                graph->getDisplayedDataMapRef() == entry.m_cat) {
                         checkstyle = 6;
                         m_backgraph = key;
@@ -1337,39 +1337,39 @@ void MainWindow::SetGraphTreeChecks() {
                     m_indexWidget->setItemVisibility(key, Qt::Unchecked);
 
                 // the editable box
-                int editable = MetaGraphDX::NOT_EDITABLE;
+                int editable = MetaGraphDX::DX_NOT_EDITABLE;
                 switch (entry.m_type) {
                 case 0:
                     if (graph->getPointMaps()[entry.m_cat].getInternalMap().isProcessed()) {
-                        editable = MetaGraphDX::NOT_EDITABLE;
+                        editable = MetaGraphDX::DX_NOT_EDITABLE;
                     } else {
-                        editable = MetaGraphDX::EDITABLE_ON;
+                        editable = MetaGraphDX::DX_EDITABLE_ON;
                     }
                     break;
                 case 1: {
                     int type = graph->getShapeGraphs()[entry.m_cat].getInternalMap().getMapType();
                     if (type == ShapeMap::SEGMENTMAP || type == ShapeMap::ALLLINEMAP) {
-                        editable = MetaGraphDX::NOT_EDITABLE;
+                        editable = MetaGraphDX::DX_NOT_EDITABLE;
                     } else {
                         editable = graph->getShapeGraphs()[entry.m_cat].isEditable()
-                                       ? MetaGraphDX::EDITABLE_ON
-                                       : MetaGraphDX::EDITABLE_OFF;
+                                       ? MetaGraphDX::DX_EDITABLE_ON
+                                       : MetaGraphDX::DX_EDITABLE_OFF;
                     }
                 } break;
                 case 2:
                     editable = graph->getDataMaps()[entry.m_cat].isEditable()
-                                   ? MetaGraphDX::EDITABLE_ON
-                                   : MetaGraphDX::EDITABLE_OFF;
+                                   ? MetaGraphDX::DX_EDITABLE_ON
+                                   : MetaGraphDX::DX_EDITABLE_OFF;
                     break;
                 }
                 switch (editable) {
-                case MetaGraphDX::NOT_EDITABLE:
+                case MetaGraphDX::DX_NOT_EDITABLE:
                     m_indexWidget->setItemReadOnly(key);
                     break;
-                case MetaGraphDX::EDITABLE_OFF:
+                case MetaGraphDX::DX_EDITABLE_OFF:
                     m_indexWidget->setItemEditability(key, Qt::Unchecked);
                     break;
-                case MetaGraphDX::EDITABLE_ON:
+                case MetaGraphDX::DX_EDITABLE_ON:
                     m_indexWidget->setItemEditability(key, Qt::Checked);
                     break;
                 }
@@ -1429,7 +1429,7 @@ void MainWindow::MakeGraphTree() {
 
     int state = graph->getState();
 
-    if (state & MetaGraphDX::POINTMAPS) {
+    if (state & MetaGraphDX::DX_POINTMAPS) {
         if (!m_treeroots[0]) {
             QTreeWidgetItem *hItem = m_indexWidget->addNewItem(tr("Visibility Graphs"));
             hItem->setIcon(0, m_tree_icon[0]);
@@ -1456,7 +1456,7 @@ void MainWindow::MakeGraphTree() {
         m_treeroots[0] = NULL;
     }
 
-    if (state & MetaGraphDX::SHAPEGRAPHS) {
+    if (state & MetaGraphDX::DX_SHAPEGRAPHS) {
         if (!m_treeroots[1]) {
             QTreeWidgetItem *hItem = m_indexWidget->addNewItem(tr("Shape Graphs"));
             hItem->setIcon(0, m_tree_icon[1]);
@@ -1490,7 +1490,7 @@ void MainWindow::MakeGraphTree() {
         m_treeroots[1] = NULL;
     }
 
-    if (state & MetaGraphDX::DATAMAPS) {
+    if (state & MetaGraphDX::DX_DATAMAPS) {
         if (!m_treeroots[2]) {
             QTreeWidgetItem *hItem = m_indexWidget->addNewItem(tr("Data Maps"));
             hItem->setIcon(0, m_tree_icon[2]);
@@ -1534,7 +1534,7 @@ void MainWindow::MakeDrawingTree() {
 
     int state = graph->getState();
 
-    if (state & MetaGraphDX::LINEDATA) {
+    if (state & MetaGraphDX::DX_LINEDATA) {
         if (m_treeroots[4]) {
             m_treeroots[4] = NULL;
             m_treedrawingmap.clear();
@@ -1988,15 +1988,16 @@ void MainWindow::RedoPlotViewMenu(QGraphDoc *pDoc) {
     in_FocusGraph = true;
 
     // this will be used to distinguish between viewing VGA and axial maps
-    int view_class = pDoc->m_meta_graph->getViewClass() &
-                     (MetaGraphDX::VIEWVGA | MetaGraphDX::VIEWAXIAL | MetaGraphDX::VIEWDATA);
+    int view_class =
+        pDoc->m_meta_graph->getViewClass() &
+        (MetaGraphDX::DX_VIEWVGA | MetaGraphDX::DX_VIEWAXIAL | MetaGraphDX::DX_VIEWDATA);
     int curr_j = 0;
 
     {
         auto lock = pDoc->getLockDeferred();
         if (lock.try_lock()) {
             m_view_map_entries.clear();
-            if (view_class == MetaGraphDX::VIEWVGA) {
+            if (view_class == MetaGraphDX::DX_VIEWVGA) {
                 auto &map = pDoc->m_meta_graph->getDisplayedPointMap();
 
                 const AttributeTable &table = map.getAttributeTable();
@@ -2007,7 +2008,7 @@ void MainWindow::RedoPlotViewMenu(QGraphDoc *pDoc) {
                         curr_j = i + 1;
                     }
                 }
-            } else if (view_class == MetaGraphDX::VIEWAXIAL) {
+            } else if (view_class == MetaGraphDX::DX_VIEWAXIAL) {
                 // using attribute tables is very, very simple...
                 const auto &map = pDoc->m_meta_graph->getDisplayedShapeGraph();
                 const auto &table = map.getAttributeTable();
@@ -2019,7 +2020,7 @@ void MainWindow::RedoPlotViewMenu(QGraphDoc *pDoc) {
                         curr_j = i + 1;
                     }
                 }
-            } else if (view_class == MetaGraphDX::VIEWDATA) {
+            } else if (view_class == MetaGraphDX::DX_VIEWDATA) {
                 // using attribute tables is very, very simple...
                 const auto &map = pDoc->m_meta_graph->getDisplayedDataMap();
                 const auto &table = map.getAttributeTable();
@@ -2128,7 +2129,7 @@ void MainWindow::updateVisibilitySubMenu() {
         convertDataMapLinesAct->setEnabled(0);
         return;
     }
-    if (m_p->m_meta_graph->getState() & MetaGraphDX::LINEDATA ||
+    if (m_p->m_meta_graph->getState() & MetaGraphDX::DX_LINEDATA ||
         m_p->m_meta_graph->viewingUnprocessedPoints())
         SetGridAct->setEnabled(true);
     else
@@ -2143,7 +2144,7 @@ void MainWindow::updateVisibilitySubMenu() {
     }
 
     int state = m_p->m_meta_graph->getState();
-    if (state & MetaGraphDX::LINEDATA)
+    if (state & MetaGraphDX::DX_LINEDATA)
         makeIsovistPathAct->setEnabled(true);
     else
         makeIsovistPathAct->setEnabled(0);
@@ -2157,7 +2158,7 @@ void MainWindow::updateVisibilitySubMenu() {
     }
 
     if (!m_p->m_communicator && m_p->m_meta_graph->viewingProcessedShapes() &&
-        (m_p->m_meta_graph->getState() & MetaGraphDX::POINTMAPS) &&
+        (m_p->m_meta_graph->getState() & MetaGraphDX::DX_POINTMAPS) &&
         m_p->m_meta_graph->getDisplayedPointMap().getInternalMap().isProcessed())
         convertDataMapLinesAct->setEnabled(true);
     else
@@ -2269,7 +2270,7 @@ void MainWindow::updateAxialSubMenu() {
     }
     int state = m_p->m_meta_graph->getState();
     // non-segment maps only
-    if (state & MetaGraphDX::SHAPEGRAPHS && !m_p->m_communicator &&
+    if (state & MetaGraphDX::DX_SHAPEGRAPHS && !m_p->m_communicator &&
         !m_p->m_meta_graph->getDisplayedShapeGraph().isSegmentMap())
         runGraphAnaysisAct->setEnabled(true);
     else
@@ -2281,7 +2282,7 @@ void MainWindow::updateAxialSubMenu() {
         stepDepthAct->setEnabled(0);
 
     state = m_p->m_meta_graph->getState();
-    if (state & MetaGraphDX::SHAPEGRAPHS && !m_p->m_communicator &&
+    if (state & MetaGraphDX::DX_SHAPEGRAPHS && !m_p->m_communicator &&
         m_p->m_meta_graph->getDisplayedShapeGraph().isAllLineMap())
         reduceToFewestLineMapAct->setEnabled(true);
     else
@@ -2367,7 +2368,7 @@ void MainWindow::updateMapMenu() {
         convertActiveMapAct->setEnabled(0);
 
     if (!m_p->m_communicator &&
-        (m_p->m_meta_graph->getState() & MetaGraphDX::LINEDATA) == MetaGraphDX::LINEDATA)
+        (m_p->m_meta_graph->getState() & MetaGraphDX::DX_LINEDATA) == MetaGraphDX::DX_LINEDATA)
         convertDrawingMapAct->setEnabled(true);
     else
         convertDrawingMapAct->setEnabled(0);
@@ -2586,7 +2587,7 @@ void MainWindow::updateToolbar() {
         if (m_p->m_meta_graph->viewingProcessed())
             zoomToolButton->setEnabled(true);
 
-        if (m_p->m_meta_graph->getState() & MetaGraphDX::LINEDATA ||
+        if (m_p->m_meta_graph->getState() & MetaGraphDX::DX_LINEDATA ||
             m_p->m_meta_graph->viewingUnprocessedPoints())
             SetGridAct->setEnabled(true);
 
@@ -2621,7 +2622,7 @@ void MainWindow::updateToolbar() {
         }
 
         type = m_p->m_meta_graph->getState();
-        if (!(~type & MetaGraphDX::LINEDATA))
+        if (!(~type & MetaGraphDX::DX_LINEDATA))
             newisoToolButton->setEnabled(true);
         else {
             if (tmpView) {
@@ -2633,10 +2634,10 @@ void MainWindow::updateToolbar() {
             }
         }
 
-        if ((((m_p->m_meta_graph->getViewClass() & MetaGraphDX::VIEWVGA) &&
+        if ((((m_p->m_meta_graph->getViewClass() & MetaGraphDX::DX_VIEWVGA) &&
               (m_p->m_meta_graph->getDisplayedPointMap().getFilledPointCount() > 1)) ||
-             (((m_p->m_meta_graph->getViewClass() & MetaGraphDX::VIEWAXIAL) &&
-               (m_p->m_meta_graph->getState() & MetaGraphDX::SHAPEGRAPHS)) &&
+             (((m_p->m_meta_graph->getViewClass() & MetaGraphDX::DX_VIEWAXIAL) &&
+               (m_p->m_meta_graph->getState() & MetaGraphDX::DX_SHAPEGRAPHS)) &&
               (m_p->m_meta_graph->hasDisplayedShapeGraph() &&
                !m_p->m_meta_graph->getDisplayedShapeGraph().isSegmentMap()))))
             JoinToolButton->setEnabled(true);
@@ -2651,7 +2652,7 @@ void MainWindow::updateToolbar() {
         }
 
         type = m_p->m_meta_graph->getState();
-        if (!(~type & MetaGraphDX::LINEDATA))
+        if (!(~type & MetaGraphDX::DX_LINEDATA))
             AxialMapButton->setEnabled(true);
         else {
             if (tmpView) {

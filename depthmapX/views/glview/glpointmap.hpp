@@ -4,10 +4,10 @@
 
 #pragma once
 
-#include "dxinterface/pointmapdx.h"
-#include "gllinesuniform.h"
-#include "glrastertexture.h"
-#include "gltrianglesuniform.h"
+#include "dxinterface/pointmapdx.hpp"
+#include "gllinesuniform.hpp"
+#include "glrastertexture.hpp"
+#include "gltrianglesuniform.hpp"
 
 class GLPixelMap {
   public:

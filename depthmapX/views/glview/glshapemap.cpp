@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include "glshapemap.h"
+#include "glshapemap.hpp"
 
 void GLShapeMap::loadGLObjects(
     const std::vector<std::pair<SimpleLine, PafColor>> &colouredLines,

@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include "settingsimpl.h"
+#include "settingsimpl.hpp"
 
 SettingsImpl::SettingsImpl(QSettingsFactory *factory) : mSettingsFactory(factory) {}
 

@@ -2,10 +2,10 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include "settingsdialog.h"
+#include "settingsdialog.hpp"
 
-#include "generalpage.h"
-#include "interfacepage.h"
+#include "generalpage.hpp"
+#include "interfacepage.hpp"
 
 #include <QtWidgets>
 

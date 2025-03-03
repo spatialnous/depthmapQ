@@ -4,6 +4,7 @@
 
 set(module segmentpathsgui)
 set(segmentpathsgui_SRCS
+    segmentpathsmainwindow.hpp
     segmentpathsmainwindow.cpp)
 set(modules_gui "${modules_gui}" ${module} CACHE INTERNAL "modules_gui" FORCE)
 
@@ -30,7 +31,7 @@ add_definitions(${Qt6OpenGLWidgets_DEFINITIONS})
 add_compile_definitions(SEGMENTPATHS_GUI_LIBRARY)
 
 add_library(${module} OBJECT ${segmentpathsgui_SRCS}
-    ../../../depthmapX/imainwindowmodule.h)
+    ../../../depthmapX/imainwindowmodule.hpp)
 
 if ((MSVC) AND (MSVC_VERSION GREATER_EQUAL 1914))
     # new option required from MSVC, but not yet implemented in CMake

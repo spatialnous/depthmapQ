@@ -2,40 +2,40 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include "compatibilitydefines.h"
-#include "interfaceversion.h"
-#include "mainwindow.h"
+#include "compatibilitydefines.hpp"
+#include "interfaceversion.hpp"
+#include "mainwindow.hpp"
 
-#include "dialogs/AgentAnalysisDlg.h"
-#include "dialogs/AttributeChooserDlg.h"
-#include "dialogs/AttributeSummary.h"
-#include "dialogs/AxialAnalysisOptionsDlg.h"
-#include "dialogs/ColumnPropertiesDlg.h"
-#include "dialogs/ConvertShapesDlg.h"
-#include "dialogs/FilePropertiesDlg.h"
-#include "dialogs/GridDialog.h"
-#include "dialogs/InsertColumnDlg.h"
-#include "dialogs/IsovistPathDlg.h"
-#include "dialogs/LayerChooserDlg.h"
-#include "dialogs/MakeLayerDlg.h"
-#include "dialogs/MakeOptionsDlg.h"
-#include "dialogs/NewLayerDlg.h"
-#include "dialogs/OptionsDlg.h"
-#include "dialogs/PromptReplace.h"
-#include "dialogs/PushDialog.h"
-#include "dialogs/RenameObjectDlg.h"
-#include "dialogs/SegmentAnalysisDlg.h"
-#include "dialogs/TopoMetDlg.h"
-#include "salalib/agents/agentanalysis.h"
-#include "views/depthmapview/depthmapview.h"
-#include "views/viewhelpers.h"
+#include "dialogs/AgentAnalysisDlg.hpp"
+#include "dialogs/AttributeChooserDlg.hpp"
+#include "dialogs/AttributeSummary.hpp"
+#include "dialogs/AxialAnalysisOptionsDlg.hpp"
+#include "dialogs/ColumnPropertiesDlg.hpp"
+#include "dialogs/ConvertShapesDlg.hpp"
+#include "dialogs/FilePropertiesDlg.hpp"
+#include "dialogs/GridDialog.hpp"
+#include "dialogs/InsertColumnDlg.hpp"
+#include "dialogs/IsovistPathDlg.hpp"
+#include "dialogs/LayerChooserDlg.hpp"
+#include "dialogs/MakeLayerDlg.hpp"
+#include "dialogs/MakeOptionsDlg.hpp"
+#include "dialogs/NewLayerDlg.hpp"
+#include "dialogs/OptionsDlg.hpp"
+#include "dialogs/PromptReplace.hpp"
+#include "dialogs/PushDialog.hpp"
+#include "dialogs/RenameObjectDlg.hpp"
+#include "dialogs/SegmentAnalysisDlg.hpp"
+#include "dialogs/TopoMetDlg.hpp"
+#include "salalib/agents/agentanalysis.hpp"
+#include "views/depthmapview/depthmapview.hpp"
+#include "views/viewhelpers.hpp"
 
-#include "salalib/agents/agentprogram.h"
-#include "salalib/entityparsing.h"
-#include "salalib/exportutils.h"
-#include "salalib/importutils.h"
-#include "salalib/linkutils.h"
-#include "salalib/salaprogram.h"
+#include "salalib/agents/agentprogram.hpp"
+#include "salalib/entityparsing.hpp"
+#include "salalib/exportutils.hpp"
+#include "salalib/importutils.hpp"
+#include "salalib/linkutils.hpp"
+#include "salalib/salaprogram.hpp"
 
 #include <QFile>
 #include <QMessageBox>
@@ -143,22 +143,22 @@ void QGraphDoc::UpdateMainframestatus() {
         int n = 0;
         int state = m_meta_graph->getState();
         // showing the axial graph
-        if ((state & MetaGraphDX::SHAPEGRAPHS) &&
-            m_meta_graph->getViewClass() & MetaGraphDX::VIEWAXIAL) {
+        if ((state & MetaGraphDX::DX_SHAPEGRAPHS) &&
+            m_meta_graph->getViewClass() & MetaGraphDX::DX_VIEWAXIAL) {
             n = (int)m_meta_graph->getDisplayedShapeGraph().getShapeCount();
-        } else if ((state & MetaGraphDX::DATAMAPS) &&
-                   m_meta_graph->getViewClass() & MetaGraphDX::VIEWDATA) {
+        } else if ((state & MetaGraphDX::DX_DATAMAPS) &&
+                   m_meta_graph->getViewClass() & MetaGraphDX::DX_VIEWDATA) {
             n = (int)m_meta_graph->getDisplayedDataMap().getShapeCount();
         }
         // either showing or constructing the VGA graph
-        else if ((state & MetaGraphDX::POINTMAPS) &&
-                 m_meta_graph->getViewClass() & MetaGraphDX::VIEWVGA) {
+        else if ((state & MetaGraphDX::DX_POINTMAPS) &&
+                 m_meta_graph->getViewClass() & MetaGraphDX::DX_VIEWVGA) {
             n = (int)m_meta_graph->getDisplayedPointMap().getInternalMap().getFilledPointCount();
         }
         if (n > 0) {
             s1 = QString("%1   ").arg(n);
         }
-        QtRegion r = m_meta_graph->getBoundingBox();
+        Region4f r = m_meta_graph->getBoundingBox();
         s2 = QString("%1,  %2   ").arg(r.width()).arg(r.height());
         s3 = QString("%1,  %2   ").arg(m_position.x).arg(m_position.y);
         ((MainWindow *)m_mainFrame)->UpdateStatus(s1, s2, s3);
@@ -199,16 +199,16 @@ LayerManagerImpl &QGraphDoc::getLayers(int type, std::optional<size_t> layer) {
     if (type == -1) {
         type = m_meta_graph->getViewClass();
     }
-    switch (type & MetaGraphDX::VIEWFRONT) {
-    case MetaGraphDX::VIEWVGA:
+    switch (type & MetaGraphDX::DX_VIEWFRONT) {
+    case MetaGraphDX::DX_VIEWVGA:
         tab = (!layer.has_value()) ? &(m_meta_graph->getDisplayedPointMap().getLayers()) //
                                    : &(m_meta_graph->getPointMaps()[layer.value()].getLayers());
         break;
-    case MetaGraphDX::VIEWAXIAL:
+    case MetaGraphDX::DX_VIEWAXIAL:
         tab = (!layer.has_value()) ? &(m_meta_graph->getDisplayedShapeGraph().getLayers())
                                    : &(m_meta_graph->getShapeGraphs()[layer.value()].getLayers());
         break;
-    case MetaGraphDX::VIEWDATA:
+    case MetaGraphDX::DX_VIEWDATA:
         tab = (!layer.has_value()) ? &(m_meta_graph->getDisplayedDataMap().getLayers()) //
                                    : &(m_meta_graph->getDataMaps()[layer.value()].getLayers());
         break;
@@ -219,18 +219,18 @@ LayerManagerImpl &QGraphDoc::getLayers(int type, std::optional<size_t> layer) {
 const LayerManagerImpl &QGraphDoc::getLayers(int type, std::optional<size_t> layer) const {
     const LayerManagerImpl *tab = NULL;
     if (type == -1) {
-        type = m_meta_graph->getViewClass() & MetaGraphDX::VIEWFRONT;
+        type = m_meta_graph->getViewClass() & MetaGraphDX::DX_VIEWFRONT;
     }
     switch (type) {
-    case MetaGraphDX::VIEWVGA:
+    case MetaGraphDX::DX_VIEWVGA:
         tab = (!layer.has_value()) ? &(m_meta_graph->getDisplayedPointMap().getLayers()) //
                                    : &(m_meta_graph->getPointMaps()[layer.value()].getLayers());
         break;
-    case MetaGraphDX::VIEWAXIAL:
+    case MetaGraphDX::DX_VIEWAXIAL:
         tab = (!layer.has_value()) ? &(m_meta_graph->getDisplayedShapeGraph().getLayers())
                                    : &(m_meta_graph->getShapeGraphs()[layer.value()].getLayers());
         break;
-    case MetaGraphDX::VIEWDATA:
+    case MetaGraphDX::DX_VIEWDATA:
         tab = (!layer.has_value()) ? &(m_meta_graph->getDisplayedDataMap().getLayers()) //
                                    : &(m_meta_graph->getDataMaps()[layer.value()].getLayers());
         break;
@@ -243,18 +243,18 @@ AttributeTableHandle &QGraphDoc::getAttributeTableHandle(int type, std::optional
     if (type == -1) {
         type = m_meta_graph->getViewClass();
     }
-    switch (type & MetaGraphDX::VIEWFRONT) {
-    case MetaGraphDX::VIEWVGA:
+    switch (type & MetaGraphDX::DX_VIEWFRONT) {
+    case MetaGraphDX::DX_VIEWVGA:
         tab = (!layer.has_value())
                   ? &(m_meta_graph->getDisplayedPointMap().getAttributeTableHandle())
                   : &(m_meta_graph->getPointMaps()[layer.value()].getAttributeTableHandle());
         break;
-    case MetaGraphDX::VIEWAXIAL:
+    case MetaGraphDX::DX_VIEWAXIAL:
         tab = (!layer.has_value())
                   ? &(m_meta_graph->getDisplayedShapeGraph().getAttributeTableHandle())
                   : &(m_meta_graph->getShapeGraphs()[layer.value()].getAttributeTableHandle());
         break;
-    case MetaGraphDX::VIEWDATA:
+    case MetaGraphDX::DX_VIEWDATA:
         tab = (!layer.has_value())
                   ? &(m_meta_graph->getDisplayedDataMap().getAttributeTableHandle())
                   : &(m_meta_graph->getDataMaps()[layer.value()].getAttributeTableHandle());
@@ -267,20 +267,20 @@ const AttributeTableHandle &QGraphDoc::getAttributeTableHandle(int type,
                                                                std::optional<size_t> layer) const {
     const AttributeTableHandle *tab = NULL;
     if (type == -1) {
-        type = m_meta_graph->getViewClass() & MetaGraphDX::VIEWFRONT;
+        type = m_meta_graph->getViewClass() & MetaGraphDX::DX_VIEWFRONT;
     }
     switch (type) {
-    case MetaGraphDX::VIEWVGA:
+    case MetaGraphDX::DX_VIEWVGA:
         tab = (!layer.has_value())
                   ? &(m_meta_graph->getDisplayedPointMap().getAttributeTableHandle())
                   : &(m_meta_graph->getPointMaps()[layer.value()].getAttributeTableHandle());
         break;
-    case MetaGraphDX::VIEWAXIAL:
+    case MetaGraphDX::DX_VIEWAXIAL:
         tab = (!layer.has_value())
                   ? &(m_meta_graph->getDisplayedShapeGraph().getAttributeTableHandle())
                   : &(m_meta_graph->getShapeGraphs()[layer.value()].getAttributeTableHandle());
         break;
-    case MetaGraphDX::VIEWDATA:
+    case MetaGraphDX::DX_VIEWDATA:
         tab = (!layer.has_value())
                   ? &(m_meta_graph->getDisplayedDataMap().getAttributeTableHandle())
                   : &(m_meta_graph->getDataMaps()[layer.value()].getAttributeTableHandle());
@@ -318,9 +318,9 @@ void QGraphDoc::OnLayerNew() {
             map = &m_meta_graph->getShapeGraphs()[size_t(ref)];
         }
 
-        QtRegion r = m_meta_graph->getBoundingBox();
+        Region4f r = m_meta_graph->getBoundingBox();
         if (r.atZero()) {
-            r = QtRegion(Point2f(-50.0, -50.0), Point2f(50.0, 50.0));
+            r = Region4f(Point2f(-50.0, -50.0), Point2f(50.0, 50.0));
         }
         map->init(0, r);
         map->setEditable(true);
@@ -578,7 +578,7 @@ void QGraphDoc::OnFileImport() {
         if (ext == tr("")) {
             ext = tr("GML");
         }
-        int graph_option = MetaGraphDX::ADD;
+        int graph_option = MetaGraphDX::DX_ADD;
         bool ok = true;
 
         if (ok) {
@@ -592,17 +592,17 @@ void QGraphDoc::OnFileImport() {
                 CreateWaitDialog(tr("Importing file..."));
                 m_communicator->SetFunction(CMSCommunicator::IMPORT);
                 if (ext == tr("CAT")) {
-                    m_communicator->SetOption(MetaGraphDX::CAT | graph_option);
+                    m_communicator->SetOption(MetaGraphDX::DX_CAT | graph_option);
                 } else if (ext == tr("DXF")) {
-                    m_communicator->SetOption(MetaGraphDX::DXF | graph_option);
+                    m_communicator->SetOption(MetaGraphDX::DX_DXF | graph_option);
                 } else if (ext == tr("NTF")) {
-                    m_communicator->SetOption(MetaGraphDX::NTF | graph_option);
+                    m_communicator->SetOption(MetaGraphDX::DX_NTF | graph_option);
                     m_communicator->SetFileSet(infiles);
                 } else if (ext == tr("GML")) {
-                    m_communicator->SetOption(MetaGraphDX::GML | graph_option);
+                    m_communicator->SetOption(MetaGraphDX::DX_GML | graph_option);
                     m_communicator->SetFileSet(infiles);
                 } else if (ext == tr("RT1")) {
-                    m_communicator->SetOption(MetaGraphDX::RT1 | graph_option);
+                    m_communicator->SetOption(MetaGraphDX::DX_RT1 | graph_option);
                     m_communicator->SetFileSet(infiles);
                 }
             } else {
@@ -633,7 +633,7 @@ void QGraphDoc::OnFileImport() {
                 QMessageBox::warning(this, tr("Info"), tr("User cancelled import"), QMessageBox::Ok,
                                      QMessageBox::Ok);
             }
-            m_meta_graph->setViewClass(MetaGraphDX::SHOWSHAPETOP);
+            m_meta_graph->setViewClass(MetaGraphDX::DX_SHOWSHAPETOP);
 
             if (newShapeMaps.size() > 0) {
                 for (auto &shapeMap : newShapeMaps) {
@@ -689,13 +689,13 @@ void QGraphDoc::OnFileExport() {
     int mode = -1;
 
     int view_class = m_meta_graph->getViewClass();
-    if (view_class & MetaGraphDX::VIEWAXIAL) {
+    if (view_class & MetaGraphDX::DX_VIEWAXIAL) {
         mode = 0;
         suffix = m_meta_graph->getDisplayedShapeGraph().getName().c_str();
-    } else if (view_class & MetaGraphDX::VIEWDATA) {
+    } else if (view_class & MetaGraphDX::DX_VIEWDATA) {
         mode = 1;
         suffix = m_meta_graph->getDisplayedDataMap().getName().c_str();
-    } else if (view_class & MetaGraphDX::VIEWVGA) {
+    } else if (view_class & MetaGraphDX::DX_VIEWVGA) {
         if (m_meta_graph->getDisplayedPointMap().getInternalMap().isProcessed()) {
             mode = 2;
             suffix = tr("vga");
@@ -780,7 +780,7 @@ void QGraphDoc::OnFileExport() {
         }
 
         if (m_meta_graph->write(outfile.toStdString(), METAGRAPH_VERSION, true) !=
-            MetaGraphReadWrite::ReadStatus::OK) { // <- true writes current layer only
+            MetaGraphReadWrite::ReadWriteStatus::OK) { // <- true writes current layer only
             QMessageBox::warning(this, tr("Notice"), tr("Sorry, unable to open file for export"),
                                  QMessageBox::Ok, QMessageBox::Ok);
         }
@@ -861,10 +861,10 @@ void QGraphDoc::OnFileExportMapGeometry() {
     int mode = -1;
 
     int view_class = m_meta_graph->getViewClass();
-    if (view_class & MetaGraphDX::VIEWAXIAL) {
+    if (view_class & MetaGraphDX::DX_VIEWAXIAL) {
         mode = 0;
         suffix = m_meta_graph->getDisplayedShapeGraph().getName().c_str();
-    } else if (view_class & MetaGraphDX::VIEWDATA) {
+    } else if (view_class & MetaGraphDX::DX_VIEWDATA) {
         mode = 1;
         suffix = m_meta_graph->getDisplayedDataMap().getName().c_str();
     }
@@ -940,13 +940,13 @@ void QGraphDoc::OnFileExportLinks() {
     int mode = -1;
 
     int view_class = m_meta_graph->getViewClass();
-    if (view_class & MetaGraphDX::VIEWAXIAL) {
+    if (view_class & MetaGraphDX::DX_VIEWAXIAL) {
         mode = 5;
         suffix = tr("unlinks");
-    } else if (view_class & MetaGraphDX::VIEWDATA) {
+    } else if (view_class & MetaGraphDX::DX_VIEWDATA) {
         mode = 6;
         suffix = tr("links");
-    } else if (view_class & MetaGraphDX::VIEWVGA) {
+    } else if (view_class & MetaGraphDX::DX_VIEWVGA) {
         if (m_meta_graph->getDisplayedPointMap().getInternalMap().isProcessed()) {
             mode = 4;
             suffix = tr("merge_lines");
@@ -1176,7 +1176,7 @@ void QGraphDoc::OnPointmapExportConnectionsAsCSV() {
                              QMessageBox::Ok, QMessageBox::Ok);
         return; // No graph to export
     }
-    if (!(m_meta_graph->getViewClass() & MetaGraphDX::VIEWVGA)) {
+    if (!(m_meta_graph->getViewClass() & MetaGraphDX::DX_VIEWVGA)) {
         QMessageBox::warning(this, tr("Error"), tr("Make sure a Visibility Graph is visible"),
                              QMessageBox::Ok, QMessageBox::Ok);
         return; // No graph to export
@@ -1224,19 +1224,19 @@ void QGraphDoc::OnPointmapExportConnectionsAsCSV() {
 
 void QGraphDoc::OnSwapColours() {
     DisplayParams displayparams;
-    if (m_meta_graph->getViewClass() & MetaGraphDX::VIEWVGA) {
+    if (m_meta_graph->getViewClass() & MetaGraphDX::DX_VIEWVGA) {
         displayparams = m_meta_graph->getDisplayedPointMap().getDisplayParams();
         float blue = displayparams.blue;
         displayparams.blue = displayparams.red;
         displayparams.red = blue;
         m_meta_graph->getDisplayedPointMap().setDisplayParams(displayparams);
-    } else if (m_meta_graph->getViewClass() & MetaGraphDX::VIEWAXIAL) {
+    } else if (m_meta_graph->getViewClass() & MetaGraphDX::DX_VIEWAXIAL) {
         displayparams = m_meta_graph->getDisplayedShapeGraph().getDisplayParams();
         float blue = displayparams.blue;
         displayparams.blue = displayparams.red;
         displayparams.red = blue;
         m_meta_graph->getDisplayedShapeGraph().setDisplayParams(displayparams);
-    } else if (m_meta_graph->getViewClass() & MetaGraphDX::VIEWDATA) {
+    } else if (m_meta_graph->getViewClass() & MetaGraphDX::DX_VIEWDATA) {
         displayparams = m_meta_graph->getDisplayedDataMap().getDisplayParams();
         float blue = displayparams.blue;
         displayparams.blue = displayparams.red;
@@ -1269,8 +1269,8 @@ void QGraphDoc::OnEditGrid() {
                                   QMessageBox::Yes | QMessageBox::No, QMessageBox::No))
             return;
     }
-    QtRegion r = m_meta_graph->getRegion();
-    CGridDialog dlg(__max(r.width(), r.height()));
+    Region4f r = m_meta_graph->getRegion();
+    CGridDialog dlg(std::max(r.width(), r.height()));
     if (QDialog::Accepted == dlg.exec()) {
         if (newmap) {
             m_meta_graph->addNewPointMap();
@@ -1293,14 +1293,14 @@ void QGraphDoc::OnFillPoints(const Point2f &p,
                              QMessageBox::Ok, QMessageBox::Ok);
         return;
     }
-    if (~state & MetaGraphDX::LINEDATA) {
+    if (~state & MetaGraphDX::DX_LINEDATA) {
         QMessageBox::warning(this, tr("Notice"),
                              tr("Sorry, line drawing data must be loaded before "
                                 "points may be filled"),
                              QMessageBox::Ok, QMessageBox::Ok);
         return;
     }
-    if (~state & MetaGraphDX::POINTMAPS) {
+    if (~state & MetaGraphDX::DX_POINTMAPS) {
         QMessageBox::warning(this, tr("Notice"), tr("Please make grid before filling"),
                              QMessageBox::Ok, QMessageBox::Ok);
         return;
@@ -1455,7 +1455,7 @@ void QGraphDoc::OnMakeIsovist(const Point2f &seed, double angle) {
                              QMessageBox::Ok, QMessageBox::Ok);
         return;
     }
-    if (~state & MetaGraphDX::LINEDATA) {
+    if (~state & MetaGraphDX::DX_LINEDATA) {
         QMessageBox::warning(this, tr("Notice"),
                              tr("Sorry, line drawing data must be loaded before an "
                                 "isovist can be constructed"),
@@ -1482,9 +1482,9 @@ void QGraphDoc::OnMakeIsovist(const Point2f &seed, double angle) {
 
 void QGraphDoc::OnToolsIsovistpath() {
     int state = m_meta_graph->getState();
-    if (state & MetaGraphDX::LINEDATA) {
+    if (state & MetaGraphDX::DX_LINEDATA) {
         int view = m_meta_graph->getViewClass();
-        if ((view & (MetaGraphDX::VIEWDATA | MetaGraphDX::VIEWAXIAL)) != 0 &&
+        if ((view & (MetaGraphDX::DX_VIEWDATA | MetaGraphDX::DX_VIEWAXIAL)) != 0 &&
             m_meta_graph->isSelected()) {
             CIsovistPathDlg dlg;
             if (dlg.exec() == QDialog::Accepted) {
@@ -1516,7 +1516,7 @@ void QGraphDoc::OnToolsAxialMap(const Point2f &seed) {
                              QMessageBox::Ok, QMessageBox::Ok);
         return;
     }
-    if (~state & MetaGraphDX::LINEDATA) {
+    if (~state & MetaGraphDX::DX_LINEDATA) {
         QMessageBox::warning(this, tr("Notice"),
                              tr("Sorry, line drawing data must be loaded before an "
                                 "axial map can be constructed"),
@@ -1550,7 +1550,7 @@ void QGraphDoc::OnToolsMakeFewestLineMap() {
                              QMessageBox::Ok, QMessageBox::Ok);
         return;
     }
-    if (~state & MetaGraphDX::SHAPEGRAPHS) {
+    if (~state & MetaGraphDX::DX_SHAPEGRAPHS) {
         QMessageBox::warning(this, tr("Warning"),
                              tr("Sorry, all line map must exist in order to "
                                 "construct fewest line map"),
@@ -1750,12 +1750,12 @@ void QGraphDoc::OnEditClear() {
     int state = m_meta_graph->getState();
 
     int editable = m_meta_graph->isEditable();
-    if (editable == MetaGraphDX::NOT_EDITABLE) {
+    if (editable == MetaGraphDX::DX_NOT_EDITABLE) {
         QMessageBox::warning(this, tr("Warning"),
                              tr("Cannot delete: the geometry forming this graph cannot be edited."),
                              QMessageBox::Ok, QMessageBox::Ok);
         return;
-    } else if (editable == MetaGraphDX::EDITABLE_OFF) {
+    } else if (editable == MetaGraphDX::DX_EDITABLE_OFF) {
         QMessageBox::warning(this, tr("Warning"),
                              tr("Cannot delete: this graph is currently uneditable."),
                              QMessageBox::Ok, QMessageBox::Ok);
@@ -1825,7 +1825,7 @@ void QGraphDoc::OnToolsUnmakeGraph() {
                              QMessageBox::Ok, QMessageBox::Ok);
         return;
     }
-    if (~state & MetaGraphDX::POINTMAPS) {
+    if (~state & MetaGraphDX::DX_POINTMAPS) {
         QMessageBox::warning(this, tr("Notice"), tr("Please make grid before filling"),
                              QMessageBox::Ok, QMessageBox::Ok);
         return;
@@ -1997,18 +1997,18 @@ int QGraphDoc::OnOpenDocument(char *lpszPathName) {
     int ret = FALSE;
 
     switch (ok) {
-    case MetaGraphReadWrite::ReadStatus::OK:
+    case MetaGraphReadWrite::ReadWriteStatus::OK:
         m_base_title = path.m_name;
         ret = TRUE;
         break;
-    case MetaGraphReadWrite::ReadStatus::WARN_BUGGY_VERSION:
+    case MetaGraphReadWrite::ReadWriteStatus::WARN_BUGGY_VERSION:
         QMessageBox::warning(this, tr("Warning"),
                              tr("this graph was made with a version of depthmapX "
                                 "that contained slight errors"),
                              QMessageBox::Ok, QMessageBox::Ok);
         ret = TRUE;
         break;
-    case MetaGraphReadWrite::ReadStatus::WARN_CONVERTED:
+    case MetaGraphReadWrite::ReadWriteStatus::WARN_CONVERTED:
         QMessageBox::warning(this, tr("Warning"),
                              tr("Warning: this graph was made with an older version of depthmapX.\n"
                                 "Some aspects of the graph may not have been translated to the new "
@@ -2016,29 +2016,29 @@ int QGraphDoc::OnOpenDocument(char *lpszPathName) {
                              QMessageBox::Ok, QMessageBox::Ok);
         ret = TRUE;
         break;
-    case MetaGraphReadWrite::ReadStatus::NOT_A_GRAPH:
+    case MetaGraphReadWrite::ReadWriteStatus::NOT_A_GRAPH:
         QMessageBox::warning(this, tr("Warning"),
                              tr("Unable to open graph: not recognised as a graph file."),
                              QMessageBox::Ok, QMessageBox::Ok);
         break;
-    case MetaGraphReadWrite::ReadStatus::DAMAGED_FILE:
+    case MetaGraphReadWrite::ReadWriteStatus::DAMAGED_FILE:
         QMessageBox::warning(this, tr("Warning"),
                              tr("Unable to open graph: the graph file is damaged."),
                              QMessageBox::Ok, QMessageBox::Ok);
         break;
-    case MetaGraphReadWrite::ReadStatus::DISK_ERROR:
+    case MetaGraphReadWrite::ReadWriteStatus::DISK_ERROR:
         QMessageBox::warning(this, tr("Warning"),
                              tr("Unable to open graph: an error occurred while "
                                 "trying to read from the disk."),
                              QMessageBox::Ok, QMessageBox::Ok);
         break;
-    case MetaGraphReadWrite::ReadStatus::NEWER_VERSION:
+    case MetaGraphReadWrite::ReadWriteStatus::NEWER_VERSION:
         QMessageBox::warning(this, tr("Warning"),
                              tr("Unable to open graph: this graph has been written "
                                 "by a newer version of depthmapX."),
                              QMessageBox::Ok, QMessageBox::Ok);
         break;
-    case MetaGraphReadWrite::ReadStatus::DEPRECATED_VERSION:
+    case MetaGraphReadWrite::ReadWriteStatus::DEPRECATED_VERSION:
         QMessageBox::warning(this, tr("Warning"),
                              tr("Unable to open graph: this is a graph file format "
                                 "not supported by this version of depthmapX."),
@@ -2135,7 +2135,7 @@ int QGraphDoc::OnSaveDocument(QString lpszPathName, int version) {
         return FALSE;
     }
 
-    if (m_meta_graph->getState() & MetaGraphDX::BUGGY) {
+    if (m_meta_graph->getState() & MetaGraphDX::DX_BUGGY) {
         if (QMessageBox::No ==
             QMessageBox::question(this, tr("depthmapX"),
                                   tr("This graph file was created by a version of depthmapX with "
@@ -2147,10 +2147,10 @@ int QGraphDoc::OnSaveDocument(QString lpszPathName, int version) {
     modifiedFlag = true;
 
     auto ok = m_meta_graph->write(lpszPathName.toStdString(), version);
-    if (ok == MetaGraphReadWrite::ReadStatus::OK) {
+    if (ok == MetaGraphReadWrite::ReadWriteStatus::OK) {
         modifiedFlag = false;
         return TRUE;
-    } else if (ok == MetaGraphReadWrite::ReadStatus::DISK_ERROR) {
+    } else if (ok == MetaGraphReadWrite::ReadWriteStatus::DISK_ERROR) {
         QMessageBox::warning(this, tr("Warning"),
                              tr("Unable to save graph: is there enough disk space?"),
                              QMessageBox::Ok, QMessageBox::Ok);
@@ -2205,23 +2205,23 @@ bool QGraphDoc::OnCloseDocument(int index) {
 
 void QGraphDoc::OnPushToLayer() {
     if (m_meta_graph->viewingProcessed()) {
-        int toplayerclass = (m_meta_graph->getViewClass() & MetaGraphDX::VIEWFRONT);
+        int toplayerclass = (m_meta_graph->getViewClass() & MetaGraphDX::DX_VIEWFRONT);
         std::string origin_layer;
         std::string origin_attribute;
         std::map<std::pair<int, int>, std::string> names;
         // I'm just going to allow push from any layer to any other layer
         // (apart from VGA graphs, which cannot map onto themselves
-        if (toplayerclass == MetaGraphDX::VIEWVGA) {
+        if (toplayerclass == MetaGraphDX::DX_VIEWVGA) {
             // bit clunky just to get two names out...
             auto &map = m_meta_graph->getDisplayedPointMap();
             origin_layer = std::string("Visibility Graphs: ") + map.getName();
             origin_attribute = map.getAttributeTable().getColumnName(map.getDisplayedAttribute());
-        } else if (toplayerclass == MetaGraphDX::VIEWAXIAL) {
+        } else if (toplayerclass == MetaGraphDX::DX_VIEWAXIAL) {
             // bit clunky just to get two names out...
             auto &map = m_meta_graph->getDisplayedShapeGraph();
             origin_layer = std::string("Shape Graphs: ") + map.getName();
             origin_attribute = map.getAttributeTable().getColumnName(map.getDisplayedAttribute());
-        } else if (toplayerclass == MetaGraphDX::VIEWDATA) {
+        } else if (toplayerclass == MetaGraphDX::DX_VIEWDATA) {
             // bit clunky just to get two names out...
             auto &map = m_meta_graph->getDisplayedDataMap();
             origin_layer = std::string("Data Maps: ") + map.getName();
@@ -2237,26 +2237,26 @@ void QGraphDoc::OnPushToLayer() {
         size_t i;
         std::vector<ShapeMapDX> &datamaps = m_meta_graph->getDataMaps();
         for (i = 0; i < datamaps.size(); i++) {
-            if (toplayerclass != MetaGraphDX::VIEWDATA ||
+            if (toplayerclass != MetaGraphDX::DX_VIEWDATA ||
                 i != m_meta_graph->getDisplayedDataMapRef()) {
-                names.insert(std::make_pair(std::pair<int, int>(MetaGraphDX::VIEWDATA, int(i)),
+                names.insert(std::make_pair(std::pair<int, int>(MetaGraphDX::DX_VIEWDATA, int(i)),
                                             std::string("Data Maps: ") + datamaps[i].getName()));
             }
         }
         auto &shapegraphs = m_meta_graph->getShapeGraphs();
         for (i = 0; i < shapegraphs.size(); i++) {
-            if (toplayerclass != MetaGraphDX::VIEWAXIAL ||
+            if (toplayerclass != MetaGraphDX::DX_VIEWAXIAL ||
                 i != m_meta_graph->getDisplayedShapeGraphRef()) {
                 names.insert(
-                    std::make_pair(std::pair<int, int>(MetaGraphDX::VIEWAXIAL, int(i)),
+                    std::make_pair(std::pair<int, int>(MetaGraphDX::DX_VIEWAXIAL, int(i)),
                                    std::string("Shape Graphs: ") + shapegraphs[i].getName()));
             }
         }
         for (i = 0; i < m_meta_graph->getPointMaps().size(); i++) {
             // note 1: no VGA graph can push to another VGA graph (point onto point
             // transforms)
-            if (toplayerclass != MetaGraphDX::VIEWVGA) {
-                names.insert(std::make_pair(std::pair<int, int>(MetaGraphDX::VIEWVGA, int(i)),
+            if (toplayerclass != MetaGraphDX::DX_VIEWVGA) {
+                names.insert(std::make_pair(std::pair<int, int>(MetaGraphDX::DX_VIEWVGA, int(i)),
                                             std::string("Visibility Graphs: ") +
                                                 m_meta_graph->getPointMaps()[i].getName()));
             }
@@ -2383,11 +2383,11 @@ void QGraphDoc::OnUpdateColumn() {
     PointMapDX *pointmap = NULL;
     ShapeMapDX *shapemap = NULL;
     int vc = m_meta_graph->getViewClass();
-    if (vc & MetaGraphDX::VIEWVGA) {
+    if (vc & MetaGraphDX::DX_VIEWVGA) {
         pointmap = &(m_meta_graph->getDisplayedPointMap());
-    } else if (vc & MetaGraphDX::VIEWAXIAL) {
+    } else if (vc & MetaGraphDX::DX_VIEWAXIAL) {
         shapemap = &(m_meta_graph->getDisplayedShapeGraph());
-    } else if (vc & MetaGraphDX::VIEWDATA) {
+    } else if (vc & MetaGraphDX::DX_VIEWDATA) {
         shapemap = &(m_meta_graph->getDisplayedDataMap());
     }
 
@@ -2471,11 +2471,11 @@ void QGraphDoc::OnEditQuery() {
     PointMapDX *pointmap = NULL;
     ShapeMapDX *shapemap = NULL;
     int vc = m_meta_graph->getViewClass();
-    if (vc & MetaGraphDX::VIEWVGA) {
+    if (vc & MetaGraphDX::DX_VIEWVGA) {
         pointmap = &(m_meta_graph->getDisplayedPointMap());
-    } else if (vc & MetaGraphDX::VIEWAXIAL) {
+    } else if (vc & MetaGraphDX::DX_VIEWAXIAL) {
         shapemap = &(m_meta_graph->getDisplayedShapeGraph());
-    } else if (vc & MetaGraphDX::VIEWDATA) {
+    } else if (vc & MetaGraphDX::DX_VIEWDATA) {
         shapemap = &(m_meta_graph->getDisplayedDataMap());
     }
 
@@ -2553,7 +2553,7 @@ bool QGraphDoc::SelectByQuery(PointMapDX *pointmap, ShapeMapDX *shapemap) {
 }
 
 void QGraphDoc::OnEditSelectToLayer() {
-    if ((m_meta_graph->getViewClass() & (MetaGraphDX::VIEWAXIAL | MetaGraphDX::VIEWDATA)) &&
+    if ((m_meta_graph->getViewClass() & (MetaGraphDX::DX_VIEWAXIAL | MetaGraphDX::DX_VIEWDATA)) &&
         m_meta_graph->isSelected()) {
 
         CRenameObjectDlg dlg("Layer"); // note, without specifying existing layer name, this
@@ -2566,7 +2566,7 @@ void QGraphDoc::OnEditSelectToLayer() {
             }
 
             bool retvar = false;
-            if (m_meta_graph->getViewClass() & (MetaGraphDX::VIEWAXIAL)) {
+            if (m_meta_graph->getViewClass() & (MetaGraphDX::DX_VIEWAXIAL)) {
                 retvar = m_meta_graph->getDisplayedShapeGraph().selectionToLayer(layer_name);
             } else {
                 retvar = m_meta_graph->getDisplayedDataMap().selectionToLayer(layer_name);
@@ -2647,8 +2647,6 @@ void QGraphDoc::OnViewShowGrid() {
     SetRedrawFlag(VIEW_ALL, QGraphDoc::REDRAW_GRAPH, QGraphDoc::NEW_DEPTHMAPVIEW_SETUP);
 }
 
-//#include "AttributeSummary.h"
-
 void QGraphDoc::OnViewSummary() {
     CAttributeSummary dlg(this);
     dlg.exec();
@@ -2658,7 +2656,7 @@ void QGraphDoc::OnToolsPointConvShapeMap() {
     // CWaitCursor wait;
     m_meta_graph->getDisplayedPointMap().getInternalMap().mergeFromShapeMap(
         m_meta_graph->getDisplayedDataMap().getInternalMap());
-    m_meta_graph->setViewClass(MetaGraphDX::SHOWVGATOP);
+    m_meta_graph->setViewClass(MetaGraphDX::DX_SHOWVGATOP);
     SetUpdateFlag(QGraphDoc::NEW_TABLE);
     SetRedrawFlag(VIEW_ALL, REDRAW_GRAPH, NEW_DATA);
 }
@@ -2684,7 +2682,7 @@ void QGraphDoc::OnToolsAxialConvShapeMap() {
         // CWaitCursor wait;
         m_meta_graph->getDisplayedShapeGraph().unlinkFromShapeMap(
             m_meta_graph->getDataMaps()[dlg.m_layer].getInternalMap());
-        m_meta_graph->setViewClass(MetaGraphDX::SHOWAXIALTOP);
+        m_meta_graph->setViewClass(MetaGraphDX::DX_SHOWAXIALTOP);
         SetUpdateFlag(QGraphDoc::NEW_TABLE);
         SetRedrawFlag(VIEW_ALL, REDRAW_GRAPH, NEW_DATA);
     }
@@ -2724,7 +2722,7 @@ void QGraphDoc::OnToolsLineLoadUnlinks() {
             map.invalidateDisplayedAttribute();
             map.setDisplayedAttribute(conn_col); // <- reflect changes to connectivity counts
         }
-        m_meta_graph->setViewClass(MetaGraphDX::SHOWAXIALTOP);
+        m_meta_graph->setViewClass(MetaGraphDX::DX_SHOWAXIALTOP);
         SetUpdateFlag(QGraphDoc::NEW_DATA);
         SetRedrawFlag(VIEW_ALL, REDRAW_GRAPH, NEW_DATA);
     }
@@ -2737,9 +2735,9 @@ void QGraphDoc::OnConvertMapShapes() {
             int viewclass = m_meta_graph->getViewClass();
             auto &map = m_meta_graph->getDisplayedDataMap();
             auto selSet = dlg.m_selected_only ? std::make_optional(map.getSelSet()) : std::nullopt;
-            if (viewclass & MetaGraphDX::VIEWDATA) {
+            if (viewclass & MetaGraphDX::DX_VIEWDATA) {
                 map.getInternalMap().convertPointsToPolys(dlg.m_radius, selSet);
-            } else if (viewclass & MetaGraphDX::VIEWAXIAL) {
+            } else if (viewclass & MetaGraphDX::DX_VIEWAXIAL) {
                 map.getInternalMap().convertPointsToPolys(dlg.m_radius, selSet);
             } else {
                 QMessageBox::warning(this, tr("Warning"),

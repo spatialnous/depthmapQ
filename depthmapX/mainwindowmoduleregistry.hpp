@@ -5,7 +5,7 @@
 
 #pragma once
 
-#include "imainwindowmodulefactory.h"
+#include "imainwindowmodulefactory.hpp"
 
 #include <memory>
 #include <vector>

@@ -2,9 +2,9 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include "mainwindow.h"
+#include "mainwindow.hpp"
 
-#include "salalib/entityparsing.h"
+#include "salalib/entityparsing.hpp"
 
 #include <QEvent>
 #include <QtGui>
@@ -145,7 +145,10 @@ void RenderThread::run() {
             break;
 
         case CMSCommunicator::ANALYSEGRAPH:
-            ok = pDoc->m_meta_graph->analyseGraph(comm, pMain->m_options, comm->simple_version);
+            ok = pDoc->m_meta_graph->analyseGraph(
+                comm, pMain->m_options.pointDepthSelection, pMain->m_options.outputType,
+                pMain->m_options.local, pMain->m_options.gatesOnly, pMain->m_options.global,
+                pMain->m_options.radius, comm->simple_version);
             pDoc->SetUpdateFlag(QGraphDoc::NEW_DATA);
             pDoc->SetRedrawFlag(QGraphDoc::VIEW_ALL, QGraphDoc::REDRAW_GRAPH, QGraphDoc::NEW_DATA);
             break;
@@ -392,7 +395,10 @@ void RenderThread::run() {
             break;
 
         case CMSCommunicator::AXIALANALYSIS:
-            ok = pDoc->m_meta_graph->analyseAxial(comm, pMain->m_options, comm->simple_version);
+            ok = pDoc->m_meta_graph->analyseAxial(
+                comm, pMain->m_options.radiusSet, pMain->m_options.weightedMeasureCol,
+                pMain->m_options.choice, pMain->m_options.fulloutput, pMain->m_options.local,
+                false);
             if (ok) {
                 pDoc->SetUpdateFlag(QGraphDoc::NEW_DATA);
             }
@@ -400,7 +406,11 @@ void RenderThread::run() {
             break;
 
         case CMSCommunicator::SEGMENTANALYSISTULIP:
-            ok = pDoc->m_meta_graph->analyseSegmentsTulip(comm, pMain->m_options);
+            ok = pDoc->m_meta_graph->analyseSegmentsTulip(
+                comm, pMain->m_options.radiusSet, pMain->m_options.selOnly,
+                pMain->m_options.tulipBins, pMain->m_options.weightedMeasureCol,
+                pMain->m_options.radiusType, pMain->m_options.choice,
+                pMain->m_options.weightedMeasureCol2, pMain->m_options.routeweightCol, true, false);
             if (ok) {
                 pDoc->SetUpdateFlag(QGraphDoc::NEW_DATA);
             }
@@ -408,7 +418,7 @@ void RenderThread::run() {
             break;
 
         case CMSCommunicator::SEGMENTANALYSISANGULAR:
-            ok = pDoc->m_meta_graph->analyseSegmentsAngular(comm, pMain->m_options);
+            ok = pDoc->m_meta_graph->analyseSegmentsAngular(comm, pMain->m_options.radiusSet);
             if (ok) {
                 pDoc->SetUpdateFlag(QGraphDoc::NEW_DATA);
             }
@@ -416,7 +426,9 @@ void RenderThread::run() {
             break;
 
         case CMSCommunicator::TOPOMETANALYSIS:
-            ok = pDoc->m_meta_graph->analyseTopoMet(comm, pMain->m_options);
+            ok = pDoc->m_meta_graph->analyseTopoMet(comm, pMain->m_options.outputType,
+                                                    pMain->m_options.radius,
+                                                    pMain->m_options.selOnly);
             if (ok) {
                 pDoc->SetUpdateFlag(QGraphDoc::NEW_DATA);
             }
@@ -429,7 +441,9 @@ void RenderThread::run() {
             options.global = 0;
             options.pointDepthSelection = 1;
 
-            ok = pDoc->m_meta_graph->analyseGraph(comm, options, comm->simple_version);
+            ok = pDoc->m_meta_graph->analyseGraph(
+                comm, options.pointDepthSelection, options.outputType, options.local,
+                options.gatesOnly, options.global, options.radius, comm->simple_version);
             if (ok) {
                 pDoc->SetUpdateFlag(QGraphDoc::NEW_DATA);
             }
@@ -442,7 +456,9 @@ void RenderThread::run() {
             options.global = 0;
             options.pointDepthSelection = 2;
 
-            ok = pDoc->m_meta_graph->analyseGraph(comm, options, comm->simple_version);
+            ok = pDoc->m_meta_graph->analyseGraph(
+                comm, options.pointDepthSelection, options.outputType, options.local,
+                options.gatesOnly, options.global, options.local, comm->simple_version);
             if (ok) {
                 pDoc->SetUpdateFlag(QGraphDoc::NEW_DATA);
             }
@@ -455,7 +471,9 @@ void RenderThread::run() {
             options.global = 0;
             options.pointDepthSelection = 3;
 
-            ok = pDoc->m_meta_graph->analyseGraph(comm, options, comm->simple_version);
+            ok = pDoc->m_meta_graph->analyseGraph(
+                comm, options.pointDepthSelection, options.outputType, options.local,
+                options.gatesOnly, options.global, options.radius, comm->simple_version);
             if (ok) {
                 pDoc->SetUpdateFlag(QGraphDoc::NEW_DATA);
             }
@@ -468,7 +486,9 @@ void RenderThread::run() {
             options.global = 0;
             options.pointDepthSelection = 4;
 
-            ok = pDoc->m_meta_graph->analyseGraph(comm, options, comm->simple_version);
+            ok = pDoc->m_meta_graph->analyseGraph(
+                comm, options.pointDepthSelection, options.outputType, options.local,
+                options.gatesOnly, options.global, options.radius, comm->simple_version);
             if (ok) {
                 pDoc->SetUpdateFlag(QGraphDoc::NEW_DATA);
             }

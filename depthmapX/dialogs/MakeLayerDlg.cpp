@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include "MakeLayerDlg.h"
+#include "MakeLayerDlg.hpp"
 
 CMakeLayerDlg::CMakeLayerDlg(QWidget *parent) : QDialog(parent) {
     setupUi(this);

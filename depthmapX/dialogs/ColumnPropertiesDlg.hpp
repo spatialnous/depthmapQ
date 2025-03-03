@@ -6,8 +6,8 @@
 
 #include "ui_ColumnPropertiesDlg.h"
 
-#include "salalib/attributetable.h"
-#include "salalib/layermanagerimpl.h"
+#include "salalib/attributetable.hpp"
+#include "salalib/layermanagerimpl.hpp"
 
 #include <set>
 

@@ -5,7 +5,7 @@
 
 #pragma once
 
-#include "../version.h"
+#include "../version.hpp"
 
 #define INTERFACE_MAJOR_VERSION DEPTHMAPX_MAJOR_VERSION
 #define INTERFACE_MINOR_VERSION DEPTHMAPX_MINOR_VERSION

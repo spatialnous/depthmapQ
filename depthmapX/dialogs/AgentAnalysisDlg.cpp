@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include "AgentAnalysisDlg.h"
+#include "AgentAnalysisDlg.hpp"
 
 CAgentAnalysisDlg::CAgentAnalysisDlg(QWidget *parent) : QDialog(parent) {
     setupUi(this);

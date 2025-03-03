@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include "AttributeChooserDlg.h"
+#include "AttributeChooserDlg.hpp"
 
 CAttributeChooserDlg::CAttributeChooserDlg(const AttributeTable &table, QWidget *parent)
     : QDialog(parent) {

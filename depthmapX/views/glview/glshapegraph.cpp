@@ -2,9 +2,9 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include "glshapegraph.h"
+#include "glshapegraph.hpp"
 
-#include "salalib/geometrygenerators.h"
+#include "salalib/geometrygenerators.hpp"
 
 void GLShapeGraph::loadGLObjects(ShapeGraphDX &shapeGraph) {
     m_shapeMap.loadGLObjects(shapeGraph);

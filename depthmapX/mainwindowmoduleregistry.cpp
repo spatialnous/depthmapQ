@@ -5,9 +5,9 @@
 
 #include "mainwindowmoduleregistry.hpp"
 
-#include "modules/segmentshortestpaths/gui/segmentpathsmainwindow.h"
-#include "modules/vgaparallel/gui/vgaparallelmainwindow.h"
-#include "modules/vgapaths/gui/vgapathsmainwindow.h"
+#include "modules/segmentshortestpaths/gui/segmentpathsmainwindow.hpp"
+#include "modules/vgaparallel/gui/vgaparallelmainwindow.hpp"
+#include "modules/vgapaths/gui/vgapathsmainwindow.hpp"
 
 void MainWindowModuleRegistry::populateModules() {
     // Register any main window modules here

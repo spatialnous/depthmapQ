@@ -4,8 +4,8 @@
 
 #pragma once
 
-#include "depthmapX/graphdoc.h"
-#include "depthmapX/settings.h"
+#include "depthmapX/graphdoc.hpp"
+#include "depthmapX/settings.hpp"
 
 #include <QOpenGLWidget>
 
@@ -39,7 +39,7 @@ class MapView : public QOpenGLWidget {
     virtual void OnViewZoomsel() = 0;
     virtual void OnEditCopy() = 0;
     virtual void OnEditSave() = 0;
-    virtual void OnViewZoomToRegion(QtRegion region) = 0;
+    virtual void OnViewZoomToRegion(Region4f region) = 0;
 
     QGraphDoc *getGraphDoc() { return &m_pDoc; }
     void setCurrentFile(const QString &fileName) { m_currentFile = fileName; }

@@ -6,7 +6,7 @@
 
 #include "ui_AttributeChooserDlg.h"
 
-#include "salalib/attributetable.h"
+#include "salalib/attributetable.hpp"
 
 class CAttributeChooserDlg : public QDialog, public Ui::CAttributeChooserDlg {
     Q_OBJECT

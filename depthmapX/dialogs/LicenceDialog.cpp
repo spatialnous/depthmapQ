@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include "LicenceDialog.h"
+#include "LicenceDialog.hpp"
 
 const char *g_agreement = "see http://www.gnu.org/licenses/";
 

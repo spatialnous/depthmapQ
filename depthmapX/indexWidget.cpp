@@ -13,7 +13,7 @@
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QMessageBox>
 
-#include "mainwindow.h"
+#include "mainwindow.hpp"
 
 QT_BEGIN_NAMESPACE
 

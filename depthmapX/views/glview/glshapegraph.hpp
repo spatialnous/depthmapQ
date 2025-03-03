@@ -4,9 +4,9 @@
 
 #pragma once
 
-#include "dxinterface/shapegraphdx.h"
-#include "gllinesuniform.h"
-#include "glshapemap.h"
+#include "dxinterface/shapegraphdx.hpp"
+#include "gllinesuniform.hpp"
+#include "glshapemap.hpp"
 
 class GLShapeGraph {
   public:

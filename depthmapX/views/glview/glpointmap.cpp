@@ -2,13 +2,13 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include "glpointmap.h"
+#include "glpointmap.hpp"
 
-#include "salalib/geometrygenerators.h"
-#include "salalib/linkutils.h"
+#include "salalib/geometrygenerators.hpp"
+#include "salalib/linkutils.hpp"
 
 void GLPixelMap::loadGLObjects(PointMapDX &pointMap) {
-    QtRegion region = pointMap.getRegion();
+    Region4f region = pointMap.getRegion();
     m_pointMap.loadRegionData(region.bottomLeft.x, region.bottomLeft.y, region.topRight.x,
                               region.topRight.y);
 

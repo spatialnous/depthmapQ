@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include "treeWindow.h"
+#include "treeWindow.hpp"
 
 #include <QtCore/QDebug>
 #include <QtCore/QEvent>

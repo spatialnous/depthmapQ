@@ -2,11 +2,11 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include "3dview.h"
+#include "3dview.hpp"
 
-#include "depthmapX/mainwindow.h"
+#include "depthmapX/mainwindow.hpp"
 
-#include "salalib/genlib/xmlparse.h"
+#include "salalib/genlib/xmlparse.hpp"
 
 #include <QMessageBox>
 #include <QTimer>
@@ -25,7 +25,7 @@
 #include "GL/gl.h"
 #endif
 
-#include "glureimpl.h"
+#include "glureimpl.hpp"
 
 #ifndef _WIN32 // Not working?
 #define LOBYTE(w) ((unsigned char)((w)&0xff))
@@ -177,7 +177,7 @@ void Q3DView::timerEvent(QTimerEvent *event) {
                             Point2f p = (Point2f)m_traces[j].events[k];
                             PixelRef pix =
                                 pointmap.pixelate(p); // note, take the pix before you scale!
-                            p.normalScale(m_region);
+                            p.normalScale(m_region.bottomLeft, m_region.width(), m_region.height());
                             m_mannequins[i].advance(p);
                             auto iter = m_pixels.find(pix);
                             if (iter != m_pixels.end()) {
@@ -193,7 +193,7 @@ void Q3DView::timerEvent(QTimerEvent *event) {
                     int j = m_mannequins[i].m_agent_id;
                     m_agents[j].onMove();
                     Point2f p = m_agents[j].getLocation();
-                    p.normalScale(m_region);
+                    p.normalScale(m_region.bottomLeft, m_region.width(), m_region.height());
                     m_mannequins[i].advance(p);
                     //
                     // pretty coloured pixels
@@ -270,7 +270,7 @@ void Q3DView::DrawScene() {
                         color.makeAxmanesque(value);
                         glColor3f(color.redf(), color.greenf(), color.bluef());
                         Point2f p = pointmap.depixelate(pix);
-                        p.normalScale(m_region);
+                        p.normalScale(m_region.bottomLeft, m_region.width(), m_region.height());
                         glPushMatrix();
                         glTranslatef(p.x, p.y, 0.0f);
                         glVertexPointer(3, GL_FLOAT, 0, m_rect);
@@ -342,20 +342,20 @@ void Q3DView::ReloadLineData() {
         delete[] m_points;
         m_points = NULL;
     }
-    m_region = QtRegion();
+    m_region = Region4f();
 
-    if (pDoc->m_meta_graph && pDoc->m_meta_graph->getState() & MetaGraphDX::LINEDATA) {
+    if (pDoc->m_meta_graph && pDoc->m_meta_graph->getState() & MetaGraphDX::DX_LINEDATA) {
         // should really check communicator is not open...
         auto mgraphLock = pDoc->getLock();
         std::unique_lock<std::mutex> drawLock(m_draw_mutex);
 
-        std::vector<Line> lines;
+        std::vector<Line4f> lines;
         auto shownDrawingMaps = pDoc->m_meta_graph->getShownDrawingMaps();
         for (const auto &pixel : shownDrawingMaps) {
             if (m_region.atZero()) {
                 m_region = pixel.first.get().getRegion();
             } else {
-                m_region = runion(m_region, pixel.first.get().getRegion());
+                m_region = m_region.runion(pixel.first.get().getRegion());
             }
 
             const auto &refShapes = pixel.first.get().getAllShapes();
@@ -365,10 +365,10 @@ void Q3DView::ReloadLineData() {
                     lines.push_back(shape.getLine());
                 } else if (shape.isPolyLine() || shape.isPolygon()) {
                     for (int n = 0; n < shape.points.size() - 1; n++) {
-                        lines.push_back(Line(shape.points[n], shape.points[n + 1]));
+                        lines.push_back(Line4f(shape.points[n], shape.points[n + 1]));
                     }
                     if (shape.isPolygon()) {
-                        lines.push_back(Line(shape.points.back(), shape.points.front()));
+                        lines.push_back(Line4f(shape.points.back(), shape.points.front()));
                     }
                 }
             }
@@ -395,7 +395,7 @@ void Q3DView::ReloadLineData() {
                 } else {
                     p = lines[i / 2].end();
                 }
-                p.normalScale(m_region);
+                p.normalScale(m_region.bottomLeft, m_region.width(), m_region.height());
                 m_points[i * 3 + 0] = p.x;
                 m_points[i * 3 + 1] = p.y;
                 m_points[i * 3 + 2] = 0.0;
@@ -438,7 +438,7 @@ void Q3DView::ReloadPointData() {
         for (const auto &iter : table) {
             PixelRef pix = iter.getKey().value;
             Point2f p = map.depixelate(pix);
-            p.normalScale(m_region);
+            p.normalScale(m_region.bottomLeft, m_region.width(), m_region.height());
             m_pixels[pix] = C3DPixelData(p);
         }
     } else {
@@ -685,17 +685,17 @@ void Q3DView::CreateAgent(QPoint point) {
         if (pDoc->m_meta_graph && pDoc->m_meta_graph->viewingProcessedPoints()) {
             // okay, you can go for it and add an agent:
             auto &pointmap = pDoc->m_meta_graph->getDisplayedPointMap();
-            p.denormalScale(m_region);
+            p.denormalScale(m_region.bottomLeft, m_region.width(), m_region.height());
             PixelRef pix = pointmap.pixelate(p);
             if (pointmap.getPoint(pix).filled()) {
                 m_agents.push_back(Agent(&m_agent_program, &pointmap.getInternalMap()));
                 m_agents.back().onInit(pix);
                 Point2f p2 = m_agents.back().getLocation();
-                p2.normalScale(m_region);
+                p2.normalScale(m_region.bottomLeft, m_region.width(), m_region.height());
                 m_mannequins.push_back(QMannequin(p2, m_agents.size() - 1));
                 m_agents.back().onMove();
                 p2 = m_agents.back().getLocation();
-                p2.normalScale(m_region);
+                p2.normalScale(m_region.bottomLeft, m_region.width(), m_region.height());
                 m_mannequins.back().advance(p2);
 
                 m_animating = true;
@@ -1089,7 +1089,7 @@ void Q3DView::OnToolsImportTraces() {
                 if (m_traces.back().events.size() >= 1) {
                     m_traces.back().endtime = m_traces.back().events.back().t;
                     Point2f p = m_traces.back().events[0];
-                    p.normalScale(m_region);
+                    p.normalScale(m_region.bottomLeft, m_region.width(), m_region.height());
                     m_mannequins.push_back(QMannequin(p, m_traces.size() - 1, true));
                     m_mannequins.back().m_active = false;
                 }

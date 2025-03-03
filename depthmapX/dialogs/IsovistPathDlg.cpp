@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include "IsovistPathDlg.h"
+#include "IsovistPathDlg.hpp"
 
 #ifndef M_PI
 #define M_PI 3.1415926535897932384626433832795

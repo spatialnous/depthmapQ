@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include "depthmapX/dxinterface/metagraphdx.h"
+#include "depthmapX/dxinterface/metagraphdx.hpp"
 
 #include "catch_amalgamated.hpp"
 
@@ -23,8 +23,8 @@ TEST_CASE("Test pointMaps", "") {
         REQUIRE(mgraph->getDisplayedPointMapRef() == 1);
         REQUIRE(mgraph->getDisplayedPointMap().getName() == "Stan");
 
-        mgraph->setState(MetaGraphDX::POINTMAPS);
-        mgraph->setViewClass(MetaGraphDX::SHOWVGATOP);
+        mgraph->setState(MetaGraphDX::DX_POINTMAPS);
+        mgraph->setViewClass(MetaGraphDX::DX_SHOWVGATOP);
         mgraph->setDisplayedPointMapRef(0);
         REQUIRE(mgraph->getDisplayedPointMapRef() == 0);
         REQUIRE(mgraph->getDisplayedPointMap().getName() == "Kenny");

@@ -2,9 +2,9 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include "mainwindowhelpers.h"
+#include "mainwindowhelpers.hpp"
 
-#include "mainwindow.h"
+#include "mainwindow.hpp"
 
 QMenu *MainWindowHelpers::getOrAddRootMenu(MainWindow *mainWindow, QString menuTitle) {
     QMenuBar *menuBar = mainWindow->menuBar();

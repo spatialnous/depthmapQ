@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include "licenseagreement.h"
+#include "licenseagreement.hpp"
 
 LicenseAgreement::LicenseAgreement(QWidget *parent)
     : QDialog(parent), ui(new Ui::LicenseAgreement) {

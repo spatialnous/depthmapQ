@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "salalib/analysistype.h"
+#include "salalib/analysistype.hpp"
 #include "ui_TopoMetDlg.h"
 
 class CTopoMetDlg : public QDialog, public Ui::CTopoMetDlg {

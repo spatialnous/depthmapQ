@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include "mdichild.h"
+#include "mdichild.hpp"
 
 #include <QtCore/QFile>
 #include <QtCore/QTextStream>

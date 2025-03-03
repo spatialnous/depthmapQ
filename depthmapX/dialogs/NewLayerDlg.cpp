@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include "NewLayerDlg.h"
+#include "NewLayerDlg.hpp"
 
 #include <QMessageBox>
 

@@ -4,9 +4,9 @@
 
 #pragma once
 
-#include "settingspage.h"
+#include "settingspage.hpp"
 
-#include "depthmapX/settings.h"
+#include "depthmapX/settings.hpp"
 
 #include <QDialog>
 

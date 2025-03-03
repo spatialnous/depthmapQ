@@ -33,7 +33,7 @@ add_compile_definitions(_DEPTHMAP)
 set(depthmapXTest_SRCS
     ../ThirdParty/Catch/catch_amalgamated.cpp
     main.cpp
-    selfcleaningfile.h
+    selfcleaningfile.hpp
     testgllines.cpp
     testgllinesuniform.cpp
     testglrastertexture.cpp
@@ -46,11 +46,11 @@ set(depthmapXTest_SRCS
     ../depthmapX/dxinterface/shapegraphdx.cpp
     ../depthmapX/dxinterface/metagraphdx.cpp
     ../depthmapX/views/viewhelpers.cpp
-    ../depthmapX/views/glview/gllines.h
+    ../depthmapX/views/glview/gllines.hpp
     ../depthmapX/views/glview/gllines.cpp
-    ../depthmapX/views/glview/gllinesuniform.h
+    ../depthmapX/views/glview/gllinesuniform.hpp
     ../depthmapX/views/glview/gllinesuniform.cpp
-    ../depthmapX/views/glview/glrastertexture.h
+    ../depthmapX/views/glview/glrastertexture.hpp
     ../depthmapX/views/glview/glrastertexture.cpp)
 
 

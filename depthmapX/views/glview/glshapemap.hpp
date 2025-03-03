@@ -4,10 +4,10 @@
 
 #pragma once
 
-#include "dxinterface/shapemapdx.h"
-#include "gllines.h"
-#include "glpolygons.h"
-#include "glregularpolygons.h"
+#include "dxinterface/shapemapdx.hpp"
+#include "gllines.hpp"
+#include "glpolygons.hpp"
+#include "glregularpolygons.hpp"
 
 class GLShapeMap {
   public:

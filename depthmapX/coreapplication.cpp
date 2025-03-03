@@ -2,11 +2,11 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include "coreapplication.h"
+#include "coreapplication.hpp"
 
-#include "interfaceversion.h"
-#include "mainwindowfactory.h"
-#include "settingsimpl.h"
+#include "interfaceversion.hpp"
+#include "mainwindowfactory.hpp"
+#include "settingsimpl.hpp"
 
 int CoreApplication::exec() {
     SettingsImpl settings(new DefaultSettingsFactory);

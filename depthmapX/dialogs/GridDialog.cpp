@@ -3,9 +3,9 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include "GridDialog.h"
+#include "GridDialog.hpp"
 
-#include "salalib/gridproperties.h"
+#include "salalib/gridproperties.hpp"
 
 #include <QMessageBox>
 

@@ -5,7 +5,7 @@
 // adapted from:
 // https://stackoverflow.com/questions/12600325/force-glutesselator-to-generate-only-gl-triangles
 
-#include "glutriangulator.h"
+#include "glutriangulator.hpp"
 
 #ifdef __linux__
 #include "GL/glu.h"

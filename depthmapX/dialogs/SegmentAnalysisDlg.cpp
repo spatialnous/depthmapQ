@@ -2,9 +2,9 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include "SegmentAnalysisDlg.h"
+#include "SegmentAnalysisDlg.hpp"
 
-#include "mainwindow.h"
+#include "mainwindow.hpp"
 
 #include <QMessageBox>
 

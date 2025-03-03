@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include "TopoMetDlg.h"
+#include "TopoMetDlg.hpp"
 
 #include <QMessageBox>
 

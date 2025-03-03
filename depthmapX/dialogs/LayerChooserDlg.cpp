@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include "LayerChooserDlg.h"
+#include "LayerChooserDlg.hpp"
 
 CLayerChooserDlg::CLayerChooserDlg(const std::vector<std::string> &names, QWidget *parent)
     : QDialog(parent), m_names(names) {

@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include "viewhelpers.h"
+#include "viewhelpers.hpp"
 
 #include <time.h>
 

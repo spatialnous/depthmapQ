@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include "depthmapX/views/viewhelpers.h"
+#include "depthmapX/views/viewhelpers.hpp"
 
 #include "catch_amalgamated.hpp"
 

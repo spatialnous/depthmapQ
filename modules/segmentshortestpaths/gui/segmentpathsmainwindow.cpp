@@ -2,14 +2,14 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include "segmentpathsmainwindow.h"
+#include "segmentpathsmainwindow.hpp"
 
-#include "salalib/segmmodules/segmmetricshortestpath.h"
-#include "salalib/segmmodules/segmtopologicalshortestpath.h"
-#include "salalib/segmmodules/segmtulipshortestpath.h"
+#include "salalib/segmmodules/segmmetricshortestpath.hpp"
+#include "salalib/segmmodules/segmtopologicalshortestpath.hpp"
+#include "salalib/segmmodules/segmtulipshortestpath.hpp"
 
-#include "depthmapX/graphdoc.h"
-#include "depthmapX/mainwindowhelpers.h"
+#include "depthmapX/graphdoc.hpp"
+#include "depthmapX/mainwindowhelpers.hpp"
 
 #include <QMenuBar>
 #include <QMessageBox>

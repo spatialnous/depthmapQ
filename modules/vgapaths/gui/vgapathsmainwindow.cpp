@@ -2,16 +2,16 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include "vgapathsmainwindow.h"
+#include "vgapathsmainwindow.hpp"
 
-#include "salalib/vgamodules/extractlinkdata.h"
-#include "salalib/vgamodules/vgaangularshortestpath.h"
-#include "salalib/vgamodules/vgaisovistzone.h"
-#include "salalib/vgamodules/vgametricshortestpath.h"
-#include "salalib/vgamodules/vgametricshortestpathtomany.h"
-#include "salalib/vgamodules/vgavisualshortestpath.h"
+#include "salalib/vgamodules/extractlinkdata.hpp"
+#include "salalib/vgamodules/vgaangularshortestpath.hpp"
+#include "salalib/vgamodules/vgaisovistzone.hpp"
+#include "salalib/vgamodules/vgametricshortestpath.hpp"
+#include "salalib/vgamodules/vgametricshortestpathtomany.hpp"
+#include "salalib/vgamodules/vgavisualshortestpath.hpp"
 
-#include "depthmapX/mainwindowhelpers.h"
+#include "depthmapX/mainwindowhelpers.hpp"
 
 #include <QMenuBar>
 #include <QMessageBox>

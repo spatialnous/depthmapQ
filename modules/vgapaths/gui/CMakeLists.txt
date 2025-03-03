@@ -4,7 +4,7 @@
 
 set(module vgapaths)
 set(module_SRCS
-    vgapathsmainwindow.h
+    vgapathsmainwindow.hpp
     vgapathsmainwindow.cpp)
 set(modules_gui "${modules_gui}" ${module} CACHE INTERNAL "modules_gui" FORCE)
 
@@ -25,13 +25,13 @@ set(CMAKE_AUTOUIC_SEARCH_PATHS "../../../depthmapX/UI")
 add_definitions(${Qt6Core_DEFINITIONS})
 add_definitions(${Qt6Widgets_DEFINITIONS})
 add_definitions(${Qt6Gui_DEFINITIONS})
-add_definitions(${Qt6OpenGL_DEFINITIONS})
+add_definitions(${Qt6OpenGL_DEFINITIONS}segmentpathsmainwindow)
 add_definitions(${Qt6OpenGLWidgets_DEFINITIONS})
 
 add_compile_definitions(VGAPARALLEL_GUI_LIBRARY)
 
 add_library(${module} OBJECT ${module_SRCS}
-    ../../../depthmapX/imainwindowmodule.h)
+    ../../../depthmapX/imainwindowmodule.hpp)
 
 if ((MSVC) AND (MSVC_VERSION GREATER_EQUAL 1914))
     # new option required from MSVC, but not yet implemented in CMake

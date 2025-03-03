@@ -4,15 +4,15 @@
 
 #pragma once
 
-#include "gldynamicline.h"
-#include "gldynamicrect.h"
-#include "gllines.h"
-#include "gllinesuniform.h"
-#include "glpointmap.h"
-#include "glshapegraph.h"
+#include "gldynamicline.hpp"
+#include "gldynamicrect.hpp"
+#include "gllines.hpp"
+#include "gllinesuniform.hpp"
+#include "glpointmap.hpp"
+#include "glshapegraph.hpp"
 
-#include "depthmapX/graphdoc.h"
-#include "depthmapX/views/mapview.h"
+#include "depthmapX/graphdoc.hpp"
+#include "depthmapX/views/mapview.hpp"
 
 #include <QMatrix4x4>
 #include <QOpenGLFunctions>
@@ -55,7 +55,7 @@ class GLView : public MapView, protected QOpenGLFunctions {
     virtual void postLoadFile() override;
     virtual void OnEditCopy() override;
     virtual void OnEditSave() override;
-    virtual void OnViewZoomToRegion(QtRegion region) override;
+    virtual void OnViewZoomToRegion(Region4f region) override;
 
   protected:
     void initializeGL() override;
@@ -117,10 +117,10 @@ class GLView : public MapView, protected QOpenGLFunctions {
     void zoomBy(float dzf, int mouseX, int mouseY);
     void resetView();
 
-    void highlightHoveredItems(const QtRegion &region);
-    void highlightHoveredPixels(const PointMapDX &map, const QtRegion &region);
+    void highlightHoveredItems(const Region4f &region);
+    void highlightHoveredPixels(const PointMapDX &map, const Region4f &region);
     void highlightHoveredPixels(const PointMapDX &map, const std::set<PixelRef> &refs);
-    void highlightHoveredShapes(const ShapeMapDX &map, const QtRegion &region);
+    void highlightHoveredShapes(const ShapeMapDX &map, const Region4f &region);
 
     void loadAxes();
     void loadDrawingGLObjects();

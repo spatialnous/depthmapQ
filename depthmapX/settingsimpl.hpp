@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "settings.h"
+#include "settings.hpp"
 
 #include <QSettings>
 #include <QStandardPaths>

@@ -18,7 +18,7 @@ target_sources(depthmapX
         glview/glshapemap.cpp
         glview/gldynamicrect.cpp
         glview/gldynamicline.cpp
-        plotview/linreg.h
+        plotview/linreg.hpp
         plotview/plotview.cpp
         tableview/tableview.cpp
         depthmapview/depthmapview.cpp
@@ -26,26 +26,27 @@ target_sources(depthmapX
         glview/glregularpolygons.cpp
         glview/gltriangles.cpp
     PUBLIC
-        mapview.h
-        viewhelpers.h
-        glview/gllinesuniform.h
-        glview/glview.h
-        glview/gllines.h
-        glview/glrastertexture.h
-        glview/glpolygons.h
-        glview/glutriangulator.h
-        glview/gltrianglesuniform.h
-        glview/glpointmap.h
-        glview/glshapegraph.h
-        glview/glshapemap.h
-        glview/gldynamicrect.h
-        glview/gldynamicline.h
-        plotview/plotview.h
-        plotview/linreg.h
-        tableview/tableview.h
-        depthmapview/depthmapview.h
-        glview/glregularpolygons.h
-        glview/gltriangles.h
-        3dview/3dview.h
-        3dview/glureimpl.h)
+        mapview.hpp
+        viewhelpers.hpp
+        glview/gllinesuniform.hpp
+        glview/glview.hpp
+        glview/gllines.hpp
+        glview/glrastertexture.hpp
+        glview/glpolygons.hpp
+        glview/glutriangulator.hpp
+        glview/gltrianglesuniform.hpp
+        glview/glpointmap.hpp
+        glview/glshapegraph.hpp
+        glview/glshapemap.hpp
+        glview/gldynamicrect.hpp
+        glview/gldynamicline.hpp
+        plotview/plotview.hpp
+        plotview/linreg.hpp
+        tableview/tableview.hpp
+        depthmapview/depthmapview.hpp
+        glview/glregularpolygons.hpp
+        glview/gltriangles.hpp
+        3dview/3dview.hpp
+        3dview/glureimpl.hpp
+)
 

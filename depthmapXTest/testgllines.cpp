@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include "depthmapX/views/glview/gllines.h"
+#include "depthmapX/views/glview/gllines.hpp"
 
 #include "catch_amalgamated.hpp"
 

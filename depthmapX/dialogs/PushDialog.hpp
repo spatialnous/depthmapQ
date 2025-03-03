@@ -6,7 +6,7 @@
 
 #include "ui_PushDialog.h"
 
-#include "salalib/pushvalues.h"
+#include "salalib/pushvalues.hpp"
 
 class CPushDialog : public QDialog, public Ui::CPushDialog {
     Q_OBJECT

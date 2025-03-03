@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "salalib/genlib/p2dpoly.h"
+#include "salalib/genlib/point2f.hpp"
 
 #include <vector>
 

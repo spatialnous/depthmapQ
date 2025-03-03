@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include "ColourScaleDlg.h"
+#include "ColourScaleDlg.hpp"
 
 CColourScaleDlg::CColourScaleDlg(QWidget *parent) : QDialog(parent) {
     setupUi(this);
@@ -260,13 +260,13 @@ void CColourScaleDlg::MyUpdateData(bool dir, bool apply_to_all) {
         } else {
             auto *graph = m_viewDoc->m_meta_graph;
             if (graph->viewingProcessed()) {
-                if (graph->getViewClass() & MetaGraphDX::VIEWVGA) {
+                if (graph->getViewClass() & MetaGraphDX::DX_VIEWVGA) {
                     auto &map = graph->getDisplayedPointMap();
                     m_display_min = map.getDisplayMinValue();
                     m_display_max = map.getDisplayMaxValue();
                     m_displayparams = map.getDisplayParams();
                     m_color = m_displayparams.colorscale;
-                } else if (graph->getViewClass() & MetaGraphDX::VIEWAXIAL) {
+                } else if (graph->getViewClass() & MetaGraphDX::DX_VIEWAXIAL) {
                     auto &map = graph->getDisplayedShapeGraph();
                     if (map.getShapeCount() > 0) {
                         m_display_min = map.getDisplayMinValue();
@@ -280,7 +280,7 @@ void CColourScaleDlg::MyUpdateData(bool dir, bool apply_to_all) {
                     m_show_lines = show_lines;
                     m_show_fill = show_fill;
                     m_show_centroids = show_centroids;
-                } else if (graph->getViewClass() & MetaGraphDX::VIEWDATA) {
+                } else if (graph->getViewClass() & MetaGraphDX::DX_VIEWDATA) {
                     auto &map = graph->getDisplayedDataMap();
                     if (map.getShapeCount() > 0) {
                         m_display_min = map.getDisplayMinValue();
@@ -314,13 +314,13 @@ void CColourScaleDlg::MyUpdateData(bool dir, bool apply_to_all) {
             auto *graph = m_viewDoc->m_meta_graph;
             m_color = m_color_type_map[c_color_type->currentIndex()];
             m_displayparams.colorscale = m_color;
-            if (graph->getViewClass() & MetaGraphDX::VIEWVGA) {
+            if (graph->getViewClass() & MetaGraphDX::DX_VIEWVGA) {
                 graph->getDisplayedPointMap().setDisplayParams(m_displayparams, apply_to_all);
-            } else if (graph->getViewClass() & MetaGraphDX::VIEWAXIAL) {
+            } else if (graph->getViewClass() & MetaGraphDX::DX_VIEWAXIAL) {
                 graph->getDisplayedShapeGraph().setDisplayParams(m_displayparams, apply_to_all);
                 graph->getDisplayedShapeGraph().setPolygonDisplay(m_show_lines, m_show_fill,
                                                                   m_show_centroids);
-            } else if (graph->getViewClass() & MetaGraphDX::VIEWDATA) {
+            } else if (graph->getViewClass() & MetaGraphDX::DX_VIEWDATA) {
                 graph->getDisplayedDataMap().setDisplayParams(m_displayparams, apply_to_all);
                 graph->getDisplayedDataMap().setPolygonDisplay(m_show_lines, m_show_fill,
                                                                m_show_centroids);

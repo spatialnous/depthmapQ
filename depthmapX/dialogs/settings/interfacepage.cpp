@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include "interfacepage.h"
+#include "interfacepage.hpp"
 
 #include <QColorDialog>
 #include <QtWidgets>

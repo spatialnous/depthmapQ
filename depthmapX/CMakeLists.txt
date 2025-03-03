@@ -39,22 +39,22 @@ set(depthmapX_SRCS
     mainwindowfactory.cpp
     settingsimpl.cpp
     mainwindowmoduleregistry.hpp
-    compatibilitydefines.h
-    mainwindow.h
-    settings.h
-    graphdoc.h
-    mainwindowfactory.h
-    settingsimpl.h
-    indexWidget.h
-    mdichild.h
-    treeWindow.h
+    compatibilitydefines.hpp
+    mainwindow.hpp
+    settings.hpp
+    graphdoc.hpp
+    mainwindowfactory.hpp
+    settingsimpl.hpp
+    indexWidget.hpp
+    mdichild.hpp
+    treeWindow.hpp
     main.cpp
     coreapplication.cpp
-    coreapplication.h
+    coreapplication.hpp
     mainwindowhelpers.cpp
     mainwindowmoduleregistry.cpp
-    imainwindowmodulefactory.h
-    interfaceversion.h
+    imainwindowmodulefactory.hpp
+    interfaceversion.hpp
 )
 
 qt_wrap_ui(UI_HDRS

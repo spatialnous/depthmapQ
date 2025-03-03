@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include "PromptReplace.h"
+#include "PromptReplace.hpp"
 
 CPromptReplace::CPromptReplace(QWidget *parent) : QDialog(parent) {
     setupUi(this);

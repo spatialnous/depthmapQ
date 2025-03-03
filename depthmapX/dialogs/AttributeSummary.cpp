@@ -2,10 +2,10 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include "AttributeSummary.h"
+#include "AttributeSummary.hpp"
 
-#include "ColumnPropertiesDlg.h"
-#include "graphdoc.h"
+#include "ColumnPropertiesDlg.hpp"
+#include "graphdoc.hpp"
 
 CAttributeSummary::CAttributeSummary(QGraphDoc *pDoc, QWidget *parent) : QDialog(parent) {
     setupUi(this);

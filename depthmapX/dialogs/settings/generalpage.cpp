@@ -2,8 +2,8 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include "generalpage.h"
-#include "depthmapX/settings.h"
+#include "generalpage.hpp"
+#include "depthmapX/settings.hpp"
 
 #include <QtWidgets>
 

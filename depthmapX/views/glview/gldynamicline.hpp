@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "gldynamicrect.h"
+#include "gldynamicrect.hpp"
 
 class GLDynamicLine : public GLDynamicRect {
   public:

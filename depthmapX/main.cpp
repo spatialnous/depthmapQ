@@ -3,7 +3,7 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include "coreapplication.h"
+#include "coreapplication.hpp"
 
 #include <QDateTime>
 #include <QDir>

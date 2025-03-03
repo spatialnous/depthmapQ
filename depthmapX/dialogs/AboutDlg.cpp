@@ -2,10 +2,10 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include "AboutDlg.h"
+#include "AboutDlg.hpp"
 
-#include "version.h"
-#include "version_defs.h"
+#include "version.hpp"
+#include "version_defs.hpp"
 
 CAboutDlg::CAboutDlg(QWidget *parent) : QDialog(parent) {
     setupUi(this);

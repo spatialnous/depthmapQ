@@ -6,7 +6,7 @@
 
 #include "ui_AxialAnalysisOptionsDlg.h"
 
-#include "dxinterface/metagraphdx.h"
+#include "dxinterface/metagraphdx.hpp"
 
 class CAxialAnalysisOptionsDlg : public QDialog, public Ui::CAxialAnalysisOptionsDlg {
     Q_OBJECT

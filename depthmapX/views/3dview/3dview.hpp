@@ -2,10 +2,10 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include "depthmapX/graphdoc.h"
+#include "depthmapX/graphdoc.hpp"
 
-#include "salalib/agents/agent.h"
-#include "salalib/agents/agentprogram.h"
+#include "salalib/agents/agent.hpp"
+#include "salalib/agents/agentprogram.hpp"
 
 #include <QOpenGLWidget>
 #include <QPoint>
@@ -107,7 +107,7 @@ class Q3DView : public QOpenGLWidget, protected QOpenGLFunctions {
     double m_track; // camera track -- used in playloop
     //
     //
-    QtRegion m_region;
+    Region4f m_region;
     float *m_points;
     float m_rect[4][3];
     std::map<int, C3DPixelData> m_pixels;

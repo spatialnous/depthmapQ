@@ -9,8 +9,8 @@
 #include <QRect>
 #include <QSize>
 
-#include "graphdoc.h"
-#include "linreg.h"
+#include "graphdoc.hpp"
+#include "linreg.hpp"
 
 #define MK_LBUTTON 0x0001
 #define MK_RBUTTON 0x0002
@@ -51,7 +51,7 @@ class QPlotView : public QWidget {
     double dataY(int x);
     int screenY(double x);
     //
-    QtRegion m_data_bounds;
+    Region4f m_data_bounds;
     QRect m_screen_bounds;
     //
     QPoint m_mouse_point;

@@ -3,9 +3,9 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include "tableview.h"
+#include "tableview.hpp"
 
-#include "mainwindow.h"
+#include "mainwindow.hpp"
 
 #include <QKeyEvent>
 #include <QtCore/QDebug>

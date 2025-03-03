@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include "PushDialog.h"
+#include "PushDialog.hpp"
 
 CPushDialog::CPushDialog(std::map<std::pair<int, int>, std::string> &names, QWidget *parent)
     : QDialog(parent) {

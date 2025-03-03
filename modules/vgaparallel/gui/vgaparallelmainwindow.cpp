@@ -2,15 +2,15 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include "vgaparallelmainwindow.h"
+#include "vgaparallelmainwindow.hpp"
 
-#include "salalib/vgamodules/vgaangularopenmp.h"
-#include "salalib/vgamodules/vgametricopenmp.h"
-#include "salalib/vgamodules/vgavisualglobalopenmp.h"
-#include "salalib/vgamodules/vgavisuallocaladjmatrix.h"
-#include "salalib/vgamodules/vgavisuallocalopenmp.h"
+#include "salalib/vgamodules/vgaangularopenmp.hpp"
+#include "salalib/vgamodules/vgametricopenmp.hpp"
+#include "salalib/vgamodules/vgavisualglobalopenmp.hpp"
+#include "salalib/vgamodules/vgavisuallocaladjmatrix.hpp"
+#include "salalib/vgamodules/vgavisuallocalopenmp.hpp"
 
-#include "depthmapX/mainwindowhelpers.h"
+#include "depthmapX/mainwindowhelpers.hpp"
 
 #include <QInputDialog>
 #include <QMenuBar>

@@ -2,9 +2,9 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include "glpolygons.h"
+#include "glpolygons.hpp"
 
-#include "glutriangulator.h"
+#include "glutriangulator.hpp"
 
 /**
  * @brief GLPolygons::GLPolygons

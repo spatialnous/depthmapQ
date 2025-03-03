@@ -4,12 +4,13 @@
 
 #pragma once
 
-#include "graphdoc.h"
-#include "indexWidget.h"
+#include "dxinterface/options.hpp"
+#include "graphdoc.hpp"
+#include "indexWidget.hpp"
 #include "mainwindowmoduleregistry.hpp"
-#include "settings.h"
-#include "treeWindow.h"
-#include "views/mapview.h"
+#include "settings.hpp"
+#include "treeWindow.hpp"
+#include "views/mapview.hpp"
 
 #include <QButtonGroup>
 #include <QComboBox>

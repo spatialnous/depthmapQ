@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include "ConvertShapesDlg.h"
+#include "ConvertShapesDlg.hpp"
 
 CConvertShapesDlg::CConvertShapesDlg(QWidget *parent) : QDialog(parent) {
     setupUi(this);

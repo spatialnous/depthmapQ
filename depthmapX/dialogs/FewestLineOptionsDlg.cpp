@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include "FewestLineOptionsDlg.h"
+#include "FewestLineOptionsDlg.hpp"
 
 CFewestLineOptionsDlg::CFewestLineOptionsDlg(QWidget *parent) : QDialog(parent) {
     setupUi(this);

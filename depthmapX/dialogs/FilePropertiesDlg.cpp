@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include "FilePropertiesDlg.h"
+#include "FilePropertiesDlg.hpp"
 
 CFilePropertiesDlg::CFilePropertiesDlg(QWidget *parent) : QDialog(parent) {
     setupUi(this);

@@ -6,7 +6,7 @@
 
 #include "ui_InsertColumnDlg.h"
 
-#include "salalib/attributetable.h"
+#include "salalib/attributetable.hpp"
 
 #include <string>
 #include <vector>
