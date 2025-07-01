@@ -622,7 +622,7 @@ void QGraphDoc::OnFileImport() {
                                     "another program is not using it."),
                                  QMessageBox::Ok, QMessageBox::Ok);
         } else {
-            std::unique_ptr<Communicator> comm(new ICommunicator());
+            std::unique_ptr<Communicator> comm(new CMSCommunicator());
             std::vector<ShapeMap> newShapeMaps;
             try {
                 newShapeMaps = depthmapX::importFile(

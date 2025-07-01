@@ -17,9 +17,7 @@
 #include <QThread>
 #include <QWaitCondition>
 
-#include <iomanip>
 #include <math.h>
-#include <sstream>
 
 QT_BEGIN_NAMESPACE
 
@@ -92,7 +90,7 @@ class CMSCommunicator : public Communicator {
     CMSCommunicator();
     virtual ~CMSCommunicator();
     virtual void CommPostMessage(size_t m,
-                                 size_t x) const; // Inline below CWaitDialog
+                                 size_t x) const override; // Inline below CWaitDialog
 
     void *parent_doc;
 
@@ -144,6 +142,12 @@ class CMSCommunicator : public Communicator {
     }
 
     void runAnalysis(QGraphDoc &graphDoc);
+
+    void logError(const std::string &message) const override { std::cerr << message << std::endl; }
+    void logWarning(const std::string &message) const override {
+        std::cerr << message << std::endl;
+    }
+    void logInfo(const std::string &message) const override { std::cout << message << std::endl; }
 
   protected:
     std::vector<int> m_options;
