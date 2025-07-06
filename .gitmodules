@@ -2,5 +2,5 @@
 	path = salalib
 	url = git@github.com:spatialnous/salalib.git
 [submodule "depthmapX/dxinterface"]
-	path = depthmapX/dxinterface
-	url = git@github.com:spatialnous/dxinterface.git
+	path = qtgui/dminterface
+	url = git@github.com:spatialnous/dminterface.git

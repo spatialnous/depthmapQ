@@ -1,0 +1,69 @@
+# SPDX-FileCopyrightText: 2017 Christian Sailer
+# SPDX-FileCopyrightText: 2017 Petros Koutsolampros
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+target_sources(${qtgui}
+    PUBLIC
+        TopoMetDlg.hpp
+        SegmentAnalysisDlg.hpp
+        RenameObjectDlg.hpp
+        PushDialog.hpp
+        PromptReplace.hpp
+        OptionsDlg.hpp
+        NewLayerDlg.hpp
+        MakeOptionsDlg.hpp
+        MakeLayerDlg.hpp
+        LicenceDialog.hpp
+        LayerChooserDlg.hpp
+        IsovistPathDlg.hpp
+        InsertColumnDlg.hpp
+        GridDialog.hpp
+        FindLocDlg.hpp
+        FilePropertiesDlg.hpp
+        FewestLineOptionsDlg.hpp
+        EditConnectionsDlg.hpp
+        ConvertShapesDlg.hpp
+        ColumnPropertiesDlg.hpp
+        ColourScaleDlg.hpp
+        AxialAnalysisOptionsDlg.hpp
+        AttributeSummary.hpp
+        AttributeChooserDlg.hpp
+        AgentAnalysisDlg.hpp
+        AboutDlg.hpp
+        licenseagreement.hpp
+        settings/generalpage.hpp
+        settings/interfacepage.hpp
+        settings/settingspage.hpp
+        settings/settingsdialog.hpp
+    PRIVATE
+        TopoMetDlg.cpp
+        SegmentAnalysisDlg.cpp
+        RenameObjectDlg.cpp
+        PushDialog.cpp
+        PromptReplace.cpp
+        OptionsDlg.cpp
+        NewLayerDlg.cpp
+        MakeOptionsDlg.cpp
+        MakeLayerDlg.cpp
+        LicenceDialog.cpp
+        LayerChooserDlg.cpp
+        IsovistPathDlg.cpp
+        InsertColumnDlg.cpp
+        GridDialog.cpp
+        FindLocDlg.cpp
+        FilePropertiesDlg.cpp
+        FewestLineOptionsDlg.cpp
+        EditConnectionsDlg.cpp
+        ConvertShapesDlg.cpp
+        ColumnPropertiesDlg.cpp
+        ColourScaleDlg.cpp
+        AxialAnalysisOptionsDlg.cpp
+        AttributeSummary.cpp
+        AttributeChooserDlg.cpp
+        AgentAnalysisDlg.cpp
+        AboutDlg.cpp
+        licenseagreement.cpp
+        settings/generalpage.cpp
+        settings/interfacepage.cpp
+        settings/settingsdialog.cpp)

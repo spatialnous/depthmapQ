@@ -8,8 +8,8 @@
 #include "salalib/segmmodules/segmtopologicalshortestpath.hpp"
 #include "salalib/segmmodules/segmtulipshortestpath.hpp"
 
-#include "depthmapX/graphdoc.hpp"
-#include "depthmapX/mainwindowhelpers.hpp"
+#include "qtgui/graphdoc.hpp"
+#include "qtgui/mainwindowhelpers.hpp"
 
 #include <QMenuBar>
 #include <QMessageBox>

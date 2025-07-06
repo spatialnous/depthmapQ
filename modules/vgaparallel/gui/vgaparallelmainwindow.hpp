@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "depthmapX/imainwindowmodule.hpp"
+#include "qtgui/imainwindowmodule.hpp"
 
 class VGAParallelMainWindow : public IMainWindowModule {
   private:

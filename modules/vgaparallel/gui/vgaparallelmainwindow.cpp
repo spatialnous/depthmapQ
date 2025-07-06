@@ -10,7 +10,7 @@
 #include "salalib/vgamodules/vgavisuallocaladjmatrix.hpp"
 #include "salalib/vgamodules/vgavisuallocalopenmp.hpp"
 
-#include "depthmapX/mainwindowhelpers.hpp"
+#include "qtgui/mainwindowhelpers.hpp"
 
 #include <QInputDialog>
 #include <QMenuBar>
@@ -186,7 +186,7 @@ double VGAParallelMainWindow::ConvertForVisibility(const std::string &radius) co
     char *end;
     long rad = std::strtol(radius.c_str(), &end, 10);
     if (rad < 1 || rad > 99) {
-        throw depthmapX::RuntimeException(
+        throw genlib::RuntimeException(
             std::string("Radius for visibility analysis must be n for the whole range or an "
                         "integer between 1 and 99 inclusive. Got ") +
             radius);
@@ -201,16 +201,16 @@ double VGAParallelMainWindow::ConvertForMetric(const std::string &radius) const 
     char *end;
     double rad = strtod(radius.c_str(), &end);
     if (rad <= 0) {
-        throw depthmapX::RuntimeException(
+        throw genlib::RuntimeException(
             std::string(
                 "Radius for metric vga must be n for the whole range or a positive number. Got ") +
             radius);
     }
     if (std::isnan(rad)) {
-        throw depthmapX::RuntimeException("Radius NaN?! Really?");
+        throw genlib::RuntimeException("Radius NaN?! Really?");
     }
     if (std::isinf(rad)) {
-        throw depthmapX::RuntimeException("Radius inf?! Who are you kidding?");
+        throw genlib::RuntimeException("Radius inf?! Who are you kidding?");
     }
 
     return rad;

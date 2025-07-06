@@ -2,9 +2,9 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+cmake_minimum_required(VERSION 3.15.0)
 set(CMAKE_OSX_DEPLOYMENT_TARGET "10.13" CACHE STRING "Minimum macOS deployment version")
-project(depthmapX)
-cmake_minimum_required(VERSION 3.13.0)
+project(depthmapQ)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
@@ -65,7 +65,7 @@ set(MODULES_CORE_TEST FALSE)
 
 add_subdirectory(salalib)
 add_subdirectory(modules) # only the core modules are loaded here
-add_subdirectory(depthmapX)
-add_subdirectory(depthmapXTest)
+add_subdirectory(qtgui)
+add_subdirectory(qtguiTest)
 add_subdirectory(moduleTest)
 

@@ -18,7 +18,7 @@ include_directories(${Qt6OpenGLWidgets_INCLUDE_DIRS})
 
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
-set(CMAKE_AUTOUIC_SEARCH_PATHS "../../../depthmapX/UI")
+set(CMAKE_AUTOUIC_SEARCH_PATHS "../../../qtgui/UI")
 
 add_definitions(${Qt6Core_DEFINITIONS})
 add_definitions(${Qt6Widgets_DEFINITIONS})
@@ -29,7 +29,7 @@ add_definitions(${Qt6OpenGLWidgets_DEFINITIONS})
 add_compile_definitions(UICTRIGGER_GUI_LIBRARY)
 
 add_library(${module} OBJECT
-    ../../../depthmapX/imainwindowmodule.hpp)
+    ../../../qtgui/imainwindowmodule.hpp)
 
 if ((MSVC) AND (MSVC_VERSION GREATER_EQUAL 1914))
     # new option required from MSVC, but not yet implemented in CMake

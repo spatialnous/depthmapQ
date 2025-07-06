@@ -1,4 +1,4 @@
-## depthmapX - multi-platform spatial network analyses software
+## depthmapQ - multi-platform spatial network analyses software
 
 This is a fork of [depthmapX](https://github.com/SpaceGroupUCL/depthmapX) that keeps up with the, originally internal - now external, spatial analysis library [salalib](https://github.com/spatialnous/salalib).
 As such, this software is now purely a Graphical User Interface to the analysis library and is only updated to make sure it runs.
@@ -12,13 +12,13 @@ For any issues/bugs/crashes please create [a new issue](https://github.com/spati
 
 For more information please check the [documentation](./docs/index.md) and the [wiki](https://github.com/spatialnous/depthmapX/wiki)
 
-[About depthmapX](./docs/about.md)
+[About depthmapQ](./docs/about.md)
 
 ##
 
-depthmapX is licensed under the [GPLv3](http://www.gnu.org/licenses/gpl-3.0.html) licence. 
+depthmapQ is licensed under the [GPLv3](http://www.gnu.org/licenses/gpl-3.0.html) licence. 
 
-depthmapX uses [Qt6](http://www.qt.io) as UI toolkit and build system, [Catch2](https://github.com/philsquared/catch) as unit testing framework and [FakeIt](https://github.com/eranpeer/FakeIt) for test mocks.
+depthmapQ uses [Qt6](http://www.qt.io) as UI toolkit and build system, [Catch2](https://github.com/philsquared/catch) as unit testing framework and [FakeIt](https://github.com/eranpeer/FakeIt) for test mocks.
 
 Please join the depthmapX mail distribution list at www.jiscmail.ac.uk/lists/DEPTHMAP.html for updates.
 

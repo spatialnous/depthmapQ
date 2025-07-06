@@ -11,7 +11,7 @@
 #include "salalib/vgamodules/vgametricshortestpathtomany.hpp"
 #include "salalib/vgamodules/vgavisualshortestpath.hpp"
 
-#include "depthmapX/mainwindowhelpers.hpp"
+#include "qtgui/mainwindowhelpers.hpp"
 
 #include <QMenuBar>
 #include <QMessageBox>
@@ -67,7 +67,7 @@ void VGAPathsMainWindow::OnShortestPath(MainWindow *mainWindow, PathType pathTyp
                              QMessageBox::Ok);
         return;
     }
-    PointMapDX &pointMap = graphDoc->m_meta_graph->getDisplayedPointMap();
+    PointMapDM &pointMap = graphDoc->m_meta_graph->getDisplayedPointMap();
     if (pointMap.getSelSet().size() != 2) {
         QMessageBox::warning(mainWindow, tr("Warning"),
                              tr("Please select two cells to create a path between"),
