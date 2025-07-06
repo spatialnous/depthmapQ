@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>depthmapX</string>
+	<string>depthmapQ</string>
 	<key>CFBundleDocumentTypes</key>
 	<array>
 		<dict>
@@ -28,15 +28,15 @@
 		</dict>
 	</array>
 	<key>CFBundleExecutable</key>
-	<string>depthmapX</string>
+	<string>depthmapQ</string>
 	<key>CFBundleIconFile</key>
-	<string>depthmapX.icns</string>
+	<string>depthmap.icns</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.spacegroupucl.depthmapX</string>
+	<string>com.spatialnous.depthmapq</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>depthmapX</string>
+	<string>depthmapQ</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleSupportedPlatforms</key>
@@ -55,7 +55,7 @@
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
-	<string>depthmapXApplication</string>
+	<string>depthmapQApplication</string>
 	<key>UTExportedTypeDeclarations</key>
 	<array>
 		<dict>

@@ -5,4 +5,4 @@
 #!/bin/sh
 
 echo Running unit tests
-./depthmapXTest/depthmapXTest && ./moduleTest/moduleTest --allow-running-no-tests || exit 1
+./qtguiTest/qtguiTest && ./moduleTest/moduleTest --allow-running-no-tests || exit 1

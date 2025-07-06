@@ -7,8 +7,8 @@ Files: .clang-format resources/graph.grammar .gitmodules .mailmap .travis.yml .g
 Copyright: Petros Koutsolampros <commits@pklampros.io>
 License: GPL-3.0-or-later
 
-Files: depthmapX/images/* depthmapX/icons/* depthmapX/UI/*.ui depthmapX/icons.rc depthmapX/*.qrc depthmapX/resources/**/*.qrc depthmapX/**/*.png depthmapX/resources/Info.plist tools/build-appimage/depthmapX.desktop
-Copyright: depthmapX authors
+Files: qtgui/images/* qtgui/icons/* qtgui/UI/*.ui qtgui/icons.rc qtgui/*.qrc qtgui/resources/**/*.qrc qtgui/**/*.png qtgui/resources/Info.plist tools/build-appimage/depthmap.desktop
+Copyright: Depthmap authors
 License: GPL-3.0-or-later
 
 Files: acanthis/images/* acanthis/dialogs/*.ui acanthis/dialogs/**/*.png acanthis/resources/Info.plist acanthis/**/*.qrc acanthis/*.qrc
@@ -16,11 +16,11 @@ Copyright: Petros Koutsolampros <commits@pklampros.io>
 License: GPL-3.0-or-later
 
 Files: .gitignore GuiUnitTest/.gitignore README.md ci/* tools/build-*/*.txt tools/build-image/Dockerfile
-Copyright: depthmapX authors
+Copyright: Depthmap authors
 License: GPL-3.0-or-later
 
 Files: dist/* docs/*.md
-Copyright: depthmapX authors
+Copyright: Depthmap authors
 License: GPL-3.0-or-later
 
 Files: testdata/*

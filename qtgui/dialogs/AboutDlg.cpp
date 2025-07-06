@@ -11,9 +11,9 @@ CAboutDlg::CAboutDlg(QWidget *parent) : QDialog(parent) {
     setupUi(this);
     QString m_version_info;
     m_version_info = QString(tr("Version %1.%2.%3 (%4, %5)"))
-                         .arg(DEPTHMAPX_MAJOR_VERSION)
-                         .arg(DEPTHMAPX_MINOR_VERSION)
-                         .arg(DEPTHMAPX_REVISION_VERSION)
+                         .arg(DEPTHMAP_MAJOR_VERSION)
+                         .arg(DEPTHMAP_MINOR_VERSION)
+                         .arg(DEPTHMAP_REVISION_VERSION)
                          .arg(APP_GIT_BRANCH)
                          .arg(APP_GIT_COMMIT);
     QString m_copyright;

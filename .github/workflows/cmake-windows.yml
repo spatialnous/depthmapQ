@@ -1,6 +1,6 @@
 # This starter workflow is for a CMake project running on a single platform. There is a different starter workflow if you need cross-platform coverage.
 # See: https://github.com/actions/starter-workflows/blob/main/ci/cmake-multi-platform.yml
-name: depthmapX on windows-latest
+name: Build on windows-latest
 
 on:
   push:
@@ -46,10 +46,10 @@ jobs:
       run: chmod +x ../ci/runTests.sh && ../ci/runTests.sh
 
     - name: Deploy for windows
-      run: windeployqt build/depthmapX/Release
+      run: windeployqt build/depthmapQ/Release
 
     - name: Store the executable
       uses: actions/upload-artifact@v4
       with:
-        name: depthmapX-win64
-        path: build/depthmapX/Release/
+        name: depthmapQ-win64
+        path: build/depthmapQ/Release/

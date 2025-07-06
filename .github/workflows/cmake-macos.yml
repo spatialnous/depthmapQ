@@ -1,6 +1,6 @@
 # This starter workflow is for a CMake project running on a single platform. There is a different starter workflow if you need cross-platform coverage.
 # See: https://github.com/actions/starter-workflows/blob/main/ci/cmake-multi-platform.yml
-name: depthmapX on macos-latest
+name: Build on macos-latest
 
 on:
   push:
@@ -46,14 +46,14 @@ jobs:
       run: chmod +x ../ci/runTests.sh && ../ci/runTests.sh
 
     - name: Deploy for macos
-      run: macdeployqt build/depthmapX/depthmapX.app/
+      run: macdeployqt build/depthmapQ/depthmapQ.app/
 
     - name: Create the DMG file
-      working-directory: build/depthmapX
-      run: hdiutil create -format UDZO -srcfolder depthmapX.app depthmapX.dmg
+      working-directory: build/depthmapQ
+      run: hdiutil create -format UDZO -srcfolder depthmapQ.app depthmapQ.dmg
 
     - name: Store the executable
       uses: actions/upload-artifact@v4
       with:
-        name: depthmapX-macos
-        path: build/depthmapX/depthmapX.dmg
+        name: depthmapQ-macos
+        path: build/depthmapQ/depthmapQ.dmg
