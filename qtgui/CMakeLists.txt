@@ -3,10 +3,14 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-set(qtgui qtgui)
+if (NOT project_NAME)
+    set(target_NAME qtgui)
+else()
+    set(target_NAME ${project_NAME})
+endif()
 
 # set this to allow for dminterface to interact with sala
-set(dminterface ${qtgui})
+set(dminterface ${target_NAME})
 
 # Find includes in corresponding build directories
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -32,7 +36,7 @@ find_package(Qt6 COMPONENTS Core Widgets Gui OpenGLWidgets OpenGL REQUIRED)
 
 add_compile_definitions(_DEPTHMAP)
 
-set(qtgui_SRCS
+set(target_SRCS
     graphdoc.cpp
     indexWidget.cpp
     mainwindow.cpp
@@ -92,7 +96,7 @@ qt_wrap_ui(UI_HDRS
 qt_add_resources(DM_RSRC resource.qrc dialogs/settings/settingsdialog.qrc)
 
 if (WIN32)
-        add_executable(${qtgui} WIN32 ${qtgui_SRCS} ${UI_HDRS} ${DM_RSRC} icons.rc)
+        add_executable(${target_NAME} WIN32 ${qtgui_SRCS} ${UI_HDRS} ${DM_RSRC} icons.rc)
         if(MINGW)
             # https://stackoverflow.com/a/18138926
             # MinGW compilation does not bring in the required DLLs to make the executable self-contained
@@ -107,31 +111,31 @@ if (WIN32)
         endif(MINGW)
 endif(WIN32)
 if(UNIX AND NOT APPLE)
-        add_executable(${qtgui} ${qtgui_SRCS} ${UI_HDRS} ${DM_RSRC}
+        add_executable(${target_NAME} ${target_SRCS} ${UI_HDRS} ${DM_RSRC}
             consts.hpp)
         if (Qt5_POSITION_INDEPENDENT_CODE)
             SET(CMAKE_POSITION_INDEPENDENT_CODE ON)
         endif()
 
-        # remove all warnings from qtgui
-        set_target_properties(${qtgui} PROPERTIES COMPILE_FLAGS "-w")
+        # remove all warnings from this target
+        set_target_properties(${target_NAME} PROPERTIES COMPILE_FLAGS "-w")
 endif()
 if(APPLE)
         set(MACOSX_BUNDLE_ICON_FILE depthmap.icns)
         set(depthmap_ICON ${CMAKE_CURRENT_SOURCE_DIR}/icons/depthmap.icns)
-        set_source_files_properties(${qtgui_ICON} PROPERTIES
+        set_source_files_properties(${target_ICON} PROPERTIES
                MACOSX_PACKAGE_LOCATION "Resources")
         set(graph_ICON ${CMAKE_CURRENT_SOURCE_DIR}/icons/graph.icns)
         set_source_files_properties(${graph_ICON} PROPERTIES
                MACOSX_PACKAGE_LOCATION "Resources")
         add_definitions(-DGL_SILENCE_DEPRECATION)
-        add_executable(${qtgui} MACOSX_BUNDLE ${depthmap_ICON} ${graph_ICON}
-            ${qtgui_SRCS} ${UI_HDRS} ${DM_RSRC})
-        set_target_properties(${qtgui} PROPERTIES
+        add_executable(${target_NAME} MACOSX_BUNDLE ${depthmap_ICON} ${graph_ICON}
+            ${target_SRCS} ${UI_HDRS} ${DM_RSRC})
+        set_target_properties(${target_NAME} PROPERTIES
             MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/resources/Info.plist)
 endif(APPLE)
 
-target_compile_options(${qtgui} PRIVATE ${COMPILE_WARNINGS})
+target_compile_options(${target_NAME} PRIVATE ${COMPILE_WARNINGS})
 
 find_package(OpenGL REQUIRED)
 
@@ -159,13 +163,13 @@ elseif()
     message("OpenMP not found, building without")
 endif()
 
-target_link_libraries(${qtgui} salalib ${LIBRARIES} ${modules_gui} ${modules_core})
+target_link_libraries(${target_NAME} salalib ${LIBRARIES} ${modules_gui} ${modules_core})
 
 if ((MSVC) AND (MSVC_VERSION GREATER_EQUAL 1914))
     # new option required from MSVC, but not yet implemented in CMake
     # see: https://gitlab.kitware.com/cmake/cmake/-/issues/18837
-    target_compile_options(${qtgui} PUBLIC "/Zc:__cplusplus" "-permissive-")
-    target_compile_options(${qtgui} PRIVATE ${COMPILE_WARNINGS})
+    target_compile_options(${target_NAME} PUBLIC "/Zc:__cplusplus" "-permissive-")
+    target_compile_options(${target_NAME} PRIVATE ${COMPILE_WARNINGS})
 endif()
 
 add_subdirectory(dialogs)

@@ -4,7 +4,10 @@
 
 cmake_minimum_required(VERSION 3.15.0)
 set(CMAKE_OSX_DEPLOYMENT_TARGET "10.13" CACHE STRING "Minimum macOS deployment version")
-project(depthmapQ)
+
+set(project_NAME depthmapQ)
+
+project(${project_NAME})
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)

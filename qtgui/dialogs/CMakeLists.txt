@@ -3,7 +3,7 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-target_sources(${qtgui}
+target_sources(${target_NAME}
     PUBLIC
         TopoMetDlg.hpp
         SegmentAnalysisDlg.hpp
