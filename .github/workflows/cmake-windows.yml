@@ -46,10 +46,10 @@ jobs:
       run: chmod +x ../ci/runTests.sh && ../ci/runTests.sh
 
     - name: Deploy for windows
-      run: windeployqt build/depthmapQ/Release
+      run: windeployqt build/qtgui/Release
 
     - name: Store the executable
       uses: actions/upload-artifact@v4
       with:
         name: depthmapQ-win64
-        path: build/depthmapQ/Release/
+        path: build/qtgui/Release/

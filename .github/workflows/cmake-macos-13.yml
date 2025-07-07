@@ -46,14 +46,14 @@ jobs:
       run: chmod +x ../ci/runTests.sh && ../ci/runTests.sh
 
     - name: Deploy for macos
-      run: macdeployqt build/depthmapQ/depthmapQ.app/
+      run: macdeployqt build/qtgui/depthmapQ.app/
 
     - name: Create the DMG file
-      working-directory: build/depthmapQ
+      working-directory: build/qtgui
       run: hdiutil create -format UDZO -srcfolder depthmapQ.app depthmapQ.dmg
 
     - name: Store the executable
       uses: actions/upload-artifact@v4
       with:
         name: depthmapQ-macos
-        path: build/depthmapQ/depthmapQ.dmg
+        path: build/qtgui/depthmapQ.dmg
