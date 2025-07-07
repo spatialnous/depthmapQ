@@ -96,7 +96,7 @@ qt_wrap_ui(UI_HDRS
 qt_add_resources(DM_RSRC resource.qrc dialogs/settings/settingsdialog.qrc)
 
 if (WIN32)
-        add_executable(${target_NAME} WIN32 ${qtgui_SRCS} ${UI_HDRS} ${DM_RSRC} icons.rc)
+        add_executable(${target_NAME} WIN32 ${target_SRCS} ${UI_HDRS} ${DM_RSRC} icons.rc)
         if(MINGW)
             # https://stackoverflow.com/a/18138926
             # MinGW compilation does not bring in the required DLLs to make the executable self-contained
