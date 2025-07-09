@@ -91,6 +91,7 @@ class GLView : public MapView, protected QOpenGLFunctions {
     bool m_hoverHasShapes = false;
     bool m_hoverStoreInvalid = false;
     GLShapeMap m_hoveredShapes;
+    GLShapeMap m_hoveredSecondaryShapes;
     GLLinesUniform m_hoveredPixels;
     PixelRef m_lastHoverPixel = -1;
 

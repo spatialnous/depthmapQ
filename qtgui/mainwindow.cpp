@@ -706,6 +706,12 @@ QMdiSubWindow *MainWindow::findMapView(const QString &fileName) {
     return 0;
 }
 
+void MainWindow::OnViewToggleHighlightConnections() {
+    m_hoverHighlightsConnections = !m_hoverHighlightsConnections;
+
+    highlightConnectionsAct->setChecked(m_hoverHighlightsConnections);
+}
+
 void MainWindow::OnWindowMap() {
     MapView *m_p = activeMapView();
     if (m_p) {
@@ -2111,6 +2117,8 @@ void MainWindow::updateViewMenu() {
     else
         showGridAct->setChecked(false);
 
+    highlightConnectionsAct->setEnabled(true);
+
     attributeSummaryAct->setEnabled(true);
     if (!m_p->m_communicator && m_p->m_meta_graph && !m_p->m_meta_graph->viewingNone())
         attributeSummaryAct->setEnabled(true);
@@ -2945,6 +2953,12 @@ void MainWindow::createActions() {
         tr("Show summarised attribute information for selected points"));
     connect(attributeSummaryAct, SIGNAL(triggered()), this, SLOT(OnViewSummary()));
 
+    highlightConnectionsAct = new QAction(tr("Highlight connections on hover"), this);
+    highlightConnectionsAct->setCheckable(true);
+    connect(highlightConnectionsAct, SIGNAL(triggered()), this,
+            SLOT(OnViewToggleHighlightConnections()));
+    highlightConnectionsAct->setChecked(m_hoverHighlightsConnections);
+
     // Window Menu Actions
     mapAct = new QAction(tr("&Map"), this);
     mapAct->setCheckable(true);
@@ -3425,6 +3439,7 @@ void MainWindow::createMenus() {
     viewMenu->addAction(RecentAct);
     viewMenu->addAction(showGridAct);
     viewMenu->addAction(attributeSummaryAct);
+    viewMenu->addAction(highlightConnectionsAct);
 
     windowMenu = menuBar()->addMenu(tr("&Window"));
     windowMenu->addAction(mapAct);

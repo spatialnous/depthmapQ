@@ -136,6 +136,7 @@ void GLView::paintGL() {
     }
     if (m_hoverStoreInvalid) {
         m_hoveredShapes.updateGL(m_core);
+        m_hoveredSecondaryShapes.updateGL(m_core);
         m_hoveredPixels.updateGL(m_core);
         m_hoverStoreInvalid = false;
     }
@@ -155,6 +156,8 @@ void GLView::paintGL() {
         m_visibleDataMap.paintGL(m_mProj, m_mView, m_mModel);
         glLineWidth(10);
         m_hoveredShapes.paintGL(m_mProj, m_mView, m_mModel);
+        glLineWidth(3);
+        m_hoveredSecondaryShapes.paintGL(m_mProj, m_mView, m_mModel);
         glLineWidth(1);
     }
 
@@ -170,6 +173,8 @@ void GLView::paintGL() {
         m_visibleShapeGraph.paintGLOverlay(m_mProj, m_mView, m_mModel);
         glLineWidth(10);
         m_hoveredShapes.paintGL(m_mProj, m_mView, m_mModel);
+        glLineWidth(3);
+        m_hoveredSecondaryShapes.paintGL(m_mProj, m_mView, m_mModel);
         glLineWidth(1);
     }
 
@@ -695,14 +700,12 @@ void GLView::highlightHoveredPixels(const PointMapDM &map, const std::set<PixelR
 
 void GLView::highlightHoveredShapes(const ShapeMapDM &map, const Region4f &region) {
 
-    auto shapesInRegion = map.getShapesInRegion(region);
-    if (!shapesInRegion.empty()) {
-        std::vector<std::pair<SimpleLine, PafColor>> colouredLines;
-        std::vector<std::pair<std::vector<Point2f>, PafColor>> colouredPolygons;
-        std::vector<std::pair<Point2f, PafColor>> colouredPoints;
-        for (auto keyShape : shapesInRegion) {
-            AttributeKey key = AttributeKey(keyShape.first);
-            const SalaShape &shape = keyShape.second;
+    auto addShapeToVec =
+        [&map](size_t shapeRef, const SalaShape &shape,
+               std::vector<std::pair<SimpleLine, PafColor>> &colouredLines,
+               std::vector<std::pair<std::vector<Point2f>, PafColor>> &colouredPolygons,
+               std::vector<std::pair<Point2f, PafColor>> &colouredPoints) {
+            AttributeKey key = AttributeKey(shapeRef);
 
             const AttributeRow &row = map.getAttributeTable().getRow(key);
             PafColor colour =
@@ -728,9 +731,54 @@ void GLView::highlightHoveredShapes(const ShapeMapDM &map, const Region4f &regio
                         std::make_pair(shape.getCentroid(), PafColor(1, 0, 0)));
                 }
             }
+        };
+    auto shapesInRegion = map.getShapesInRegion(region);
+    if (!shapesInRegion.empty()) {
+        std::vector<std::pair<SimpleLine, PafColor>> colouredLines;
+        std::vector<std::pair<std::vector<Point2f>, PafColor>> colouredPolygons;
+        std::vector<std::pair<Point2f, PafColor>> colouredPoints;
+        std::vector<std::pair<SimpleLine, PafColor>> connectedColouredLines;
+        std::vector<std::pair<std::vector<Point2f>, PafColor>> connectedColouredPolygons;
+        std::vector<std::pair<Point2f, PafColor>> connectedColouredPoints;
+        auto &shapes = map.getAllShapes();
+        for (auto keyShape : shapesInRegion) {
+            addShapeToVec(keyShape.first, keyShape.second, colouredLines, colouredPolygons,
+                          colouredPoints);
+            if (((MainWindow *)m_pDoc.m_mainFrame)->m_hoverHighlightsConnections &&
+                !map.getInternalMap().getConnections().empty()) {
+                auto shapeIter = shapes.find(keyShape.first);
+                if (shapeIter != shapes.end()) {
+                    auto shapeIdx = std::distance(shapes.begin(), shapeIter);
+                    auto connector = map.getInternalMap().getConnections().at(shapeIdx);
+                    if (!connector.connections.empty()) {
+                        // axial, convex
+                        for (size_t connection : connector.connections) {
+                            const SalaShape &shape = shapes.at(connection);
+                            addShapeToVec(connection, shape, connectedColouredLines,
+                                          connectedColouredPolygons, connectedColouredPoints);
+                        }
+                    } else if (!connector.backSegconns.empty() ||
+                               !connector.forwardSegconns.empty()) {
+                        for (auto connection : connector.backSegconns) {
+                            size_t ref = static_cast<size_t>(connection.first.ref);
+                            const SalaShape &shape = shapes.at(ref);
+                            addShapeToVec(ref, shape, connectedColouredLines,
+                                          connectedColouredPolygons, connectedColouredPoints);
+                        }
+                        for (auto connection : connector.forwardSegconns) {
+                            size_t ref = static_cast<size_t>(connection.first.ref);
+                            const SalaShape &shape = shapes.at(ref);
+                            addShapeToVec(ref, shape, connectedColouredLines,
+                                          connectedColouredPolygons, connectedColouredPoints);
+                        }
+                    }
+                }
+            }
         }
         m_hoveredShapes.loadGLObjects(colouredLines, colouredPolygons, colouredPoints, 8,
                                       map.getSpacing() * 0.1);
+        m_hoveredSecondaryShapes.loadGLObjects(connectedColouredLines, connectedColouredPolygons,
+                                               connectedColouredPoints, 8, map.getSpacing() * 0.1);
         m_hoverStoreInvalid = true;
         m_hoverHasShapes = true;
     } else if (m_hoverHasShapes) {
@@ -738,6 +786,10 @@ void GLView::highlightHoveredShapes(const ShapeMapDM &map, const Region4f &regio
                                       std::vector<std::pair<std::vector<Point2f>, PafColor>>(),
                                       std::vector<std::pair<Point2f, PafColor>>(), 8,
                                       map.getSpacing() * 0.1);
+        m_hoveredSecondaryShapes.loadGLObjects(
+            std::vector<std::pair<SimpleLine, PafColor>>(),
+            std::vector<std::pair<std::vector<Point2f>, PafColor>>(),
+            std::vector<std::pair<Point2f, PafColor>>(), 8, map.getSpacing() * 0.1);
         m_hoverStoreInvalid = true;
         m_hoverHasShapes = false;
     }

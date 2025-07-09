@@ -71,6 +71,7 @@ class MainWindow : public QMainWindow {
     QGraphDoc *activeMapDoc();
 
     bool m_simpleVersion; // bool that replaces compile defines
+    bool m_hoverHighlightsConnections = false;
 
     void RedoPlotViewMenu(QGraphDoc *pDoc);
     void updateToolbar();
@@ -159,6 +160,7 @@ class MainWindow : public QMainWindow {
     void OnHelpTutorials();
     void OnHelpSalaManual();
     void OnEditGrid();
+    void OnViewToggleHighlightConnections();
     void OnWindowMap();
     void OnViewTable();
     void OnWindow3dView();
@@ -375,6 +377,7 @@ class MainWindow : public QMainWindow {
     // View Menu Actions
     QAction *showGridAct;
     QAction *attributeSummaryAct;
+    QAction *highlightConnectionsAct;
 
     // Window Menu Actions
     QAction *mapAct;
