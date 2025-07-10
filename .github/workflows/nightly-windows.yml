@@ -17,6 +17,8 @@ jobs:
     # You can convert this to a matrix build if you need cross-platform coverage.
     # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
     runs-on: windows-latest
+    permissions:
+      contents: write
 
     steps:
     - uses: actions/checkout@v4
@@ -45,12 +47,6 @@ jobs:
 
     - name: Deploy for windows
       run: windeployqt build/qtgui/Release
-
-    - name: Store the executable
-      uses: actions/upload-artifact@v4
-      with:
-        name: depthmapQ-win64
-        path: build/qtgui/Release/
 
     - name: Zip Folder
       uses: vimtor/action-zip@v1.2
