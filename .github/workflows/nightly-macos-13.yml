@@ -1,12 +1,10 @@
 # This starter workflow is for a CMake project running on a single platform. There is a different starter workflow if you need cross-platform coverage.
 # See: https://github.com/actions/starter-workflows/blob/main/ci/cmake-multi-platform.yml
-name: Build on windows-latest
+name: Nightly on macos-13
 
 on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+  schedule:
+    - cron: '0 2 * * *' # run at 2 AM UTC
   workflow_dispatch:
 
 env:
@@ -18,7 +16,7 @@ jobs:
     # The CMake configure and build commands are platform agnostic and should work equally well on Windows or Mac.
     # You can convert this to a matrix build if you need cross-platform coverage.
     # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
-    runs-on: windows-latest
+    runs-on: macos-13
 
     steps:
     - uses: actions/checkout@v4
@@ -38,18 +36,37 @@ jobs:
     - name: Build
       # Build your program with the given configuration
       run: cmake --build build --config ${{env.BUILD_TYPE}}
-      
+
     - name: Test
       working-directory: build
       # Execute tests defined by the CMake configuration.
       # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
       run: chmod +x ../ci/runTests.sh && ../ci/runTests.sh
 
-    - name: Deploy for windows
-      run: windeployqt build/qtgui/Release
+    - name: Deploy for macos
+      run: macdeployqt build/qtgui/depthmapQ.app/
 
-    - name: Store the executable
-      uses: actions/upload-artifact@v4
+    - name: Create the DMG file
+      working-directory: build/qtgui
+      run: hdiutil create -format UDZO -srcfolder depthmapQ.app depthmapQ.dmg
+
+    - name: Zip Folder
+      uses: vimtor/action-zip@v1.2
       with:
-        name: depthmapQ-win64
-        path: build/qtgui/Release/
+        files: build/qtgui/depthmapQ.dmg
+        dest: depthmapQ.zip
+    
+    - name: Get new commits
+      run: echo "NEW_COMMIT_COUNT=$(git log --oneline --since '24 hours ago' | wc -l)" >> $GITHUB_ENV
+      
+    - name: Deploy nightly release
+      uses: WebFreak001/deploy-nightly@v3.2.0
+      # if: ${{ env.NEW_COMMIT_COUNT > 0 }}
+      with:
+        upload_url: https://uploads.github.com/repos/spatialnous/depthmapQ/releases/231307555/assets{?name,label}
+        release_id: 231307555
+        asset_path: ./depthmapQ.zip
+        asset_name: depthmapQ-macos_x86-nightly-$$.zip
+        asset_content_type: application/zip
+        max_releases: 7
+        ignore_hash: false
