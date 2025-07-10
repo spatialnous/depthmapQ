@@ -57,15 +57,15 @@ jobs:
         path: build/qtgui/Release/
 
     - name: Zip Folder
-      run: zip -r depthmapQ-win64.zip ./build/qtgui/Release/depthmapQ-win64
+      run: zip -r depthmapQ-win64.zip build/qtgui/Release/depthmapQ-win64
     
     - name: Deploy Windows release
-        uses: WebFreak001/deploy-nightly@v3.2.0
-        with:
-          upload_url: https://uploads.github.com/repos/spatialnous/depthmapQ/releases/231307555/assets{?name,label}
-          release_id: 231307555
-          asset_path: ./depthmapQ-win64.zip
-          asset_name: depthmapQ-win64-nightly-$$.zip
-          asset_content_type: application/zip
-          max_releases: 7
-          ignore_hash: false
+      uses: WebFreak001/deploy-nightly@v3.2.0
+      with:
+        upload_url: https://uploads.github.com/repos/spatialnous/depthmapQ/releases/231307555/assets{?name,label}
+        release_id: 231307555
+        asset_path: ./depthmapQ-win64.zip
+        asset_name: depthmapQ-win64-nightly-$$.zip
+        asset_content_type: application/zip
+        max_releases: 7
+        ignore_hash: false
