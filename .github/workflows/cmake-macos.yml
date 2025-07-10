@@ -67,7 +67,7 @@ jobs:
     - name: Get new commits
       run: echo "NEW_COMMIT_COUNT=$(git log --oneline --since '24 hours ago' | wc -l)" >> $GITHUB_ENV
       
-    - name: Deploy Windows release
+    - name: Deploy nightly release
       uses: WebFreak001/deploy-nightly@v3.2.0
       if: ${{ env.NEW_COMMIT_COUNT > 0 }}
       with:
@@ -77,4 +77,4 @@ jobs:
         asset_name: depthmapQ-macos_arm-nightly-$$.zip
         asset_content_type: application/zip
         max_releases: 7
-        ignore_hash: false
+        ignore_hash: true
