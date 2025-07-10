@@ -57,14 +57,21 @@ jobs:
         path: build/qtgui/Release/
 
     - name: Zip Folder
-      run: zip -r depthmapQ-win64.zip build/qtgui/Release/depthmapQ-win64
+      uses: vimtor/action-zip@v1.2
+      with:
+        files: build/qtgui/Release/
+        dest: depthmapQ.zip
     
+    - name: Get new commits
+      run: echo "NEW_COMMIT_COUNT=$(git log --oneline --since '24 hours ago' | wc -l)" >> $GITHUB_ENV
+      
     - name: Deploy Windows release
       uses: WebFreak001/deploy-nightly@v3.2.0
+      if: ${{ env.NEW_COMMIT_COUNT > 0 }}
       with:
         upload_url: https://uploads.github.com/repos/spatialnous/depthmapQ/releases/231307555/assets{?name,label}
         release_id: 231307555
-        asset_path: ./depthmapQ-win64.zip
+        asset_path: ./depthmapQ.zip
         asset_name: depthmapQ-win64-nightly-$$.zip
         asset_content_type: application/zip
         max_releases: 7
