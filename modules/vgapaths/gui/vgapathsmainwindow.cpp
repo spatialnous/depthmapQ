@@ -61,67 +61,69 @@ void VGAPathsMainWindow::OnShortestPath(MainWindow *mainWindow, PathType pathTyp
                              QMessageBox::Ok);
         return;
     }
-    if (graphDoc->m_meta_graph->getDisplayedMapType() != ShapeMap::POINTMAP) {
+    if (graphDoc->m_meta_graph->getDisplayedMapType() != ShapeMap::LATTICEMAP) {
         QMessageBox::warning(mainWindow, tr("Warning"),
                              tr("Please make sure the displayed map is a VGA map"), QMessageBox::Ok,
                              QMessageBox::Ok);
         return;
     }
-    PointMapDM &pointMap = graphDoc->m_meta_graph->getDisplayedPointMap();
-    if (pointMap.getSelSet().size() != 2) {
+    LatticeMapDM &latticeMap = graphDoc->m_meta_graph->getDisplayedLatticeMap();
+    if (latticeMap.getSelSet().size() != 2) {
         QMessageBox::warning(mainWindow, tr("Warning"),
                              tr("Please select two cells to create a path between"),
                              QMessageBox::Ok, QMessageBox::Ok);
         return;
     }
-    const PixelRef &pixelFrom = *pointMap.getSelSet().begin();
-    const PixelRef &pixelTo = *std::next(pointMap.getSelSet().begin());
+    const PixelRef &pixelFrom = *latticeMap.getSelSet().begin();
+    const PixelRef &pixelTo = *std::next(latticeMap.getSelSet().begin());
 
     graphDoc->m_communicator = new CMSCommunicator();
     switch (pathType) {
     case PathType::VISUAL: {
         graphDoc->m_communicator->setAnalysis(std::unique_ptr<IAnalysis>(
-            new VGAVisualShortestPath(pointMap.getInternalMap(), pixelFrom, pixelTo)));
-        graphDoc->m_communicator->setPostAnalysisFunc(
-            [&pointMap](std::unique_ptr<IAnalysis> &analysis, AnalysisResult &analysisResult) {
-                auto vgaAnalysis = dynamic_cast<VGAVisualShortestPath *>(analysis.get());
-                vgaAnalysis->copyResultToMap(analysisResult.getAttributes(),
-                                             analysisResult.getAttributeData(),
-                                             pointMap.getInternalMap(), analysisResult.columnStats);
-                pointMap.overrideDisplayedAttribute(-2);
-                pointMap.setDisplayedAttribute(VGAVisualShortestPath::Column::VISUAL_SHORTEST_PATH);
-            });
+            new VGAVisualShortestPath(latticeMap.getInternalMap(), pixelFrom, pixelTo)));
+        graphDoc->m_communicator->setPostAnalysisFunc([&latticeMap](
+                                                          std::unique_ptr<IAnalysis> &analysis,
+                                                          AnalysisResult &analysisResult) {
+            auto vgaAnalysis = dynamic_cast<VGAVisualShortestPath *>(analysis.get());
+            vgaAnalysis->copyResultToMap(analysisResult.getAttributes(),
+                                         analysisResult.getAttributeData(),
+                                         latticeMap.getInternalMap(), analysisResult.columnStats);
+            latticeMap.overrideDisplayedAttribute(-2);
+            latticeMap.setDisplayedAttribute(VGAVisualShortestPath::Column::VISUAL_SHORTEST_PATH);
+        });
         break;
     }
     case PathType::METRIC: {
         std::set<PixelRef> pixelsFrom;
         pixelsFrom.insert(pixelFrom);
         graphDoc->m_communicator->setAnalysis(std::unique_ptr<IAnalysis>(
-            new VGAMetricShortestPath(pointMap.getInternalMap(), pixelsFrom, pixelTo)));
-        graphDoc->m_communicator->setPostAnalysisFunc(
-            [&pointMap](std::unique_ptr<IAnalysis> &analysis, AnalysisResult &analysisResult) {
-                auto vgaAnalysis = dynamic_cast<VGAMetricShortestPath *>(analysis.get());
-                vgaAnalysis->copyResultToMap(analysisResult.getAttributes(),
-                                             analysisResult.getAttributeData(),
-                                             pointMap.getInternalMap(), analysisResult.columnStats);
-                pointMap.overrideDisplayedAttribute(-2);
-                pointMap.setDisplayedAttribute(VGAMetricShortestPath::Column::METRIC_SHORTEST_PATH);
-            });
+            new VGAMetricShortestPath(latticeMap.getInternalMap(), pixelsFrom, pixelTo)));
+        graphDoc->m_communicator->setPostAnalysisFunc([&latticeMap](
+                                                          std::unique_ptr<IAnalysis> &analysis,
+                                                          AnalysisResult &analysisResult) {
+            auto vgaAnalysis = dynamic_cast<VGAMetricShortestPath *>(analysis.get());
+            vgaAnalysis->copyResultToMap(analysisResult.getAttributes(),
+                                         analysisResult.getAttributeData(),
+                                         latticeMap.getInternalMap(), analysisResult.columnStats);
+            latticeMap.overrideDisplayedAttribute(-2);
+            latticeMap.setDisplayedAttribute(VGAMetricShortestPath::Column::METRIC_SHORTEST_PATH);
+        });
         break;
     }
     case PathType::ANGULAR: {
         graphDoc->m_communicator->setAnalysis(std::unique_ptr<IAnalysis>(
-            new VGAAngularShortestPath(pointMap.getInternalMap(), pixelFrom, pixelTo)));
-        graphDoc->m_communicator->setPostAnalysisFunc(
-            [&pointMap](std::unique_ptr<IAnalysis> &analysis, AnalysisResult &analysisResult) {
-                auto vgaAnalysis = dynamic_cast<VGAAngularShortestPath *>(analysis.get());
-                vgaAnalysis->copyResultToMap(analysisResult.getAttributes(),
-                                             analysisResult.getAttributeData(),
-                                             pointMap.getInternalMap(), analysisResult.columnStats);
-                pointMap.overrideDisplayedAttribute(-2);
-                pointMap.setDisplayedAttribute(
-                    VGAAngularShortestPath::Column::ANGULAR_SHORTEST_PATH);
-            });
+            new VGAAngularShortestPath(latticeMap.getInternalMap(), pixelFrom, pixelTo)));
+        graphDoc->m_communicator->setPostAnalysisFunc([&latticeMap](
+                                                          std::unique_ptr<IAnalysis> &analysis,
+                                                          AnalysisResult &analysisResult) {
+            auto vgaAnalysis = dynamic_cast<VGAAngularShortestPath *>(analysis.get());
+            vgaAnalysis->copyResultToMap(analysisResult.getAttributes(),
+                                         analysisResult.getAttributeData(),
+                                         latticeMap.getInternalMap(), analysisResult.columnStats);
+            latticeMap.overrideDisplayedAttribute(-2);
+            latticeMap.setDisplayedAttribute(VGAAngularShortestPath::Column::ANGULAR_SHORTEST_PATH);
+        });
         break;
     }
     }
@@ -145,7 +147,7 @@ void VGAPathsMainWindow::OnExtractLinkData(MainWindow *mainWindow) {
                              QMessageBox::Ok);
         return;
     }
-    if (graphDoc->m_meta_graph->getDisplayedMapType() != ShapeMap::POINTMAP) {
+    if (graphDoc->m_meta_graph->getDisplayedMapType() != ShapeMap::LATTICEMAP) {
         QMessageBox::warning(mainWindow, tr("Warning"),
                              tr("Please make sure the displayed map is a VGA map"), QMessageBox::Ok,
                              QMessageBox::Ok);
@@ -153,7 +155,7 @@ void VGAPathsMainWindow::OnExtractLinkData(MainWindow *mainWindow) {
     }
 
     graphDoc->m_communicator->setAnalysis(std::unique_ptr<IAnalysis>(
-        new ExtractLinkData(graphDoc->m_meta_graph->getDisplayedPointMap().getInternalMap())));
+        new ExtractLinkData(graphDoc->m_meta_graph->getDisplayedLatticeMap().getInternalMap())));
 
     graphDoc->m_communicator->SetFunction(CMSCommunicator::FROMCONNECTOR);
     graphDoc->m_communicator->setSuccessUpdateFlags(QGraphDoc::NEW_DATA);
@@ -175,7 +177,7 @@ void VGAPathsMainWindow::OnMakeIsovistZones(MainWindow *mainWindow) {
                              QMessageBox::Ok);
         return;
     }
-    if (graphDoc->m_meta_graph->getDisplayedMapType() != ShapeMap::POINTMAP) {
+    if (graphDoc->m_meta_graph->getDisplayedMapType() != ShapeMap::LATTICEMAP) {
         QMessageBox::warning(mainWindow, tr("Warning"),
                              tr("Please make sure the displayed map is a VGA map"), QMessageBox::Ok,
                              QMessageBox::Ok);
@@ -185,7 +187,7 @@ void VGAPathsMainWindow::OnMakeIsovistZones(MainWindow *mainWindow) {
     std::map<std::string, std::set<PixelRef>> originPointSets;
     float restrictDistance = -1;
 
-    auto &map = graphDoc->m_meta_graph->getDisplayedPointMap();
+    auto &map = graphDoc->m_meta_graph->getDisplayedLatticeMap();
     graphDoc->m_communicator->setAnalysis(std::unique_ptr<IAnalysis>(
         new VGAIsovistZone(map.getInternalMap(), originPointSets, restrictDistance)));
 
@@ -215,7 +217,7 @@ void VGAPathsMainWindow::OnMetricShortestPathsToMany(MainWindow *mainWindow) {
                              QMessageBox::Ok);
         return;
     }
-    if (graphDoc->m_meta_graph->getDisplayedMapType() != ShapeMap::POINTMAP) {
+    if (graphDoc->m_meta_graph->getDisplayedMapType() != ShapeMap::LATTICEMAP) {
         QMessageBox::warning(mainWindow, tr("Warning"),
                              tr("Please make sure the displayed map is a VGA map"), QMessageBox::Ok,
                              QMessageBox::Ok);
@@ -224,7 +226,7 @@ void VGAPathsMainWindow::OnMetricShortestPathsToMany(MainWindow *mainWindow) {
 
     std::set<PixelRef> pixelsFrom;
     std::set<PixelRef> pixelsTo;
-    auto &map = graphDoc->m_meta_graph->getDisplayedPointMap();
+    auto &map = graphDoc->m_meta_graph->getDisplayedLatticeMap();
     graphDoc->m_communicator->setAnalysis(std::unique_ptr<IAnalysis>(
         new VGAMetricShortestPathToMany(map.getInternalMap(), pixelsFrom, pixelsTo)));
 

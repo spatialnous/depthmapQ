@@ -500,7 +500,7 @@ void RenderThread::run() {
                 pDoc->SetUpdateFlag(QGraphDoc::NEW_TABLE);
                 pDoc->SetRedrawFlag(QGraphDoc::VIEW_ALL, QGraphDoc::REDRAW_POINTS,
                                     QGraphDoc::NEW_DATA);
-            } catch (sala::PointMapException const &e) {
+            } catch (sala::LatticeMapException const &e) {
                 emit runtimeExceptionThrown(e.getErrorType(), e.what());
             }
         } break;

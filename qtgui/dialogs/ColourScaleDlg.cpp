@@ -261,7 +261,7 @@ void CColourScaleDlg::MyUpdateData(bool dir, bool apply_to_all) {
             auto *graph = m_viewDoc->m_meta_graph;
             if (graph->viewingProcessed()) {
                 if (graph->getViewClass() & MetaGraphDM::DX_VIEWVGA) {
-                    auto &map = graph->getDisplayedPointMap();
+                    auto &map = graph->getDisplayedLatticeMap();
                     m_display_min = map.getDisplayMinValue();
                     m_display_max = map.getDisplayMaxValue();
                     m_displayparams = map.getDisplayParams();
@@ -315,7 +315,7 @@ void CColourScaleDlg::MyUpdateData(bool dir, bool apply_to_all) {
             m_color = m_color_type_map[c_color_type->currentIndex()];
             m_displayparams.colorscale = m_color;
             if (graph->getViewClass() & MetaGraphDM::DX_VIEWVGA) {
-                graph->getDisplayedPointMap().setDisplayParams(m_displayparams, apply_to_all);
+                graph->getDisplayedLatticeMap().setDisplayParams(m_displayparams, apply_to_all);
             } else if (graph->getViewClass() & MetaGraphDM::DX_VIEWAXIAL) {
                 graph->getDisplayedShapeGraph().setDisplayParams(m_displayparams, apply_to_all);
                 graph->getDisplayedShapeGraph().setPolygonDisplay(m_show_lines, m_show_fill,

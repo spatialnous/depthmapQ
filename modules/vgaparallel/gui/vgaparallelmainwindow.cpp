@@ -60,7 +60,7 @@ void VGAParallelMainWindow::OnVGAParallel(MainWindow *mainWindow,
                              QMessageBox::Ok);
         return;
     }
-    if (graphDoc->m_meta_graph->getDisplayedMapType() != ShapeMap::POINTMAP) {
+    if (graphDoc->m_meta_graph->getDisplayedMapType() != ShapeMap::LATTICEMAP) {
         QMessageBox::warning(mainWindow, tr("Warning"),
                              tr("Please make sure the displayed map is a vga map"), QMessageBox::Ok,
                              QMessageBox::Ok);
@@ -80,7 +80,7 @@ void VGAParallelMainWindow::OnVGAParallel(MainWindow *mainWindow,
             QLineEdit::Normal, "n", &ok);
         if (!ok)
             return;
-        auto &map = graphDoc->m_meta_graph->getDisplayedPointMap();
+        auto &map = graphDoc->m_meta_graph->getDisplayedLatticeMap();
         auto radius = ConvertForVisibility(radiusText.toStdString());
         graphDoc->m_communicator->setAnalysis(std::unique_ptr<IAnalysis>(
             new VGAVisualGlobalOpenMP(map.getInternalMap(), radius, false)));
@@ -93,7 +93,7 @@ void VGAParallelMainWindow::OnVGAParallel(MainWindow *mainWindow,
         break;
     }
     case AnalysisType::VISUAL_LOCAL_OPENMP: {
-        auto &map = graphDoc->m_meta_graph->getDisplayedPointMap();
+        auto &map = graphDoc->m_meta_graph->getDisplayedLatticeMap();
         graphDoc->m_communicator->setAnalysis(
             std::unique_ptr<IAnalysis>(new VGAVisualLocalOpenMP(map.getInternalMap())));
         graphDoc->m_communicator->setPostAnalysisFunc([&map](std::unique_ptr<IAnalysis> &analysis,
@@ -104,7 +104,7 @@ void VGAParallelMainWindow::OnVGAParallel(MainWindow *mainWindow,
         break;
     }
     case AnalysisType::VISUAL_LOCAL_ADJMATRIX: {
-        auto &map = graphDoc->m_meta_graph->getDisplayedPointMap();
+        auto &map = graphDoc->m_meta_graph->getDisplayedLatticeMap();
         graphDoc->m_communicator->setAnalysis(
             std::unique_ptr<IAnalysis>(new VGAVisualLocalAdjMatrix(map.getInternalMap(), false)));
         graphDoc->m_communicator->setPostAnalysisFunc(
@@ -124,7 +124,7 @@ void VGAParallelMainWindow::OnVGAParallel(MainWindow *mainWindow,
             QLineEdit::Normal, "n", &ok);
         if (!ok)
             return;
-        auto &map = graphDoc->m_meta_graph->getDisplayedPointMap();
+        auto &map = graphDoc->m_meta_graph->getDisplayedLatticeMap();
         auto radius = ConvertForMetric(radiusText.toStdString());
         graphDoc->m_communicator->setAnalysis(
             std::unique_ptr<IAnalysis>(new VGAMetricOpenMP(map.getInternalMap(), radius, false)));
@@ -147,7 +147,7 @@ void VGAParallelMainWindow::OnVGAParallel(MainWindow *mainWindow,
             QLineEdit::Normal, "n", &ok);
         if (!ok)
             return;
-        auto &map = graphDoc->m_meta_graph->getDisplayedPointMap();
+        auto &map = graphDoc->m_meta_graph->getDisplayedLatticeMap();
         auto radius = ConvertForMetric(radiusText.toStdString());
         graphDoc->m_communicator->setAnalysis(
             std::unique_ptr<IAnalysis>(new VGAAngularOpenMP(map.getInternalMap(), radius, false)));

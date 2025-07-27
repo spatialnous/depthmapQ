@@ -323,8 +323,8 @@ class QGraphDoc : public QWidget {
     void OnMakeIsovist(const Point2f &seed, double angle = -1.0);
     void OnToolsAxialMap(const Point2f &seed);
     int RenameColumn(AttributeTable *tab, int col);
-    bool ReplaceColumnContents(PointMapDM *pointmap, ShapeMapDM *shapemap, int col);
-    bool SelectByQuery(PointMapDM *pointmap, ShapeMapDM *shapemap);
+    bool ReplaceColumnContents(LatticeMapDM *latticemap, ShapeMapDM *shapemap, int col);
+    bool SelectByQuery(LatticeMapDM *latticemap, ShapeMapDM *shapemap);
     void OnToolsTopomet();
 
     bool OnNewDocument();
@@ -378,7 +378,7 @@ class QGraphDoc : public QWidget {
     bool OnFileSaveAs();
     void OnConvertMapShapes();
     void OnToolsLineLoadUnlinks();
-    void OnPointmapExportConnectionsAsCSV();
+    void OnLatticeMapExportConnectionsAsCSV();
 
   protected:
     virtual void timerEvent(QTimerEvent *event);

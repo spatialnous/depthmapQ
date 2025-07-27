@@ -42,7 +42,7 @@ set(qtguiTest_SRCS
     testmetagraphdx.cpp
     ../qtgui/settingsimpl.cpp
     ../qtgui/dminterface/shapemapdm.cpp
-    ../qtgui/dminterface/pointmapdm.cpp
+    ../qtgui/dminterface/latticemapdm.cpp
     ../qtgui/dminterface/shapegraphdm.cpp
     ../qtgui/dminterface/metagraphdm.cpp
     ../qtgui/views/viewhelpers.cpp

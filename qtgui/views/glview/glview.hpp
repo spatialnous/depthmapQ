@@ -8,7 +8,7 @@
 #include "gldynamicrect.hpp"
 #include "gllines.hpp"
 #include "gllinesuniform.hpp"
-#include "glpointmap.hpp"
+#include "gllatticemap.hpp"
 #include "glshapegraph.hpp"
 
 #include "graphdoc.hpp"
@@ -84,7 +84,7 @@ class GLView : public MapView, protected QOpenGLFunctions {
     GLLines m_axes;
     GLShapeGraph m_visibleShapeGraph;
     GLLinesUniform m_visibleDrawingLines;
-    GLPixelMap m_visiblePointMap;
+    GLPixelMap m_visibleLatticeMap;
     GLShapeMap m_visibleDataMap;
 
     bool m_highlightOnHover = true;
@@ -119,8 +119,8 @@ class GLView : public MapView, protected QOpenGLFunctions {
     void resetView();
 
     void highlightHoveredItems(const Region4f &region);
-    void highlightHoveredPixels(const PointMapDM &map, const Region4f &region);
-    void highlightHoveredPixels(const PointMapDM &map, const std::set<PixelRef> &refs);
+    void highlightHoveredPixels(const LatticeMapDM &map, const Region4f &region);
+    void highlightHoveredPixels(const LatticeMapDM &map, const std::set<PixelRef> &refs);
     void highlightHoveredShapes(const ShapeMapDM &map, const Region4f &region);
 
     void loadAxes();

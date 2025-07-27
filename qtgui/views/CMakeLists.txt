@@ -13,7 +13,7 @@ target_sources(${target_NAME}
         glview/glpolygons.cpp
         glview/glutriangulator.cpp
         glview/gltrianglesuniform.cpp
-        glview/glpointmap.cpp
+        glview/gllatticemap.cpp
         glview/glshapegraph.cpp
         glview/glshapemap.cpp
         glview/gldynamicrect.cpp
@@ -35,7 +35,7 @@ target_sources(${target_NAME}
         glview/glpolygons.hpp
         glview/glutriangulator.hpp
         glview/gltrianglesuniform.hpp
-        glview/glpointmap.hpp
+        glview/gllatticemap.hpp
         glview/glshapegraph.hpp
         glview/glshapemap.hpp
         glview/gldynamicrect.hpp

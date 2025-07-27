@@ -126,7 +126,7 @@ class MainWindow : public QMainWindow {
     void OnAxialConnectionsExportAsDot();
     void OnAxialConnectionsExportAsPairCSV();
     void OnSegmentConnectionsExportAsPairCSV();
-    void OnPointmapExportConnectionsAsCSV();
+    void OnLatticeMapExportConnectionsAsCSV();
     void OnAddColumn();
     void OnRenameColumn();
     void OnUpdateColumn();
@@ -343,7 +343,7 @@ class MainWindow : public QMainWindow {
     QAction *exportAxialConnectionsDotAct;
     QAction *exportAxialConnectionsPairAct;
     QAction *exportSegmentConnectionsPairAct;
-    QAction *exportPointmapConnectionsPairAct;
+    QAction *exportLatticeMapConnectionsPairAct;
 
     // Attributes Menu Actions
     QAction *renameColumnAct;

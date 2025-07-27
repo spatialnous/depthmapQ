@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "dminterface/pointmapdm.hpp"
+#include "dminterface/latticemapdm.hpp"
 #include "gllinesuniform.hpp"
 #include "glrastertexture.hpp"
 #include "gltrianglesuniform.hpp"
@@ -13,19 +13,19 @@ class GLPixelMap {
   public:
     void initializeGL(bool m_core) {
         m_grid.initializeGL(m_core);
-        m_pointMap.initializeGL(m_core);
+        m_latticeMap.initializeGL(m_core);
         m_linkLines.initializeGL(m_core);
         m_linkFills.initializeGL(m_core);
     }
     void updateGL(bool m_core) {
-        m_pointMap.updateGL(m_core);
+        m_latticeMap.updateGL(m_core);
         m_grid.updateGL(m_core);
         m_linkLines.updateGL(m_core);
         m_linkFills.updateGL(m_core);
     }
     void cleanup() {
         m_grid.cleanup();
-        m_pointMap.cleanup();
+        m_latticeMap.cleanup();
         m_linkLines.cleanup();
         m_linkFills.cleanup();
     }
@@ -40,19 +40,19 @@ class GLPixelMap {
         }
     }
     void paintGL(const QMatrix4x4 &m_mProj, const QMatrix4x4 &m_mView, const QMatrix4x4 &m_mModel) {
-        m_pointMap.paintGL(m_mProj, m_mView, m_mModel);
+        m_latticeMap.paintGL(m_mProj, m_mView, m_mModel);
         if (m_showGrid)
             m_grid.paintGL(m_mProj, m_mView, m_mModel);
     }
     void setGridColour(QRgb gridColour) { m_gridColour = gridColour; }
     void showLinks(bool showLinks) { m_showLinks = showLinks; }
     void showGrid(bool showGrid) { m_showGrid = showGrid; }
-    void loadGLObjects(PointMapDM &pointMap);
-    void loadGLObjectsRequiringGLContext(const PointMapDM &currentPointMap);
+    void loadGLObjects(LatticeMapDM &latticeMap);
+    void loadGLObjectsRequiringGLContext(const LatticeMapDM &currentLatticeMap);
 
   private:
     GLLinesUniform m_grid;
-    GLRasterTexture m_pointMap;
+    GLRasterTexture m_latticeMap;
     GLLinesUniform m_linkLines;
     GLTrianglesUniform m_linkFills;
 

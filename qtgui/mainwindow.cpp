@@ -332,10 +332,10 @@ void MainWindow::OnSegmentConnectionsExportAsPairCSV() {
     }
 }
 
-void MainWindow::OnPointmapExportConnectionsAsCSV() {
+void MainWindow::OnLatticeMapExportConnectionsAsCSV() {
     QGraphDoc *m_p = activeMapDoc();
     if (m_p) {
-        m_p->OnPointmapExportConnectionsAsCSV();
+        m_p->OnLatticeMapExportConnectionsAsCSV();
     }
 }
 
@@ -1181,13 +1181,13 @@ void MainWindow::OnSelchangingTree(QTreeWidgetItem *hItem, int col) {
                 switch (entry.m_type) {
                 case 0:
                     if (graph->getViewClass() & MetaGraphDM::DX_VIEWVGA) {
-                        if (graph->getDisplayedPointMapRef() == entry.m_cat) {
+                        if (graph->getDisplayedLatticeMapRef() == entry.m_cat) {
                             graph->setViewClass(MetaGraphDM::DX_SHOWHIDEVGA);
                         } else {
-                            graph->setDisplayedPointMapRef(entry.m_cat);
+                            graph->setDisplayedLatticeMapRef(entry.m_cat);
                         }
                     } else {
-                        graph->setDisplayedPointMapRef(entry.m_cat);
+                        graph->setDisplayedLatticeMapRef(entry.m_cat);
                         graph->setViewClass(MetaGraphDM::DX_SHOWVGATOP);
                     }
                     remenu = true;
@@ -1275,11 +1275,11 @@ void MainWindow::OnSelchangingTree(QTreeWidgetItem *hItem, int col) {
             if (entry.m_subcat != -1) {
                 if (graph->getLineLayer(entry.m_cat, entry.m_subcat).isShown()) {
                     graph->getLineLayer(entry.m_cat, entry.m_subcat).setShow(false);
-                    graph->redoPointMapBlockLines();
+                    graph->redoLatticeMapBlockLines();
                     graph->resetBSPtree();
                 } else {
                     graph->getLineLayer(entry.m_cat, entry.m_subcat).setShow(true);
-                    graph->redoPointMapBlockLines();
+                    graph->redoLatticeMapBlockLines();
                     graph->resetBSPtree();
                 }
             }
@@ -1303,11 +1303,11 @@ void MainWindow::SetGraphTreeChecks() {
                 switch (entry.m_type) {
                 case 0:
                     if (viewclass & MetaGraphDM::DX_VIEWVGA &&
-                        graph->getDisplayedPointMapRef() == entry.m_cat) {
+                        graph->getDisplayedLatticeMapRef() == entry.m_cat) {
                         checkstyle = 5;
                         m_topgraph = key;
                     } else if (viewclass & MetaGraphDM::DX_VIEWBACKVGA &&
-                               graph->getDisplayedPointMapRef() == entry.m_cat) {
+                               graph->getDisplayedLatticeMapRef() == entry.m_cat) {
                         checkstyle = 6;
                         m_backgraph = key;
                     }
@@ -1347,7 +1347,7 @@ void MainWindow::SetGraphTreeChecks() {
                 int editable = MetaGraphDM::DX_NOT_EDITABLE;
                 switch (entry.m_type) {
                 case 0:
-                    if (graph->getPointMaps()[entry.m_cat].getInternalMap().isProcessed()) {
+                    if (graph->getLatticeMaps()[entry.m_cat].getInternalMap().isProcessed()) {
                         editable = MetaGraphDM::DX_NOT_EDITABLE;
                     } else {
                         editable = MetaGraphDM::DX_EDITABLE_ON;
@@ -1436,7 +1436,7 @@ void MainWindow::MakeGraphTree() {
 
     int state = graph->getState();
 
-    if (state & MetaGraphDM::DX_POINTMAPS) {
+    if (state & MetaGraphDM::DX_LATTICEMAPS) {
         if (!m_treeroots[0]) {
             QTreeWidgetItem *hItem = m_indexWidget->addNewItem(tr("Visibility Graphs"));
             hItem->setIcon(0, m_tree_icon[0]);
@@ -1445,8 +1445,8 @@ void MainWindow::MakeGraphTree() {
             m_treeroots[0] = hItem;
         }
         int i = 0;
-        for (auto &pointmap : m_treeDoc->m_meta_graph->getPointMaps()) {
-            QString name = QString(pointmap.getName().c_str());
+        for (auto &latticemap : m_treeDoc->m_meta_graph->getLatticeMaps()) {
+            QString name = QString(latticemap.getName().c_str());
             QTreeWidgetItem *hItem = m_indexWidget->addNewItem(name, m_treeroots[0]);
             m_indexWidget->setItemVisibility(hItem, Qt::Unchecked);
             m_indexWidget->setItemEditability(hItem, Qt::Unchecked);
@@ -2005,7 +2005,7 @@ void MainWindow::RedoPlotViewMenu(QGraphDoc *pDoc) {
         if (lock.try_lock()) {
             m_view_map_entries.clear();
             if (view_class == MetaGraphDM::DX_VIEWVGA) {
-                auto &map = pDoc->m_meta_graph->getDisplayedPointMap();
+                auto &map = pDoc->m_meta_graph->getDisplayedLatticeMap();
 
                 const AttributeTable &table = map.getAttributeTable();
                 m_view_map_entries.insert(std::make_pair(0, "Ref Number"));
@@ -2167,8 +2167,8 @@ void MainWindow::updateVisibilitySubMenu() {
     }
 
     if (!m_p->m_communicator && m_p->m_meta_graph->viewingProcessedShapes() &&
-        (m_p->m_meta_graph->getState() & MetaGraphDM::DX_POINTMAPS) &&
-        m_p->m_meta_graph->getDisplayedPointMap().getInternalMap().isProcessed())
+        (m_p->m_meta_graph->getState() & MetaGraphDM::DX_LATTICEMAPS) &&
+        m_p->m_meta_graph->getDisplayedLatticeMap().getInternalMap().isProcessed())
         convertDataMapLinesAct->setEnabled(true);
     else
         convertDataMapLinesAct->setEnabled(0);
@@ -2644,7 +2644,7 @@ void MainWindow::updateToolbar() {
         }
 
         if ((((m_p->m_meta_graph->getViewClass() & MetaGraphDM::DX_VIEWVGA) &&
-              (m_p->m_meta_graph->getDisplayedPointMap().getFilledPointCount() > 1)) ||
+              (m_p->m_meta_graph->getDisplayedLatticeMap().getFilledPointCount() > 1)) ||
              (((m_p->m_meta_graph->getViewClass() & MetaGraphDM::DX_VIEWAXIAL) &&
                (m_p->m_meta_graph->getState() & MetaGraphDM::DX_SHAPEGRAPHS)) &&
               (m_p->m_meta_graph->hasDisplayedShapeGraph() &&
@@ -2839,13 +2839,13 @@ void MainWindow::createActions() {
     connect(exportSegmentConnectionsPairAct, SIGNAL(triggered()), this,
             SLOT(OnSegmentConnectionsExportAsPairCSV()));
 
-    exportPointmapConnectionsPairAct =
+    exportLatticeMapConnectionsPairAct =
         new QAction(tr("Visibility Graph Connections as CSV..."), this);
-    exportPointmapConnectionsPairAct->setStatusTip(
+    exportLatticeMapConnectionsPairAct->setStatusTip(
         tr("Export connections between cells in a visibility graph as an "
            "adjacency list"));
-    connect(exportPointmapConnectionsPairAct, SIGNAL(triggered()), this,
-            SLOT(OnPointmapExportConnectionsAsCSV()));
+    connect(exportLatticeMapConnectionsPairAct, SIGNAL(triggered()), this,
+            SLOT(OnLatticeMapExportConnectionsAsCSV()));
 
     // Attributes Menu Actions
     renameColumnAct = new QAction(tr("&Rename Column..."), this);
@@ -3383,7 +3383,7 @@ void MainWindow::createMenus() {
     exportSubMenu->addAction(exportAxialConnectionsDotAct);
     exportSubMenu->addAction(exportAxialConnectionsPairAct);
     exportSubMenu->addAction(exportSegmentConnectionsPairAct);
-    exportSubMenu->addAction(exportPointmapConnectionsPairAct);
+    exportSubMenu->addAction(exportLatticeMapConnectionsPairAct);
 
     attributesMenu = menuBar()->addMenu(tr("&Attributes"));
     attributesMenu->addAction(addColumAct);

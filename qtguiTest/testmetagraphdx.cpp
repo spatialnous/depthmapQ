@@ -6,32 +6,32 @@
 
 #include "catch_amalgamated.hpp"
 
-TEST_CASE("Test pointMaps", "") {
+TEST_CASE("Test latticeMaps", "") {
     std::unique_ptr<MetaGraphDM> mgraph(new MetaGraphDM());
-    auto pointMapIdx = mgraph->addNewPointMap("Kenny");
-    REQUIRE(mgraph->getPointMaps().size() == 1);
-    REQUIRE(pointMapIdx == 0);
-    REQUIRE(mgraph->getPointMaps()[0].getName() == "Kenny");
-    REQUIRE(mgraph->getDisplayedPointMapRef() == pointMapIdx);
-    REQUIRE(mgraph->getDisplayedPointMap().getName() == "Kenny");
+    auto latticeMapIdx = mgraph->addNewLatticeMap("Kenny");
+    REQUIRE(mgraph->getLatticeMaps().size() == 1);
+    REQUIRE(latticeMapIdx == 0);
+    REQUIRE(mgraph->getLatticeMaps()[0].getName() == "Kenny");
+    REQUIRE(mgraph->getDisplayedLatticeMapRef() == latticeMapIdx);
+    REQUIRE(mgraph->getDisplayedLatticeMap().getName() == "Kenny");
 
     SECTION("Add another and remove the first through the MetaGraph") {
-        auto pointMapIdx = mgraph->addNewPointMap("Stan");
-        REQUIRE(mgraph->getPointMaps().size() == 2);
-        REQUIRE(pointMapIdx == 1);
-        REQUIRE(mgraph->getPointMaps()[1].getName() == "Stan");
-        REQUIRE(mgraph->getDisplayedPointMapRef() == 1);
-        REQUIRE(mgraph->getDisplayedPointMap().getName() == "Stan");
+        auto latticeMapIdx = mgraph->addNewLatticeMap("Stan");
+        REQUIRE(mgraph->getLatticeMaps().size() == 2);
+        REQUIRE(latticeMapIdx == 1);
+        REQUIRE(mgraph->getLatticeMaps()[1].getName() == "Stan");
+        REQUIRE(mgraph->getDisplayedLatticeMapRef() == 1);
+        REQUIRE(mgraph->getDisplayedLatticeMap().getName() == "Stan");
 
-        mgraph->setState(MetaGraphDM::DX_POINTMAPS);
+        mgraph->setState(MetaGraphDM::DX_LATTICEMAPS);
         mgraph->setViewClass(MetaGraphDM::DX_SHOWVGATOP);
-        mgraph->setDisplayedPointMapRef(0);
-        REQUIRE(mgraph->getDisplayedPointMapRef() == 0);
-        REQUIRE(mgraph->getDisplayedPointMap().getName() == "Kenny");
+        mgraph->setDisplayedLatticeMapRef(0);
+        REQUIRE(mgraph->getDisplayedLatticeMapRef() == 0);
+        REQUIRE(mgraph->getDisplayedLatticeMap().getName() == "Kenny");
 
         mgraph->removeDisplayedMap();
-        REQUIRE(mgraph->getPointMaps().size() == 1);
-        REQUIRE(mgraph->getPointMaps()[0].getName() == "Stan");
-        REQUIRE(mgraph->getDisplayedPointMapRef() == 0);
+        REQUIRE(mgraph->getLatticeMaps().size() == 1);
+        REQUIRE(mgraph->getLatticeMaps()[0].getName() == "Stan");
+        REQUIRE(mgraph->getDisplayedLatticeMapRef() == 0);
     }
 }

@@ -88,7 +88,7 @@ QGraphDoc::QGraphDoc(const QString &author, const QString &organisation) {
     connect(&m_thread, &RenderThread::closeWaitDialog, this, &QGraphDoc::DestroyWaitDialog);
 }
 void QGraphDoc::exceptionThrownInRenderThread(int type, std::string message) {
-    if (type == sala::PointMapExceptionType::NO_ISOVIST_ANALYSIS) {
+    if (type == sala::LatticeMapExceptionType::NO_ISOVIST_ANALYSIS) {
         std::stringstream message;
         message << "This operation requires isovist analysis. To run it go to: ";
         message << "Tools -> Visibility -> Run Visibility Graph Analysis... ";
@@ -152,9 +152,9 @@ void QGraphDoc::UpdateMainframestatus() {
             n = (int)m_meta_graph->getDisplayedDataMap().getShapeCount();
         }
         // either showing or constructing the VGA graph
-        else if ((state & MetaGraphDM::DX_POINTMAPS) &&
+        else if ((state & MetaGraphDM::DX_LATTICEMAPS) &&
                  m_meta_graph->getViewClass() & MetaGraphDM::DX_VIEWVGA) {
-            n = (int)m_meta_graph->getDisplayedPointMap().getInternalMap().getFilledPointCount();
+            n = (int)m_meta_graph->getDisplayedLatticeMap().getInternalMap().getFilledPointCount();
         }
         if (n > 0) {
             s1 = QString("%1   ").arg(n);
@@ -202,8 +202,8 @@ LayerManagerImpl &QGraphDoc::getLayers(int type, std::optional<size_t> layer) {
     }
     switch (type & MetaGraphDM::DX_VIEWFRONT) {
     case MetaGraphDM::DX_VIEWVGA:
-        tab = (!layer.has_value()) ? &(m_meta_graph->getDisplayedPointMap().getLayers()) //
-                                   : &(m_meta_graph->getPointMaps()[layer.value()].getLayers());
+        tab = (!layer.has_value()) ? &(m_meta_graph->getDisplayedLatticeMap().getLayers()) //
+                                   : &(m_meta_graph->getLatticeMaps()[layer.value()].getLayers());
         break;
     case MetaGraphDM::DX_VIEWAXIAL:
         tab = (!layer.has_value()) ? &(m_meta_graph->getDisplayedShapeGraph().getLayers())
@@ -224,8 +224,8 @@ const LayerManagerImpl &QGraphDoc::getLayers(int type, std::optional<size_t> lay
     }
     switch (type) {
     case MetaGraphDM::DX_VIEWVGA:
-        tab = (!layer.has_value()) ? &(m_meta_graph->getDisplayedPointMap().getLayers()) //
-                                   : &(m_meta_graph->getPointMaps()[layer.value()].getLayers());
+        tab = (!layer.has_value()) ? &(m_meta_graph->getDisplayedLatticeMap().getLayers()) //
+                                   : &(m_meta_graph->getLatticeMaps()[layer.value()].getLayers());
         break;
     case MetaGraphDM::DX_VIEWAXIAL:
         tab = (!layer.has_value()) ? &(m_meta_graph->getDisplayedShapeGraph().getLayers())
@@ -247,8 +247,8 @@ AttributeTableHandle &QGraphDoc::getAttributeTableHandle(int type, std::optional
     switch (type & MetaGraphDM::DX_VIEWFRONT) {
     case MetaGraphDM::DX_VIEWVGA:
         tab = (!layer.has_value())
-                  ? &(m_meta_graph->getDisplayedPointMap().getAttributeTableHandle())
-                  : &(m_meta_graph->getPointMaps()[layer.value()].getAttributeTableHandle());
+                  ? &(m_meta_graph->getDisplayedLatticeMap().getAttributeTableHandle())
+                  : &(m_meta_graph->getLatticeMaps()[layer.value()].getAttributeTableHandle());
         break;
     case MetaGraphDM::DX_VIEWAXIAL:
         tab = (!layer.has_value())
@@ -273,8 +273,8 @@ const AttributeTableHandle &QGraphDoc::getAttributeTableHandle(int type,
     switch (type) {
     case MetaGraphDM::DX_VIEWVGA:
         tab = (!layer.has_value())
-                  ? &(m_meta_graph->getDisplayedPointMap().getAttributeTableHandle())
-                  : &(m_meta_graph->getPointMaps()[layer.value()].getAttributeTableHandle());
+                  ? &(m_meta_graph->getDisplayedLatticeMap().getAttributeTableHandle())
+                  : &(m_meta_graph->getLatticeMaps()[layer.value()].getAttributeTableHandle());
         break;
     case MetaGraphDM::DX_VIEWAXIAL:
         tab = (!layer.has_value())
@@ -466,7 +466,7 @@ void QGraphDoc::OnVGALinksFileImport() {
         return;
     } else {
         try {
-            PointMapDM &currentMap = m_meta_graph->getDisplayedPointMap();
+            LatticeMapDM &currentMap = m_meta_graph->getDisplayedLatticeMap();
             std::vector<PixelRefPair> newLinks = sala::pixelateMergeLines(
                 EntityParsing::parseLines(fileStream, '\t'), currentMap.getInternalMap());
             sala::mergePixelPairs(newLinks, currentMap.getInternalMap());
@@ -696,7 +696,7 @@ void QGraphDoc::OnFileExport() {
         mode = 1;
         suffix = m_meta_graph->getDisplayedDataMap().getName().c_str();
     } else if (view_class & MetaGraphDM::DX_VIEWVGA) {
-        if (m_meta_graph->getDisplayedPointMap().getInternalMap().isProcessed()) {
+        if (m_meta_graph->getDisplayedLatticeMap().getInternalMap().isProcessed()) {
             mode = 2;
             suffix = tr("vga");
         } else {
@@ -761,10 +761,11 @@ void QGraphDoc::OnFileExport() {
             m_meta_graph->getDisplayedDataMap().getInternalMap().output(stream, delimiter);
             break;
         case 2:
-            m_meta_graph->getDisplayedPointMap().getInternalMap().outputSummary(stream, delimiter);
+            m_meta_graph->getDisplayedLatticeMap().getInternalMap().outputSummary(stream,
+                                                                                  delimiter);
             break;
         case 3:
-            m_meta_graph->getDisplayedPointMap().getInternalMap().outputPoints(stream, delimiter);
+            m_meta_graph->getDisplayedLatticeMap().getInternalMap().outputPoints(stream, delimiter);
             break;
         default:
             break;
@@ -800,7 +801,7 @@ void QGraphDoc::OnFileExport() {
             if (mode == 0) {
                 m_meta_graph->getDisplayedShapeGraph().getInternalMap().outputNet(stream);
             } else if (mode == 2) {
-                m_meta_graph->getDisplayedPointMap().getInternalMap().outputNet(stream);
+                m_meta_graph->getDisplayedLatticeMap().getInternalMap().outputNet(stream);
             }
         }
     } else {
@@ -838,7 +839,7 @@ void QGraphDoc::OnFileExport() {
         } else if (mode == 1) {
             m_meta_graph->getDisplayedDataMap().getInternalMap().outputMifMap(miffile, midfile);
         } else if (mode == 2) {
-            m_meta_graph->getDisplayedPointMap().getInternalMap().outputMif(miffile, midfile);
+            m_meta_graph->getDisplayedLatticeMap().getInternalMap().outputMif(miffile, midfile);
         }
     }
 }
@@ -947,7 +948,7 @@ void QGraphDoc::OnFileExportLinks() {
         mode = 6;
         suffix = tr("links");
     } else if (view_class & MetaGraphDM::DX_VIEWVGA) {
-        if (m_meta_graph->getDisplayedPointMap().getInternalMap().isProcessed()) {
+        if (m_meta_graph->getDisplayedLatticeMap().getInternalMap().isProcessed()) {
             mode = 4;
             suffix = tr("merge_lines");
         }
@@ -1003,13 +1004,13 @@ void QGraphDoc::OnFileExportLinks() {
         m_meta_graph->getDisplayedDataMap().getInternalMap().output(stream, delimiter);
         break;
     case 2:
-        m_meta_graph->getDisplayedPointMap().getInternalMap().outputSummary(stream, delimiter);
+        m_meta_graph->getDisplayedLatticeMap().getInternalMap().outputSummary(stream, delimiter);
         break;
     case 3:
-        m_meta_graph->getDisplayedPointMap().getInternalMap().outputPoints(stream, delimiter);
+        m_meta_graph->getDisplayedLatticeMap().getInternalMap().outputPoints(stream, delimiter);
         break;
     case 4:
-        m_meta_graph->getDisplayedPointMap().getInternalMap().outputMergeLines(stream, delimiter);
+        m_meta_graph->getDisplayedLatticeMap().getInternalMap().outputMergeLines(stream, delimiter);
         break;
     case 5:
         // note: specific to line graphs
@@ -1163,7 +1164,7 @@ void QGraphDoc::OnSegmentConnectionsExportAsPairCSV() {
     stream.close();
 }
 
-void QGraphDoc::OnPointmapExportConnectionsAsCSV() {
+void QGraphDoc::OnLatticeMapExportConnectionsAsCSV() {
     if (m_communicator) {
         QMessageBox::warning(this, tr("Notice"),
                              tr("Sorry, cannot export as another process is running"),
@@ -1189,7 +1190,7 @@ void QGraphDoc::OnPointmapExportConnectionsAsCSV() {
         return; // No graph to export
     }
 
-    auto &pointMap = m_meta_graph->getDisplayedPointMap();
+    auto &latticeMap = m_meta_graph->getDisplayedLatticeMap();
 
     QString suffix = tr("connectivity");
 
@@ -1217,7 +1218,7 @@ void QGraphDoc::OnPointmapExportConnectionsAsCSV() {
                              QMessageBox::Ok, QMessageBox::Ok);
         return;
     }
-    pointMap.getInternalMap().outputConnectionsAsCSV(stream, ",");
+    latticeMap.getInternalMap().outputConnectionsAsCSV(stream, ",");
 
     stream.close();
 }
@@ -1225,11 +1226,11 @@ void QGraphDoc::OnPointmapExportConnectionsAsCSV() {
 void QGraphDoc::OnSwapColours() {
     DisplayParams displayparams;
     if (m_meta_graph->getViewClass() & MetaGraphDM::DX_VIEWVGA) {
-        displayparams = m_meta_graph->getDisplayedPointMap().getDisplayParams();
+        displayparams = m_meta_graph->getDisplayedLatticeMap().getDisplayParams();
         float blue = displayparams.blue;
         displayparams.blue = displayparams.red;
         displayparams.red = blue;
-        m_meta_graph->getDisplayedPointMap().setDisplayParams(displayparams);
+        m_meta_graph->getDisplayedLatticeMap().setDisplayParams(displayparams);
     } else if (m_meta_graph->getViewClass() & MetaGraphDM::DX_VIEWAXIAL) {
         displayparams = m_meta_graph->getDisplayedShapeGraph().getDisplayParams();
         float blue = displayparams.blue;
@@ -1257,12 +1258,12 @@ void QGraphDoc::OnEditGrid() {
     }
     bool newmap = false;
 
-    if (m_meta_graph->getPointMaps().empty() ||
-        m_meta_graph->getDisplayedPointMap().getInternalMap().isProcessed()) {
+    if (m_meta_graph->getLatticeMaps().empty() ||
+        m_meta_graph->getDisplayedLatticeMap().getInternalMap().isProcessed()) {
         // this can happen if there are no displayed maps -- so flag new map
         // required:
         newmap = true;
-    } else if (m_meta_graph->getDisplayedPointMap().getInternalMap().getFilledPointCount() != 0) {
+    } else if (m_meta_graph->getDisplayedLatticeMap().getInternalMap().getFilledPointCount() != 0) {
         if (QMessageBox::Yes !=
             QMessageBox::question(this, tr("Notice"),
                                   tr("This will clear existing points.  Do you want to continue?"),
@@ -1273,7 +1274,7 @@ void QGraphDoc::OnEditGrid() {
     CGridDialog dlg(std::max(r.width(), r.height()));
     if (QDialog::Accepted == dlg.exec()) {
         if (newmap) {
-            m_meta_graph->addNewPointMap();
+            m_meta_graph->addNewLatticeMap();
         }
         m_meta_graph->setGrid(dlg.getSpacing(), Point2f(0.0f, 0.0f));
         m_meta_graph->setShowGrid(true);
@@ -1300,7 +1301,7 @@ void QGraphDoc::OnFillPoints(const Point2f &p,
                              QMessageBox::Ok, QMessageBox::Ok);
         return;
     }
-    if (~state & MetaGraphDM::DX_POINTMAPS) {
+    if (~state & MetaGraphDM::DX_LATTICEMAPS) {
         QMessageBox::warning(this, tr("Notice"), tr("Please make grid before filling"),
                              QMessageBox::Ok, QMessageBox::Ok);
         return;
@@ -1706,18 +1707,18 @@ void QGraphDoc::OnToolsAgentRun() {
 
     if (dlg.m_release_location == 1) {
         randomReleaseLocationSeed = std::nullopt;
-        std::set<int> selected = m_meta_graph->getDisplayedPointMap().getSelSet();
+        std::set<int> selected = m_meta_graph->getDisplayedLatticeMap().getSelSet();
         for (auto sel : selected) {
             releasePoints.push_back(
-                m_meta_graph->getDisplayedPointMap().getPoint(sel).getLocation());
+                m_meta_graph->getDisplayedLatticeMap().getPoint(sel).getLocation());
         }
     }
 
     // then go:
     std::unique_ptr<IAnalysis> analysis(new AgentAnalysis(
-        m_meta_graph->getDisplayedPointMap().getInternalMap(), dlg.m_timesteps, dlg.m_release_rate,
-        dlg.m_frames, dlg.m_fov, dlg.m_steps, agentAlgorithm, randomReleaseLocationSeed,
-        releasePoints,
+        m_meta_graph->getDisplayedLatticeMap().getInternalMap(), dlg.m_timesteps,
+        dlg.m_release_rate, dlg.m_frames, dlg.m_fov, dlg.m_steps, agentAlgorithm,
+        randomReleaseLocationSeed, releasePoints,
         dlg.m_gatelayer == -1 ? std::nullopt
                               : std::make_optional(std::ref(
                                     m_meta_graph->getDataMaps()[dlg.m_gatelayer].getInternalMap())),
@@ -1825,7 +1826,7 @@ void QGraphDoc::OnToolsUnmakeGraph() {
                              QMessageBox::Ok, QMessageBox::Ok);
         return;
     }
-    if (~state & MetaGraphDM::DX_POINTMAPS) {
+    if (~state & MetaGraphDM::DX_LATTICEMAPS) {
         QMessageBox::warning(this, tr("Notice"), tr("Please make grid before filling"),
                              QMessageBox::Ok, QMessageBox::Ok);
         return;
@@ -1839,7 +1840,7 @@ void QGraphDoc::OnToolsUnmakeGraph() {
             return;
     }
     bool removeLinks = false;
-    if (m_meta_graph->getDisplayedPointMap().getInternalMap().getMergedPixelPairs().size() > 0) {
+    if (m_meta_graph->getDisplayedLatticeMap().getInternalMap().getMergedPixelPairs().size() > 0) {
         removeLinks =
             QMessageBox::Yes ==
             QMessageBox::question(this, tr("Notice"), tr("Would you also like to clear the links?"),
@@ -2220,7 +2221,7 @@ void QGraphDoc::OnPushToLayer() {
         // (apart from VGA graphs, which cannot map onto themselves
         if (toplayerclass == MetaGraphDM::DX_VIEWVGA) {
             // bit clunky just to get two names out...
-            auto &map = m_meta_graph->getDisplayedPointMap();
+            auto &map = m_meta_graph->getDisplayedLatticeMap();
             origin_layer = std::string("Visibility Graphs: ") + map.getName();
             origin_attribute = map.getAttributeTable().getColumnName(map.getDisplayedAttribute());
         } else if (toplayerclass == MetaGraphDM::DX_VIEWAXIAL) {
@@ -2259,13 +2260,13 @@ void QGraphDoc::OnPushToLayer() {
                                    std::string("Shape Graphs: ") + shapegraphs[i].getName()));
             }
         }
-        for (i = 0; i < m_meta_graph->getPointMaps().size(); i++) {
+        for (i = 0; i < m_meta_graph->getLatticeMaps().size(); i++) {
             // note 1: no VGA graph can push to another VGA graph (point onto point
             // transforms)
             if (toplayerclass != MetaGraphDM::DX_VIEWVGA) {
                 names.insert(std::make_pair(std::pair<int, int>(MetaGraphDM::DX_VIEWVGA, int(i)),
                                             std::string("Visibility Graphs: ") +
-                                                m_meta_graph->getPointMaps()[i].getName()));
+                                                m_meta_graph->getLatticeMaps()[i].getName()));
             }
         }
         CPushDialog dlg(names);
@@ -2387,31 +2388,31 @@ void QGraphDoc::OnUpdateColumn() {
         return;
     }
 
-    PointMapDM *pointmap = NULL;
+    LatticeMapDM *latticemap = NULL;
     ShapeMapDM *shapemap = NULL;
     int vc = m_meta_graph->getViewClass();
     if (vc & MetaGraphDM::DX_VIEWVGA) {
-        pointmap = &(m_meta_graph->getDisplayedPointMap());
+        latticemap = &(m_meta_graph->getDisplayedLatticeMap());
     } else if (vc & MetaGraphDM::DX_VIEWAXIAL) {
         shapemap = &(m_meta_graph->getDisplayedShapeGraph());
     } else if (vc & MetaGraphDM::DX_VIEWDATA) {
         shapemap = &(m_meta_graph->getDisplayedDataMap());
     }
 
-    if (ReplaceColumnContents(pointmap, shapemap, col)) {
+    if (ReplaceColumnContents(latticemap, shapemap, col)) {
         m_meta_graph->setDisplayedAttribute(col);
         SetUpdateFlag(QGraphDoc::NEW_DATA);
         SetRedrawFlag(VIEW_ALL, QGraphDoc::REDRAW_GRAPH, QGraphDoc::NEW_DATA);
     }
 }
 
-// Either shapemap or pointmap should be NULL:
-bool QGraphDoc::ReplaceColumnContents(PointMapDM *pointmap, ShapeMapDM *shapemap, int col) {
+// Either shapemap or latticemap should be NULL:
+bool QGraphDoc::ReplaceColumnContents(LatticeMapDM *latticemap, ShapeMapDM *shapemap, int col) {
     SalaObj program_context;
     SalaGrf graph;
-    if (pointmap != NULL) {
-        graph.map.point = &pointmap->getInternalMap();
-        program_context = SalaObj(SalaObj::S_POINTMAPOBJ, graph);
+    if (latticemap != NULL) {
+        graph.map.point = &latticemap->getInternalMap();
+        program_context = SalaObj(SalaObj::S_LATTICEMAPOBJ, graph);
     } else if (shapemap != NULL) {
         SalaGrf graph;
         graph.map.shape = &shapemap->getInternalMap();
@@ -2452,8 +2453,8 @@ bool QGraphDoc::ReplaceColumnContents(PointMapDM *pointmap, ShapeMapDM *shapemap
                 // just check you really are viewing the layers:
                 bool retvar;
                 if (dlg.m_selection_only) {
-                    retvar = proggy.runupdate(col, pointmap ? pointmap->getSelSet()
-                                                            : shapemap->getSelSet());
+                    retvar = proggy.runupdate(col, latticemap ? latticemap->getSelSet()
+                                                              : shapemap->getSelSet());
                 } else {
                     retvar = proggy.runupdate(col);
                 }
@@ -2475,29 +2476,29 @@ bool QGraphDoc::ReplaceColumnContents(PointMapDM *pointmap, ShapeMapDM *shapemap
 }
 
 void QGraphDoc::OnEditQuery() {
-    PointMapDM *pointmap = NULL;
+    LatticeMapDM *latticemap = NULL;
     ShapeMapDM *shapemap = NULL;
     int vc = m_meta_graph->getViewClass();
     if (vc & MetaGraphDM::DX_VIEWVGA) {
-        pointmap = &(m_meta_graph->getDisplayedPointMap());
+        latticemap = &(m_meta_graph->getDisplayedLatticeMap());
     } else if (vc & MetaGraphDM::DX_VIEWAXIAL) {
         shapemap = &(m_meta_graph->getDisplayedShapeGraph());
     } else if (vc & MetaGraphDM::DX_VIEWDATA) {
         shapemap = &(m_meta_graph->getDisplayedDataMap());
     }
 
-    if (SelectByQuery(pointmap, shapemap)) {
+    if (SelectByQuery(latticemap, shapemap)) {
         SetRedrawFlag(VIEW_ALL, QGraphDoc::REDRAW_GRAPH, QGraphDoc::NEW_DATA);
     }
 }
 
-// Either shapemap or pointmap should be NULL:
-bool QGraphDoc::SelectByQuery(PointMapDM *pointmap, ShapeMapDM *shapemap) {
+// Either shapemap or latticemap should be NULL:
+bool QGraphDoc::SelectByQuery(LatticeMapDM *latticemap, ShapeMapDM *shapemap) {
     SalaObj program_context;
     SalaGrf graph;
-    if (pointmap != NULL) {
-        graph.map.point = &pointmap->getInternalMap();
-        program_context = SalaObj(SalaObj::S_POINTMAPOBJ, graph);
+    if (latticemap != NULL) {
+        graph.map.point = &latticemap->getInternalMap();
+        program_context = SalaObj(SalaObj::S_LATTICEMAPOBJ, graph);
     } else if (shapemap != NULL) {
         SalaGrf graph;
         graph.map.shape = &shapemap->getInternalMap();
@@ -2531,8 +2532,8 @@ bool QGraphDoc::SelectByQuery(PointMapDM *pointmap, ShapeMapDM *shapemap) {
             bool retvar;
             std::vector<int> selset;
             if (dlg.m_selection_only) {
-                retvar = proggy.runselect(selset,
-                                          pointmap ? pointmap->getSelSet() : shapemap->getSelSet());
+                retvar = proggy.runselect(selset, latticemap ? latticemap->getSelSet()
+                                                             : shapemap->getSelSet());
             } else {
                 retvar = proggy.runselect(selset);
             }
@@ -2543,8 +2544,8 @@ bool QGraphDoc::SelectByQuery(PointMapDM *pointmap, ShapeMapDM *shapemap) {
                 error = true;
             } else {
                 // make the selection using the selset:
-                if (pointmap) {
-                    pointmap->setCurSel(selset);
+                if (latticemap) {
+                    latticemap->setCurSel(selset);
                 } else {
                     // note, shape maps have been working with rowids directly:
                     shapemap->setCurSel(selset);
@@ -2661,7 +2662,7 @@ void QGraphDoc::OnViewSummary() {
 
 void QGraphDoc::OnToolsPointConvShapeMap() {
     // CWaitCursor wait;
-    m_meta_graph->getDisplayedPointMap().getInternalMap().mergeFromShapeMap(
+    m_meta_graph->getDisplayedLatticeMap().getInternalMap().mergeFromShapeMap(
         m_meta_graph->getDisplayedDataMap().getInternalMap());
     m_meta_graph->setViewClass(MetaGraphDM::DX_SHOWVGATOP);
     SetUpdateFlag(QGraphDoc::NEW_TABLE);

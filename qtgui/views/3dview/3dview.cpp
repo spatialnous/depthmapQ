@@ -156,7 +156,7 @@ void Q3DView::timerEvent(QTimerEvent *event) {
 
     if (m_animating && !pDoc->m_communicator && pDoc->m_meta_graph &&
         pDoc->m_meta_graph->viewingProcessedPoints()) {
-        auto &pointmap = pDoc->m_meta_graph->getDisplayedPointMap();
+        auto &latticemap = pDoc->m_meta_graph->getDisplayedLatticeMap();
         m_animating = false;
         for (size_t i = 0; i < m_mannequins.size(); i++) {
             m_mannequins[i].frame();
@@ -176,7 +176,7 @@ void Q3DView::timerEvent(QTimerEvent *event) {
                         if (k < m_traces[j].events.size()) {
                             Point2f p = (Point2f)m_traces[j].events[k];
                             PixelRef pix =
-                                pointmap.pixelate(p); // note, take the pix before you scale!
+                                latticemap.pixelate(p); // note, take the pix before you scale!
                             p.normalScale(m_region.bottomLeft, m_region.width(), m_region.height());
                             m_mannequins[i].advance(p);
                             auto iter = m_pixels.find(pix);
@@ -258,18 +258,18 @@ void Q3DView::DrawScene() {
         if (!m_animating) {
             if (pDoc->m_meta_graph && pDoc->m_meta_graph->viewingProcessedPoints()) {
                 // okay, you can go for it and draw all the squares in cutesy 3d:
-                auto &pointmap = pDoc->m_meta_graph->getDisplayedPointMap();
-                AttributeTable &table = pointmap.getAttributeTable();
+                auto &latticemap = pDoc->m_meta_graph->getDisplayedLatticeMap();
+                AttributeTable &table = latticemap.getAttributeTable();
 
                 for (auto iter = table.begin(); iter != table.end(); iter++) {
                     PixelRef pix = iter->getKey().value;
                     PafColor color;
-                    int col = pointmap.getDisplayedAttribute();
+                    int col = latticemap.getDisplayedAttribute();
                     float value = iter->getRow().getNormalisedValue(col);
                     if (value != -1.0f) {
                         color.makeAxmanesque(value);
                         glColor3f(color.redf(), color.greenf(), color.bluef());
-                        Point2f p = pointmap.depixelate(pix);
+                        Point2f p = latticemap.depixelate(pix);
                         p.normalScale(m_region.bottomLeft, m_region.width(), m_region.height());
                         glPushMatrix();
                         glTranslatef(p.x, p.y, 0.0f);
@@ -419,7 +419,7 @@ void Q3DView::ReloadPointData() {
         //
         if (!m_region.atZero()) {
             GLfloat unit =
-                pDoc->m_meta_graph->getDisplayedPointMap().getSpacing() / m_region.width();
+                pDoc->m_meta_graph->getDisplayedLatticeMap().getSpacing() / m_region.width();
             m_male_template.Init(unit, true);
             m_female_template.Init(unit, false);
             for (int i = 0; i < 4; i++) {
@@ -433,7 +433,7 @@ void Q3DView::ReloadPointData() {
         }
         //
         m_pixels.clear();
-        auto &map = pDoc->m_meta_graph->getDisplayedPointMap();
+        auto &map = pDoc->m_meta_graph->getDisplayedLatticeMap();
         auto &table = map.getAttributeTable();
         for (const auto &iter : table) {
             PixelRef pix = iter.getKey().value;
@@ -684,11 +684,11 @@ void Q3DView::CreateAgent(QPoint point) {
 
         if (pDoc->m_meta_graph && pDoc->m_meta_graph->viewingProcessedPoints()) {
             // okay, you can go for it and add an agent:
-            auto &pointmap = pDoc->m_meta_graph->getDisplayedPointMap();
+            auto &latticemap = pDoc->m_meta_graph->getDisplayedLatticeMap();
             p.denormalScale(m_region.bottomLeft, m_region.width(), m_region.height());
-            PixelRef pix = pointmap.pixelate(p);
-            if (pointmap.getPoint(pix).filled()) {
-                m_agents.push_back(Agent(&m_agent_program, &pointmap.getInternalMap()));
+            PixelRef pix = latticemap.pixelate(p);
+            if (latticemap.getPoint(pix).filled()) {
+                m_agents.push_back(Agent(&m_agent_program, &latticemap.getInternalMap()));
                 m_agents.back().onInit(pix);
                 Point2f p2 = m_agents.back().getLocation();
                 p2.normalScale(m_region.bottomLeft, m_region.width(), m_region.height());

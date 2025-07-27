@@ -392,16 +392,16 @@ void QDepthmapView::paintEvent(QPaintEvent *) {
         // note that the redraw rect is dependent on the cleared portion above
         // note you *must* check *state* before drawing, you cannot rely on
         // view_class as it can be set up before the layer is ready to draw:
-        if (state & MetaGraphDM::DX_POINTMAPS &&
-            (!m_pDoc.m_meta_graph->getDisplayedPointMap().getInternalMap().isProcessed() ||
+        if (state & MetaGraphDM::DX_LATTICEMAPS &&
+            (!m_pDoc.m_meta_graph->getDisplayedLatticeMap().getInternalMap().isProcessed() ||
              m_pDoc.m_meta_graph->getViewClass() &
                  (MetaGraphDM::DX_VIEWVGA | MetaGraphDM::DX_VIEWBACKVGA)) &&
             !m_pDoc.m_communicator) // <- m_communicator because I'm having thread
                                     // locking problems
         {
-            m_pDoc.m_meta_graph->getDisplayedPointMap().setScreenPixel(
+            m_pDoc.m_meta_graph->getDisplayedLatticeMap().setScreenPixel(
                 m_unit); // only used by points (at the moment!)
-            m_pDoc.m_meta_graph->getDisplayedPointMap().makeViewportPoints(
+            m_pDoc.m_meta_graph->getDisplayedLatticeMap().makeViewportPoints(
                 LogicalViewport(rect, &m_pDoc));
         }
         if (state & MetaGraphDM::DX_SHAPEGRAPHS &&
@@ -533,8 +533,8 @@ void QDepthmapView::mouseMoveEvent(QMouseEvent *e) {
             // If only CTRL key down, snap to grid
             if (m_pDoc.m_meta_graph->getViewClass() &
                 (MetaGraphDM::DX_VIEWVGA | MetaGraphDM::DX_VIEWBACKVGA)) {
-                auto &map = m_pDoc.m_meta_graph->getDisplayedPointMap();
-                if (m_pDoc.m_meta_graph->getDisplayedPointMap().getSpacing() / m_unit > 20) {
+                auto &map = m_pDoc.m_meta_graph->getDisplayedLatticeMap();
+                if (m_pDoc.m_meta_graph->getDisplayedLatticeMap().getSpacing() / m_unit > 20) {
                     // hi-res snap when zoomed in
                     m_snap_point = map.depixelate(map.pixelate(LogicalUnits(point), false, 2), 0.5);
                 } else {
@@ -615,10 +615,10 @@ void QDepthmapView::mouseMoveEvent(QMouseEvent *e) {
             }
         } else if (m_current_mode == PENCIL) {
             if (m_mouse_point != point &&
-                m_pDoc.m_meta_graph->getDisplayedPointMap().pixelate(LogicalUnits(point)) !=
-                    m_pDoc.m_meta_graph->getDisplayedPointMap().pixelate(
+                m_pDoc.m_meta_graph->getDisplayedLatticeMap().pixelate(LogicalUnits(point)) !=
+                    m_pDoc.m_meta_graph->getDisplayedLatticeMap().pixelate(
                         LogicalUnits(m_mouse_point))) {
-                m_pDoc.m_meta_graph->getDisplayedPointMap().fillPoint(LogicalUnits(point), true);
+                m_pDoc.m_meta_graph->getDisplayedLatticeMap().fillPoint(LogicalUnits(point), true);
                 m_redraw_no_clear = true;
                 m_mouse_point = point;
                 // Redraw scene
@@ -626,10 +626,10 @@ void QDepthmapView::mouseMoveEvent(QMouseEvent *e) {
             }
         } else if (m_current_mode == ERASE) {
             if (m_mouse_point != point &&
-                m_pDoc.m_meta_graph->getDisplayedPointMap().pixelate(LogicalUnits(point)) !=
-                    m_pDoc.m_meta_graph->getDisplayedPointMap().pixelate(
+                m_pDoc.m_meta_graph->getDisplayedLatticeMap().pixelate(LogicalUnits(point)) !=
+                    m_pDoc.m_meta_graph->getDisplayedLatticeMap().pixelate(
                         LogicalUnits(m_mouse_point))) {
-                m_pDoc.m_meta_graph->getDisplayedPointMap().fillPoint(LogicalUnits(point), false);
+                m_pDoc.m_meta_graph->getDisplayedLatticeMap().fillPoint(LogicalUnits(point), false);
                 m_redraw_no_clear = true;
                 m_mouse_point = point;
                 // Redraw scene
@@ -761,7 +761,7 @@ void QDepthmapView::mousePressEvent(QMouseEvent *e) {
             case PENCIL: {
                 m_current_mode = PENCIL;
                 // Fill the point
-                m_pDoc.m_meta_graph->getDisplayedPointMap().fillPoint(LogicalUnits(point), true);
+                m_pDoc.m_meta_graph->getDisplayedLatticeMap().fillPoint(LogicalUnits(point), true);
                 m_mouse_point = point;
                 // Redraw scene
                 m_redraw_no_clear = true;
@@ -779,11 +779,11 @@ void QDepthmapView::mousePressEvent(QMouseEvent *e) {
 
 void QDepthmapView::BeginJoin() {
     if (m_pDoc.m_meta_graph->getSelCount() > 1 && m_pDoc.m_meta_graph->viewingProcessedPoints()) {
-        Region4f r = m_pDoc.m_meta_graph->getDisplayedPointMap().getSelBounds();
+        Region4f r = m_pDoc.m_meta_graph->getDisplayedLatticeMap().getSelBounds();
         QRect rect(PhysicalUnits(Point2f(r.bottomLeft.x, r.topRight.y)),
                    PhysicalUnits(Point2f(r.topRight.x, r.bottomLeft.y)));
         int spacer = int(
-            ceil(5.0 * m_pDoc.m_meta_graph->getDisplayedPointMap().getSpacing() / (m_unit * 10.0)));
+            ceil(5.0 * m_pDoc.m_meta_graph->getDisplayedLatticeMap().getSpacing() / (m_unit * 10.0)));
         m_mouse_point = this->rect().center();
         m_drag_rect_a =
             QRect(-rect.width() - spacer / 2, -rect.height() - spacer / 2, spacer / 2, spacer / 2);
@@ -865,7 +865,7 @@ void QDepthmapView::mouseReleaseEvent(QMouseEvent *e) {
             bool ok = false;
             bool clearcursor = false;
             if (m_pDoc.m_meta_graph->getViewClass() & MetaGraphDM::DX_VIEWVGA) {
-                ok = m_pDoc.m_meta_graph->getDisplayedPointMap().mergePoints(LogicalUnits(point));
+                ok = m_pDoc.m_meta_graph->getDisplayedLatticeMap().mergePoints(LogicalUnits(point));
             } else if (m_pDoc.m_meta_graph->getViewClass() & MetaGraphDM::DX_VIEWAXIAL) {
                 if (m_pDoc.m_meta_graph->getSelCount() == 1) {
                     auto &map = m_pDoc.m_meta_graph->getDisplayedShapeGraph();
@@ -1039,7 +1039,7 @@ void QDepthmapView::mouseReleaseEvent(QMouseEvent *e) {
         } else if (m_mouse_mode == UNJOIN) {
             if (m_pDoc.m_meta_graph->isSelected()) {
                 if (m_pDoc.m_meta_graph->viewingProcessedPoints()) {
-                    if (m_pDoc.m_meta_graph->getDisplayedPointMap().unmergePoints()) {
+                    if (m_pDoc.m_meta_graph->getDisplayedLatticeMap().unmergePoints()) {
                         m_pDoc.modifiedFlag = true;
                         m_pDoc.SetRedrawFlag(QGraphDoc::VIEW_ALL, QGraphDoc::REDRAW_GRAPH,
                                              QGraphDoc::NEW_DATA);
@@ -1092,7 +1092,7 @@ void QDepthmapView::mouseReleaseEvent(QMouseEvent *e) {
                 }
                 break;
             case PENCIL: {
-                m_pDoc.m_meta_graph->getDisplayedPointMap().fillPoint(LogicalUnits(point), false);
+                m_pDoc.m_meta_graph->getDisplayedLatticeMap().fillPoint(LogicalUnits(point), false);
                 m_redraw_all = true;
                 update();
             } break;
@@ -1287,8 +1287,8 @@ bool QDepthmapView::Output(QPainter *pDC, QGraphDoc *pDoc, bool screendraw) {
     if (!b_continue && m_showlinks) {
         pDC->setBrush(QBrush(QColor(m_foreground), Qt::SolidPattern));
         if (pDoc->m_meta_graph->getViewClass() & MetaGraphDM::DX_VIEWVGA &&
-            pDoc->m_meta_graph->getDisplayedPointMap().getInternalMap().isProcessed()) {
-            auto &map = pDoc->m_meta_graph->getDisplayedPointMap();
+            pDoc->m_meta_graph->getDisplayedLatticeMap().getInternalMap().isProcessed()) {
+            auto &map = pDoc->m_meta_graph->getDisplayedLatticeMap();
             // merge lines
             pDC->setPen(QPen(QBrush(QColor(00, 255, 0)), spacer / 10 + 1, Qt::SolidLine));
             while ((b_continue = map.findNextMergeLine())) {
@@ -1325,7 +1325,7 @@ bool QDepthmapView::DrawPoints(QPainter *pDC, QGraphDoc *pDoc, int spacer, unsig
     unsigned long c_tick = 0;
     bool b_continue = false;
 
-    auto &map = pDoc->m_meta_graph->getDisplayedPointMap();
+    auto &map = pDoc->m_meta_graph->getDisplayedLatticeMap();
 
     bool muted = (map.getInternalMap().isProcessed() &&
                   pDoc->m_meta_graph->getViewClass() & MetaGraphDM::DX_VIEWBACKVGA);
@@ -1652,10 +1652,10 @@ void QDepthmapView::OutputEPS(std::ofstream &stream, QGraphDoc *pDoc, bool inclu
 
     Region4f logicalviewport = LogicalViewport(rect, pDoc);
 
-    if (state & MetaGraphDM::DX_POINTMAPS) {
-        pDoc->m_meta_graph->getDisplayedPointMap().setScreenPixel(
+    if (state & MetaGraphDM::DX_LATTICEMAPS) {
+        pDoc->m_meta_graph->getDisplayedLatticeMap().setScreenPixel(
             m_unit); // only used by points (at the moment!)
-        pDoc->m_meta_graph->getDisplayedPointMap().makeViewportPoints(logicalviewport);
+        pDoc->m_meta_graph->getDisplayedLatticeMap().makeViewportPoints(logicalviewport);
     }
     if (state & MetaGraphDM::DX_SHAPEGRAPHS) {
         pDoc->m_meta_graph->getDisplayedShapeGraph().makeViewportShapes(logicalviewport);
@@ -1672,7 +1672,7 @@ void QDepthmapView::OutputEPS(std::ofstream &stream, QGraphDoc *pDoc, bool inclu
         spacer = 0.1;
     }
 
-    if (state & MetaGraphDM::DX_POINTMAPS &&
+    if (state & MetaGraphDM::DX_LATTICEMAPS &&
         pDoc->m_meta_graph->getViewClass() & MetaGraphDM::DX_VIEWVGA) {
 
         // Define EPS box using spacer dimensions:
@@ -1685,7 +1685,7 @@ void QDepthmapView::OutputEPS(std::ofstream &stream, QGraphDoc *pDoc, bool inclu
         stream << "/fbx\n"
                << " { C fill } def" << std::endl;
 
-        auto &map = pDoc->m_meta_graph->getDisplayedPointMap();
+        auto &map = pDoc->m_meta_graph->getDisplayedLatticeMap();
 
         while (map.findNextPoint()) {
 
@@ -1797,7 +1797,7 @@ void QDepthmapView::OutputEPS(std::ofstream &stream, QGraphDoc *pDoc, bool inclu
              {
                 PixelRef pos = eco.arts()[i].getPos();
                 Point2f logical =
-       pDoc->m_meta_graph->getDisplayedPointMap().depixelate(pos);
+       pDoc->m_meta_graph->getDisplayedLatticeMap().depixelate(pos);
                 // this is in units of logical is unit based so this actually
        works okay: QPoint p = PhysicalUnits(Point2f(logical.x, logical.y)); QPoint
        bottomleft = PhysicalUnits(Point2f(logical.x - 0.5, logical.y - 0.5));
@@ -2001,7 +2001,7 @@ int QDepthmapView::GetSpacer(QGraphDoc *pDoc) {
     int viewclass = pDoc->m_meta_graph->getViewClass();
     if (viewclass & (MetaGraphDM::DX_VIEWVGA | MetaGraphDM::DX_VIEWBACKVGA)) {
         spacer = int(
-            ceil(5.0 * pDoc->m_meta_graph->getDisplayedPointMap().getSpacing() / (m_unit * 10.0)));
+            ceil(5.0 * pDoc->m_meta_graph->getDisplayedLatticeMap().getSpacing() / (m_unit * 10.0)));
     } else if (viewclass & MetaGraphDM::DX_VIEWAXIAL) {
         spacer =
             int(ceil(pDoc->m_meta_graph->getDisplayedShapeGraph().getSpacing() / (m_unit * 10.0)));
@@ -2238,7 +2238,7 @@ void QDepthmapView::OnEditPolygonTool() {
 
 void QDepthmapView::OnModeJoin() {
     if (m_pDoc.m_meta_graph->getState() &
-        (MetaGraphDM::DX_POINTMAPS | MetaGraphDM::DX_SHAPEGRAPHS)) {
+        (MetaGraphDM::DX_LATTICEMAPS | MetaGraphDM::DX_SHAPEGRAPHS)) {
         m_mouse_mode = JOIN;
         if (!m_pDoc.m_meta_graph->isSelected()) {
             SetCursor(m_mouse_mode);
@@ -2254,7 +2254,7 @@ void QDepthmapView::OnModeJoin() {
 
 void QDepthmapView::OnModeUnjoin() {
     if (m_pDoc.m_meta_graph->getState() &
-        (MetaGraphDM::DX_POINTMAPS | MetaGraphDM::DX_SHAPEGRAPHS)) {
+        (MetaGraphDM::DX_LATTICEMAPS | MetaGraphDM::DX_SHAPEGRAPHS)) {
         m_mouse_mode = UNJOIN;
         if (!m_pDoc.m_meta_graph->isSelected()) {
             SetCursor(m_mouse_mode);
@@ -2277,13 +2277,13 @@ void QDepthmapView::OnEditCopy() {
     QRect rectin = QRect(0, 0, width(), height());
     int state = m_pDoc.m_meta_graph->getState();
 
-    if (state & MetaGraphDM::DX_POINTMAPS &&
-        (!m_pDoc.m_meta_graph->getDisplayedPointMap().getInternalMap().isProcessed() ||
+    if (state & MetaGraphDM::DX_LATTICEMAPS &&
+        (!m_pDoc.m_meta_graph->getDisplayedLatticeMap().getInternalMap().isProcessed() ||
          m_pDoc.m_meta_graph->getViewClass() &
              (MetaGraphDM::DX_VIEWVGA | MetaGraphDM::DX_VIEWBACKVGA))) {
-        m_pDoc.m_meta_graph->getDisplayedPointMap().setScreenPixel(
+        m_pDoc.m_meta_graph->getDisplayedLatticeMap().setScreenPixel(
             m_unit); // only used by points (at the moment!)
-        m_pDoc.m_meta_graph->getDisplayedPointMap().makeViewportPoints(
+        m_pDoc.m_meta_graph->getDisplayedLatticeMap().makeViewportPoints(
             LogicalViewport(rectin, &m_pDoc));
     }
     if (state & MetaGraphDM::DX_SHAPEGRAPHS &&
@@ -2432,10 +2432,10 @@ void QDepthmapView::OutputSVG(std::ofstream &stream, QGraphDoc *pDoc) {
 
     int state = pDoc->m_meta_graph->getState();
 
-    if (state & MetaGraphDM::DX_POINTMAPS) {
-        pDoc->m_meta_graph->getDisplayedPointMap().setScreenPixel(
+    if (state & MetaGraphDM::DX_LATTICEMAPS) {
+        pDoc->m_meta_graph->getDisplayedLatticeMap().setScreenPixel(
             m_unit); // only used by points (at the moment!)
-        pDoc->m_meta_graph->getDisplayedPointMap().makeViewportPoints(logicalviewport);
+        pDoc->m_meta_graph->getDisplayedLatticeMap().makeViewportPoints(logicalviewport);
     }
     if (state & MetaGraphDM::DX_SHAPEGRAPHS) {
         pDoc->m_meta_graph->getDisplayedShapeGraph().makeViewportShapes(logicalviewport);
@@ -2447,10 +2447,10 @@ void QDepthmapView::OutputSVG(std::ofstream &stream, QGraphDoc *pDoc) {
         pDoc->m_meta_graph->makeViewportShapes(logicalviewport);
     }
 
-    if (state & MetaGraphDM::DX_POINTMAPS &&
+    if (state & MetaGraphDM::DX_LATTICEMAPS &&
         pDoc->m_meta_graph->getViewClass() & MetaGraphDM::DX_VIEWVGA) {
 
-        auto &map = pDoc->m_meta_graph->getDisplayedPointMap();
+        auto &map = pDoc->m_meta_graph->getDisplayedLatticeMap();
 
         double spacing = map.getSpacing();
         double spacer = 4800.0 * (spacing / logicalviewport.width()) / 2.0;
