@@ -461,7 +461,11 @@ void QDepthmapView::resizeGL(int w, int h) {
     //   m_viewport_set = false;
     m_redraw_all = true;
     m_resize_viewport = true;
-    m_pDoc.m_view[QGraphDoc::VIEW_MAP] = this;
+    if (!testAttribute(Qt::WA_DontShowOnScreen)) {
+        // only do this if the widget is shown on screen (otherwise graphdoc
+        // will try to refresh it.
+        m_pDoc.m_view[QGraphDoc::VIEW_MAP] = this;
+    }
     m_pixmap = new QPixmap(w, h);
     update();
 }
@@ -2371,7 +2375,11 @@ void QDepthmapView::OnEditSave() {
 void QDepthmapView::closeEvent(QCloseEvent *event) {
     m_pDoc.m_view[QGraphDoc::VIEW_MAP] = NULL;
     if (!m_pDoc.OnCloseDocument(QGraphDoc::VIEW_MAP)) {
-        m_pDoc.m_view[QGraphDoc::VIEW_MAP] = this;
+        if (!testAttribute(Qt::WA_DontShowOnScreen)) {
+            // only do this if the widget is shown on screen (otherwise graphdoc
+            // will try to refresh it.
+            m_pDoc.m_view[QGraphDoc::VIEW_MAP] = this;
+        }
         event->ignore();
     }
 }
