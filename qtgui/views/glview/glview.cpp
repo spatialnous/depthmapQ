@@ -267,7 +267,7 @@ void GLView::mouseReleaseEvent(QMouseEvent *event) {
         }
         case MOUSE_MODE_PENCIL: {
             m_pDoc.m_meta_graph->getDisplayedLatticeMap().fillPoint(worldPoint, event->button() ==
-                                                                                  Qt::LeftButton);
+                                                                                    Qt::LeftButton);
             break;
         }
         case MOUSE_MODE_SEED_ISOVIST: {

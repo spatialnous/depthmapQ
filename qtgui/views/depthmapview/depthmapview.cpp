@@ -782,8 +782,8 @@ void QDepthmapView::BeginJoin() {
         Region4f r = m_pDoc.m_meta_graph->getDisplayedLatticeMap().getSelBounds();
         QRect rect(PhysicalUnits(Point2f(r.bottomLeft.x, r.topRight.y)),
                    PhysicalUnits(Point2f(r.topRight.x, r.bottomLeft.y)));
-        int spacer = int(
-            ceil(5.0 * m_pDoc.m_meta_graph->getDisplayedLatticeMap().getSpacing() / (m_unit * 10.0)));
+        int spacer = int(ceil(5.0 * m_pDoc.m_meta_graph->getDisplayedLatticeMap().getSpacing() /
+                              (m_unit * 10.0)));
         m_mouse_point = this->rect().center();
         m_drag_rect_a =
             QRect(-rect.width() - spacer / 2, -rect.height() - spacer / 2, spacer / 2, spacer / 2);
@@ -2000,8 +2000,8 @@ int QDepthmapView::GetSpacer(QGraphDoc *pDoc) {
     int spacer = 1;
     int viewclass = pDoc->m_meta_graph->getViewClass();
     if (viewclass & (MetaGraphDM::DX_VIEWVGA | MetaGraphDM::DX_VIEWBACKVGA)) {
-        spacer = int(
-            ceil(5.0 * pDoc->m_meta_graph->getDisplayedLatticeMap().getSpacing() / (m_unit * 10.0)));
+        spacer = int(ceil(5.0 * pDoc->m_meta_graph->getDisplayedLatticeMap().getSpacing() /
+                          (m_unit * 10.0)));
     } else if (viewclass & MetaGraphDM::DX_VIEWAXIAL) {
         spacer =
             int(ceil(pDoc->m_meta_graph->getDisplayedShapeGraph().getSpacing() / (m_unit * 10.0)));
