@@ -67,6 +67,7 @@ set(target_SRCS
 qt_wrap_ui(UI_HDRS
     UI/TopoMetDlg.ui
     UI/SegmentAnalysisDlg.ui
+    UI/SegmentTulipLeafChoiceDlg.ui
     UI/RenameObjectDlg.ui
     UI/PushDialog.ui
     UI/PromptReplace.ui

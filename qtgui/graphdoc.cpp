@@ -26,6 +26,7 @@
 #include "dialogs/PushDialog.hpp"
 #include "dialogs/RenameObjectDlg.hpp"
 #include "dialogs/SegmentAnalysisDlg.hpp"
+#include "dialogs/SegmentTulipLeafChoiceDlg.hpp"
 #include "dialogs/TopoMetDlg.hpp"
 #include "salalib/agents/agentanalysis.hpp"
 #include "views/depthmapview/depthmapview.hpp"
@@ -1622,6 +1623,24 @@ void QGraphDoc::OnToolsRunSeg() {
         m_communicator->SetFunction(dlg.m_analysis_type == 1
                                         ? CMSCommunicator::SEGMENTANALYSISANGULAR
                                         : CMSCommunicator::SEGMENTANALYSISTULIP);
+        m_thread.render(this);
+    }
+}
+
+void QGraphDoc::OnToolsRunTulipLeafChoice() {
+    int state = m_meta_graph->getState();
+    if (m_communicator) {
+        QMessageBox::warning(this, tr("Warning"), tr("Please wait, another task is running"),
+                             QMessageBox::Ok, QMessageBox::Ok);
+        return;
+    }
+
+    CSegmentTulipLeafChoiceDlg dlg(m_meta_graph);
+
+    if (QDialog::Accepted == dlg.exec()) {
+        m_communicator = new CMSCommunicator();
+        CreateWaitDialog(tr("Performing segment tulip leaf choice analysis..."));
+        m_communicator->SetFunction(CMSCommunicator::SEGMENTANALYSISTULIPLEAFCHOICE);
         m_thread.render(this);
     }
 }

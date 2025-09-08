@@ -7,6 +7,7 @@ target_sources(${target_NAME}
     PUBLIC
         TopoMetDlg.hpp
         SegmentAnalysisDlg.hpp
+        SegmentTulipLeafChoiceDlg.hpp
         RenameObjectDlg.hpp
         PushDialog.hpp
         PromptReplace.hpp
@@ -39,6 +40,7 @@ target_sources(${target_NAME}
     PRIVATE
         TopoMetDlg.cpp
         SegmentAnalysisDlg.cpp
+        SegmentTulipLeafChoiceDlg.cpp
         RenameObjectDlg.cpp
         PushDialog.cpp
         PromptReplace.cpp

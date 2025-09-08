@@ -416,6 +416,18 @@ void RenderThread::run() {
             pDoc->SetRedrawFlag(QGraphDoc::VIEW_ALL, QGraphDoc::REDRAW_GRAPH, QGraphDoc::NEW_DATA);
             break;
 
+        case CMSCommunicator::SEGMENTANALYSISTULIPLEAFCHOICE:
+            ok = pDoc->m_meta_graph->analyseSegmentsTulipLeafChoice(
+                comm, pMain->m_options.radiusSet, pMain->m_options.selOnly,
+                pMain->m_options.tulipBins, pMain->m_options.weightedMeasureCol,
+                pMain->m_options.radiusType, pMain->m_options.weightedMeasureCol2,
+                pMain->m_options.routeweightCol, true, false);
+            if (ok) {
+                pDoc->SetUpdateFlag(QGraphDoc::NEW_DATA);
+            }
+            pDoc->SetRedrawFlag(QGraphDoc::VIEW_ALL, QGraphDoc::REDRAW_GRAPH, QGraphDoc::NEW_DATA);
+            break;
+
         case CMSCommunicator::SEGMENTANALYSISANGULAR:
             ok = pDoc->m_meta_graph->analyseSegmentsAngular(comm, pMain->m_options.radiusSet);
             if (ok) {

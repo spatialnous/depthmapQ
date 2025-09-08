@@ -487,6 +487,13 @@ void MainWindow::OnToolsRunSeg() {
     }
 }
 
+void MainWindow::OnToolsRunTulipLeafChoice() {
+    QGraphDoc *m_p = activeMapDoc();
+    if (m_p) {
+        m_p->OnToolsRunTulipLeafChoice();
+    }
+}
+
 void MainWindow::OnToolsTopomet() {
     QGraphDoc *m_p = activeMapDoc();
     if (m_p) {
@@ -2223,13 +2230,17 @@ void MainWindow::updateSegmentSubMenu() {
     if (!m_p) {
         runAngularSegmentAnalysisAct->setEnabled(0);
         runTopologicalOrMetricAnalysisAct->setEnabled(0);
+        runAngularSegmentTulipLeafChoiceAct->setEnabled(0);
         return;
     }
     if (m_p->m_meta_graph->viewingProcessedLines() &&
-        m_p->m_meta_graph->getDisplayedShapeGraph().isSegmentMap())
+        m_p->m_meta_graph->getDisplayedShapeGraph().isSegmentMap()) {
         runAngularSegmentAnalysisAct->setEnabled(true);
-    else
+        runAngularSegmentTulipLeafChoiceAct->setEnabled(true);
+    } else {
         runAngularSegmentAnalysisAct->setEnabled(0);
+        runAngularSegmentTulipLeafChoiceAct->setEnabled(0);
+    }
 
     if (m_p->m_meta_graph->viewingProcessedLines() &&
         m_p->m_meta_graph->getDisplayedShapeGraph().isSegmentMap())
@@ -2924,6 +2935,10 @@ void MainWindow::createActions() {
     runAngularSegmentAnalysisAct = new QAction(tr("&Run Angular Segment Analysis..."), this);
     connect(runAngularSegmentAnalysisAct, SIGNAL(triggered()), this, SLOT(OnToolsRunSeg()));
 
+    runAngularSegmentTulipLeafChoiceAct = new QAction(tr("Run Tulip Leaf Choice..."), this);
+    connect(runAngularSegmentTulipLeafChoiceAct, SIGNAL(triggered()), this,
+            SLOT(OnToolsRunTulipLeafChoice()));
+
     runTopologicalOrMetricAnalysisAct =
         new QAction(tr("Run &Topological or Metric Analysis..."), this);
     connect(runTopologicalOrMetricAnalysisAct, SIGNAL(triggered()), this, SLOT(OnToolsTopomet()));
@@ -3427,6 +3442,7 @@ void MainWindow::createMenus() {
     segmentSubMenu = toolsMenu->addMenu(tr("&Segment"));
     segmentSubMenu->addAction(runAngularSegmentAnalysisAct);
     segmentSubMenu->addAction(runTopologicalOrMetricAnalysisAct);
+    segmentSubMenu->addAction(runAngularSegmentTulipLeafChoiceAct);
     segmentStepDepthSubMenu = segmentSubMenu->addMenu(tr("Step &Depth"));
     segmentStepDepthSubMenu->addAction(segmentAngularStepAct);
     segmentStepDepthSubMenu->addAction(topologicalStepAct);

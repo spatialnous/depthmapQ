@@ -146,6 +146,7 @@ class MainWindow : public QMainWindow {
     void OnToolsAxialConvShapeMap();
     void OnToolsLineLoadUnlinks();
     void OnToolsRunSeg();
+    void OnToolsRunTulipLeafChoice();
     void OnToolsTopomet();
     void OnToolsTPD();
     void OnToolsMPD();
@@ -368,6 +369,7 @@ class MainWindow : public QMainWindow {
     QAction *convertDataMapPointsAct;
     QAction *loadUnlinksFromFileAct;
     QAction *runAngularSegmentAnalysisAct;
+    QAction *runAngularSegmentTulipLeafChoiceAct;
     QAction *runTopologicalOrMetricAnalysisAct;
     QAction *segmentAngularStepAct;
     QAction *topologicalStepAct;

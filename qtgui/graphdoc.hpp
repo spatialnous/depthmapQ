@@ -80,6 +80,7 @@ class CMSCommunicator : public Communicator {
         MAKECONVEXMAP,
         AXIALANALYSIS,
         SEGMENTANALYSISTULIP,
+        SEGMENTANALYSISTULIPLEAFCHOICE,
         SEGMENTANALYSISANGULAR,
         TOPOMETANALYSIS,
         AGENTANALYSIS,
@@ -353,6 +354,7 @@ class QGraphDoc : public QWidget {
     void OnToolsMPD();
     void OnToolsMakeFewestLineMap();
     void OnToolsRunSeg();
+    void OnToolsRunTulipLeafChoice();
     void OnAddColumn();
     void OnRemoveColumn();
     void OnFileProperties();
