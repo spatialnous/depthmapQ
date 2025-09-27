@@ -7,19 +7,19 @@
     <x>0</x>
     <y>0</y>
     <width>319</width>
-    <height>501</height>
+    <height>571</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Segment Analysis Options</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_7">
+  <layout class="QVBoxLayout">
    <item>
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
       <string>Analysis Type</string>
      </property>
-     <layout class="QVBoxLayout" name="verticalLayout_2">
+     <layout class="QVBoxLayout">
       <item>
        <widget class="QRadioButton" name="c_analysis_type">
         <property name="text">
@@ -28,13 +28,13 @@
        </widget>
       </item>
       <item>
-       <layout class="QVBoxLayout" name="verticalLayout">
+       <layout class="QVBoxLayout">
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout">
+         <layout class="QHBoxLayout">
           <item>
-           <widget class="QLabel" name="label">
+           <widget class="QLabel">
             <property name="layoutDirection">
-             <enum>Qt::LeftToRight</enum>
+             <enum>Qt::LayoutDirection::LeftToRight</enum>
             </property>
             <property name="text">
              <string>Tulip Bins (4 to 1024)</string>
@@ -47,20 +47,13 @@
          </layout>
         </item>
         <item>
-         <widget class="QLabel" name="label_2">
+         <widget class="QLabel">
           <property name="text">
            <string>(1024 approximates full angular analysis)</string>
           </property>
          </widget>
         </item>
        </layout>
-      </item>
-      <item>
-       <widget class="QCheckBox" name="c_choice">
-        <property name="text">
-         <string>Include choice (betweenness)</string>
-        </property>
-       </widget>
       </item>
       <item>
        <widget class="QRadioButton" name="c_radio2">
@@ -73,11 +66,36 @@
     </widget>
    </item>
    <item>
+    <layout class="QVBoxLayout">
+     <item>
+      <widget class="QCheckBox" name="c_choice">
+       <property name="text">
+        <string>Include choice (betweenness)</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="c_selected_only">
+       <property name="toolTip">
+        <string>
+         This only really limits choice which requires traversing and
+         back-tracking. The other metrics can be calculated using
+         step depth algorithms
+        </string>
+       </property>
+       <property name="text">
+        <string>Selected segments only</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
     <widget class="QGroupBox" name="groupBox_2">
      <property name="title">
       <string>Radius Type</string>
      </property>
-     <layout class="QVBoxLayout" name="verticalLayout_4">
+     <layout class="QVBoxLayout">
       <item>
        <widget class="QRadioButton" name="c_radius_type">
         <property name="text">
@@ -86,7 +104,7 @@
        </widget>
       </item>
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <layout class="QHBoxLayout">
         <item>
          <widget class="QRadioButton" name="radioButton">
           <property name="text">
@@ -104,9 +122,9 @@
        </layout>
       </item>
       <item>
-       <layout class="QVBoxLayout" name="verticalLayout_3">
+       <layout class="QVBoxLayout">
         <item>
-         <widget class="QLabel" name="label_3">
+         <widget class="QLabel">
           <property name="text">
            <string>Radius / List of radii</string>
           </property>
@@ -125,7 +143,7 @@
      <property name="title">
       <string>Weighted measures</string>
      </property>
-     <layout class="QVBoxLayout" name="verticalLayout_6">
+     <layout class="QVBoxLayout">
       <item>
        <widget class="QCheckBox" name="c_weighted">
         <property name="text">
@@ -134,9 +152,9 @@
        </widget>
       </item>
       <item>
-       <layout class="QVBoxLayout" name="verticalLayout_5">
+       <layout class="QVBoxLayout">
         <item>
-         <widget class="QLabel" name="label_4">
+         <widget class="QLabel">
           <property name="text">
            <string>Weight by</string>
           </property>
@@ -151,11 +169,11 @@
     </widget>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_3">
+    <layout class="QHBoxLayout">
      <item>
       <spacer name="horizontalSpacer">
        <property name="orientation">
-        <enum>Qt::Horizontal</enum>
+        <enum>Qt::Orientation::Horizontal</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>

@@ -13,11 +13,11 @@
   <property name="windowTitle">
    <string>Graph File Properties</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_2">
+  <layout class="QVBoxLayout">
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout">
+    <layout class="QHBoxLayout">
      <item>
-      <widget class="QLabel" name="label">
+      <widget class="QLabel">
        <property name="text">
         <string>Title</string>
        </property>
@@ -29,9 +29,9 @@
     </layout>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
+    <layout class="QHBoxLayout">
      <item>
-      <widget class="QLabel" name="label_2">
+      <widget class="QLabel">
        <property name="text">
         <string>Location</string>
        </property>
@@ -43,11 +43,11 @@
     </layout>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_3">
+    <layout class="QHBoxLayout">
      <item>
-      <layout class="QVBoxLayout" name="verticalLayout">
+      <layout class="QVBoxLayout">
        <item>
-        <widget class="QLabel" name="label_3">
+        <widget class="QLabel">
          <property name="text">
           <string>Description</string>
          </property>
@@ -74,9 +74,9 @@
     </layout>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_4">
+    <layout class="QHBoxLayout">
      <item>
-      <widget class="QLabel" name="label_4">
+      <widget class="QLabel">
        <property name="text">
         <string>Author</string>
        </property>
@@ -92,9 +92,9 @@
     </layout>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_5">
+    <layout class="QHBoxLayout">
      <item>
-      <widget class="QLabel" name="label_5">
+      <widget class="QLabel">
        <property name="text">
         <string>Organization</string>
        </property>
@@ -110,9 +110,9 @@
     </layout>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_6">
+    <layout class="QHBoxLayout">
      <item>
-      <widget class="QLabel" name="label_6">
+      <widget class="QLabel">
        <property name="text">
         <string>Created on</string>
        </property>
@@ -128,9 +128,9 @@
     </layout>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_7">
+    <layout class="QHBoxLayout">
      <item>
-      <widget class="QLabel" name="label_7">
+      <widget class="QLabel">
        <property name="text">
         <string>Created by</string>
        </property>
@@ -146,9 +146,9 @@
     </layout>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_8">
+    <layout class="QHBoxLayout">
      <item>
-      <widget class="QLabel" name="label_8">
+      <widget class="QLabel">
        <property name="text">
         <string>File version</string>
        </property>
@@ -164,7 +164,7 @@
     </layout>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_9">
+    <layout class="QHBoxLayout">
      <item>
       <spacer name="horizontalSpacer">
        <property name="orientation">

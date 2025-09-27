@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>Make Fewest Line Map Options</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
+  <layout class="QVBoxLayout">
    <item>
     <widget class="QRadioButton" name="c_option">
      <property name="text">
@@ -29,7 +29,7 @@
     </widget>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout">
+    <layout class="QHBoxLayout">
      <item>
       <spacer name="horizontalSpacer">
        <property name="orientation">

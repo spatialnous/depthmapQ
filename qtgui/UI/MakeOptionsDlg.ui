@@ -13,9 +13,9 @@
   <property name="windowTitle">
    <string>Make Graph Options</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
+  <layout class="QVBoxLayout">
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout">
+    <layout class="QHBoxLayout">
      <item>
       <widget class="QCheckBox" name="c_restrict_visibility">
        <property name="text">
@@ -40,7 +40,7 @@
     </widget>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
+    <layout class="QHBoxLayout">
      <item>
       <spacer name="horizontalSpacer">
        <property name="orientation">

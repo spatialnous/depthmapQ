@@ -13,11 +13,11 @@
   <property name="windowTitle">
    <string>Replace Attribute Values</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_3">
+  <layout class="QVBoxLayout">
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_3">
+    <layout class="QHBoxLayout">
      <item>
-      <layout class="QVBoxLayout" name="verticalLayout">
+      <layout class="QVBoxLayout">
        <item>
         <widget class="QLabel" name="c_formula_desc">
          <property name="text">
@@ -31,9 +31,9 @@
       </layout>
      </item>
      <item>
-      <layout class="QVBoxLayout" name="verticalLayout_2">
+      <layout class="QVBoxLayout">
        <item>
-        <widget class="QLabel" name="label">
+        <widget class="QLabel">
          <property name="text">
           <string>Existing attributes</string>
          </property>
@@ -47,7 +47,7 @@
     </layout>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
+    <layout class="QHBoxLayout">
      <item>
       <widget class="QCheckBox" name="c_selection_desc">
        <property name="text">
@@ -68,7 +68,7 @@
     </layout>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout">
+    <layout class="QHBoxLayout">
      <item>
       <spacer name="horizontalSpacer">
        <property name="orientation">

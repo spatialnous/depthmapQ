@@ -22,7 +22,7 @@
      <height>381</height>
     </rect>
    </property>
-   <layout class="QVBoxLayout" name="verticalLayout">
+   <layout class="QVBoxLayout">
     <item>
      <widget class="QLabel" name="c_version_info">
       <property name="text">
@@ -38,14 +38,14 @@
      </widget>
     </item>
     <item>
-     <widget class="QLabel" name="label_3">
+     <widget class="QLabel">
       <property name="text">
        <string>In memory of Alasdair Turner</string>
       </property>
      </widget>
     </item>
     <item>
-     <widget class="QLabel" name="label_5">
+     <widget class="QLabel">
       <property name="text">
        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;http://en.wikipedia.org/wiki/Alasdair_Turner&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;http://en.wikipedia.org/wiki/Alasdair_Turner&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
@@ -62,14 +62,14 @@
      </widget>
     </item>
     <item>
-     <widget class="QLabel" name="label_4">
+     <widget class="QLabel">
       <property name="text">
        <string>For more information or to submit a bug see:</string>
       </property>
      </widget>
     </item>
     <item>
-     <widget class="QLabel" name="c_vrlink">
+     <widget class="QLabel">
       <property name="text">
        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/spatialnous/depthmapQ&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;https://github.com/spatialnous/depthmapQ&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>

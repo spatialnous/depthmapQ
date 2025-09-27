@@ -13,9 +13,9 @@
   <property name="windowTitle">
    <string>Choose Layer</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_2">
+  <layout class="QVBoxLayout">
    <item>
-    <layout class="QVBoxLayout" name="verticalLayout">
+    <layout class="QVBoxLayout">
      <item>
       <widget class="QLabel" name="c_text">
        <property name="text">
@@ -25,9 +25,9 @@ Layer</string>
       </widget>
      </item>
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout">
+      <layout class="QHBoxLayout">
        <item>
-        <widget class="QLabel" name="label">
+        <widget class="QLabel">
          <property name="text">
           <string>Layer</string>
          </property>
@@ -41,7 +41,7 @@ Layer</string>
     </layout>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
+    <layout class="QHBoxLayout">
      <item>
       <spacer name="horizontalSpacer">
        <property name="orientation">

@@ -13,15 +13,15 @@
   <property name="windowTitle">
    <string>Edit Connections</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_5">
+  <layout class="QVBoxLayout">
    <item>
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
       <string>Change to make</string>
      </property>
-     <layout class="QVBoxLayout" name="verticalLayout_2">
+     <layout class="QVBoxLayout">
       <item>
-       <layout class="QVBoxLayout" name="verticalLayout">
+       <layout class="QVBoxLayout">
         <item>
          <widget class="QRadioButton" name="c_join_type">
           <property name="text">
@@ -53,9 +53,9 @@
      <property name="title">
       <string>GroupBox</string>
      </property>
-     <layout class="QVBoxLayout" name="verticalLayout_4">
+     <layout class="QVBoxLayout">
       <item>
-       <layout class="QVBoxLayout" name="verticalLayout_3">
+       <layout class="QVBoxLayout">
         <item>
          <widget class="QCheckBox" name="c_pin_to_sel">
           <property name="text">
@@ -76,7 +76,7 @@
     </widget>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout">
+    <layout class="QHBoxLayout">
      <item>
       <spacer name="horizontalSpacer">
        <property name="orientation">

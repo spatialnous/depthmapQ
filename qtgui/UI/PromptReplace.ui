@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>Notice</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
+  <layout class="QVBoxLayout">
    <item>
     <widget class="QLabel" name="c_message">
      <property name="text">
@@ -24,7 +24,7 @@ the existing line data, or cancel?</string>
     </widget>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout">
+    <layout class="QHBoxLayout">
      <item>
       <widget class="QPushButton" name="c_add">
        <property name="text">

@@ -13,11 +13,11 @@
   <property name="windowTitle">
    <string>New Map</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
+  <layout class="QVBoxLayout">
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout">
+    <layout class="QHBoxLayout">
      <item>
-      <widget class="QLabel" name="label">
+      <widget class="QLabel">
        <property name="text">
         <string>Map type</string>
        </property>
@@ -50,9 +50,9 @@
     </layout>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
+    <layout class="QHBoxLayout">
      <item>
-      <widget class="QLabel" name="label_2">
+      <widget class="QLabel">
        <property name="text">
         <string>Name</string>
        </property>
@@ -64,7 +64,7 @@
     </layout>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_3">
+    <layout class="QHBoxLayout">
      <item>
       <spacer name="horizontalSpacer">
        <property name="orientation">

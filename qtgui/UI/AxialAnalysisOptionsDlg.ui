@@ -16,11 +16,11 @@
   <property name="layoutDirection">
    <enum>Qt::LeftToRight</enum>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_4">
+  <layout class="QVBoxLayout">
    <item>
-    <layout class="QVBoxLayout" name="verticalLayout">
+    <layout class="QVBoxLayout">
      <item>
-      <widget class="QLabel" name="label">
+      <widget class="QLabel">
        <property name="text">
         <string>Radius / list of radii, e.g., 2,3,n</string>
        </property>
@@ -32,7 +32,7 @@
     </layout>
    </item>
    <item>
-    <layout class="QVBoxLayout" name="verticalLayout_2">
+    <layout class="QVBoxLayout">
      <item>
       <widget class="QCheckBox" name="c_choice">
        <property name="layoutDirection">
@@ -76,9 +76,9 @@
     </layout>
    </item>
    <item>
-    <layout class="QVBoxLayout" name="verticalLayout_3">
+    <layout class="QVBoxLayout">
      <item>
-      <widget class="QLabel" name="label_2">
+      <widget class="QLabel">
        <property name="text">
         <string>Weight by</string>
        </property>
@@ -90,7 +90,7 @@
     </layout>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout">
+    <layout class="QHBoxLayout">
      <item>
       <spacer name="horizontalSpacer">
        <property name="orientation">

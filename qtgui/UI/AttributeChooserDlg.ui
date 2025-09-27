@@ -36,9 +36,9 @@ Atrribute</string>
      <height>26</height>
     </rect>
    </property>
-   <layout class="QHBoxLayout" name="horizontalLayout">
+   <layout class="QHBoxLayout">
     <item>
-     <widget class="QLabel" name="label">
+     <widget class="QLabel">
       <property name="text">
        <string>Attribute</string>
       </property>
@@ -58,7 +58,7 @@ Atrribute</string>
      <height>32</height>
     </rect>
    </property>
-   <layout class="QHBoxLayout" name="horizontalLayout_2">
+   <layout class="QHBoxLayout">
     <item>
      <widget class="QPushButton" name="c_ok">
       <property name="text">

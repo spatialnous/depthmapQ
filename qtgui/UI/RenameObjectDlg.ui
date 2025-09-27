@@ -13,9 +13,9 @@
   <property name="windowTitle">
    <string>Rename Column</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_2">
+  <layout class="QVBoxLayout">
    <item>
-    <layout class="QVBoxLayout" name="verticalLayout">
+    <layout class="QVBoxLayout">
      <item>
       <widget class="QLabel" name="c_prompt">
        <property name="text">
@@ -29,7 +29,7 @@
     </layout>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout">
+    <layout class="QHBoxLayout">
      <item>
       <widget class="QPushButton" name="c_ok">
        <property name="text">

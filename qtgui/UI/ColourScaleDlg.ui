@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string> Colour Scale</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_2">
+  <layout class="QVBoxLayout">
    <item>
     <widget class="QComboBox" name="c_color_type">
      <property name="enabled">
@@ -29,7 +29,7 @@
     </widget>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout">
+    <layout class="QHBoxLayout">
      <item>
       <widget class="QLabel" name="c_blue">
        <property name="text">
@@ -54,7 +54,7 @@
     </widget>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
+    <layout class="QHBoxLayout">
      <item>
       <widget class="QLabel" name="c_red">
        <property name="text">
@@ -72,7 +72,7 @@
     </layout>
    </item>
    <item>
-    <layout class="QVBoxLayout" name="verticalLayout">
+    <layout class="QVBoxLayout">
      <item>
       <widget class="QCheckBox" name="c_show_lines">
        <property name="text">
@@ -97,7 +97,7 @@
     </layout>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_3">
+    <layout class="QHBoxLayout">
      <item>
       <widget class="QPushButton" name="c_ok">
        <property name="text">

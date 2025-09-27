@@ -13,11 +13,11 @@
   <property name="windowTitle">
    <string>Isovist Options</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_2">
+  <layout class="QVBoxLayout">
    <item>
-    <layout class="QVBoxLayout" name="verticalLayout">
+    <layout class="QVBoxLayout">
      <item>
-      <widget class="QLabel" name="label">
+      <widget class="QLabel">
        <property name="text">
         <string>Isovist field of view</string>
        </property>
@@ -50,7 +50,7 @@
     </layout>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout">
+    <layout class="QHBoxLayout">
      <item>
       <spacer name="horizontalSpacer">
        <property name="orientation">

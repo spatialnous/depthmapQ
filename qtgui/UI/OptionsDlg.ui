@@ -13,13 +13,13 @@
   <property name="windowTitle">
    <string>Analysis Options</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_2">
+  <layout class="QVBoxLayout">
    <item>
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
       <string>Analysis Type</string>
      </property>
-     <layout class="QVBoxLayout" name="verticalLayout">
+     <layout class="QVBoxLayout">
       <item>
        <widget class="QRadioButton" name="c_output_type">
         <property name="text">
@@ -35,7 +35,7 @@
        </widget>
       </item>
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout">
+       <layout class="QHBoxLayout">
         <item>
          <widget class="QCheckBox" name="c_global">
           <property name="text">
@@ -63,9 +63,9 @@
        </widget>
       </item>
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <layout class="QHBoxLayout">
         <item>
-         <widget class="QLabel" name="label">
+         <widget class="QLabel">
           <property name="text">
            <string>Radius</string>
           </property>
@@ -91,9 +91,9 @@
        </widget>
       </item>
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <layout class="QHBoxLayout">
         <item>
-         <widget class="QLabel" name="label_2">
+         <widget class="QLabel">
           <property name="text">
            <string>Record gate counts in data map</string>
           </property>
@@ -108,7 +108,7 @@
     </widget>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_4">
+    <layout class="QHBoxLayout">
      <item>
       <spacer name="horizontalSpacer">
        <property name="orientation">

@@ -13,11 +13,11 @@
   <property name="windowTitle">
    <string>Push Values to Map</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_5">
+  <layout class="QVBoxLayout">
    <item>
-    <layout class="QVBoxLayout" name="verticalLayout">
+    <layout class="QVBoxLayout">
      <item>
-      <widget class="QLabel" name="label">
+      <widget class="QLabel">
        <property name="text">
         <string>Origin map</string>
        </property>
@@ -33,9 +33,9 @@
     </layout>
    </item>
    <item>
-    <layout class="QVBoxLayout" name="verticalLayout_2">
+    <layout class="QVBoxLayout">
      <item>
-      <widget class="QLabel" name="label_2">
+      <widget class="QLabel">
        <property name="text">
         <string>Origin attribute</string>
        </property>
@@ -51,9 +51,9 @@
     </layout>
    </item>
    <item>
-    <layout class="QVBoxLayout" name="verticalLayout_3">
+    <layout class="QVBoxLayout">
      <item>
-      <widget class="QLabel" name="label_3">
+      <widget class="QLabel">
        <property name="text">
         <string>Push values to</string>
        </property>
@@ -65,9 +65,9 @@
     </layout>
    </item>
    <item>
-    <layout class="QVBoxLayout" name="verticalLayout_4">
+    <layout class="QVBoxLayout">
      <item>
-      <widget class="QLabel" name="label_4">
+      <widget class="QLabel">
        <property name="text">
         <string>If destination object intersects more than
  one object in origin map</string>
@@ -108,7 +108,7 @@
     </widget>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout">
+    <layout class="QHBoxLayout">
      <item>
       <spacer name="horizontalSpacer">
        <property name="orientation">

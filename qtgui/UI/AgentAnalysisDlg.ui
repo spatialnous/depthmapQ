@@ -34,9 +34,9 @@
       <height>24</height>
      </rect>
     </property>
-    <layout class="QHBoxLayout" name="horizontalLayout">
+    <layout class="QHBoxLayout">
      <item>
-      <widget class="QLabel" name="label">
+      <widget class="QLabel">
        <property name="text">
         <string>Analysis length(timesteps)</string>
        </property>
@@ -56,9 +56,9 @@
       <height>26</height>
      </rect>
     </property>
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
+    <layout class="QHBoxLayout">
      <item>
-      <widget class="QLabel" name="label_2">
+      <widget class="QLabel">
        <property name="text">
         <string>Record gate counts in data map</string>
        </property>
@@ -124,9 +124,9 @@
       <height>24</height>
      </rect>
     </property>
-    <layout class="QHBoxLayout" name="horizontalLayout_3">
+    <layout class="QHBoxLayout">
      <item>
-      <widget class="QLabel" name="label_3">
+      <widget class="QLabel">
        <property name="text">
         <string>Release rate (agents per timestep)</string>
        </property>
@@ -159,9 +159,9 @@
       <height>24</height>
      </rect>
     </property>
-    <layout class="QHBoxLayout" name="horizontalLayout_4">
+    <layout class="QHBoxLayout">
      <item>
-      <widget class="QLabel" name="label_4">
+      <widget class="QLabel">
        <property name="text">
         <string>Field of view (bins)</string>
        </property>
@@ -185,9 +185,9 @@
       <height>24</height>
      </rect>
     </property>
-    <layout class="QHBoxLayout" name="horizontalLayout_5">
+    <layout class="QHBoxLayout">
      <item>
-      <widget class="QLabel" name="label_5">
+      <widget class="QLabel">
        <property name="text">
         <string>Steps before turn decision</string>
        </property>
@@ -207,9 +207,9 @@
       <height>24</height>
      </rect>
     </property>
-    <layout class="QHBoxLayout" name="horizontalLayout_6">
+    <layout class="QHBoxLayout">
      <item>
-      <widget class="QLabel" name="label_6">
+      <widget class="QLabel">
        <property name="text">
         <string>Timesteps in system</string>
        </property>
@@ -230,7 +230,7 @@
      <height>29</height>
     </rect>
    </property>
-   <layout class="QHBoxLayout" name="horizontalLayout_7">
+   <layout class="QHBoxLayout">
     <item>
      <widget class="QCheckBox" name="c_record_trails">
       <property name="text">
@@ -242,7 +242,7 @@
      <widget class="QLineEdit" name="c_trail_count"/>
     </item>
     <item>
-     <widget class="QLabel" name="label_7">
+     <widget class="QLabel">
       <property name="text">
        <string>agents</string>
       </property>
@@ -259,9 +259,9 @@
      <height>26</height>
     </rect>
    </property>
-   <layout class="QHBoxLayout" name="horizontalLayout_8">
+   <layout class="QHBoxLayout">
     <item>
-     <widget class="QLabel" name="label_8">
+     <widget class="QLabel">
       <property name="text">
        <string>Movement rule:</string>
       </property>
@@ -337,7 +337,7 @@
      <height>32</height>
     </rect>
    </property>
-   <layout class="QHBoxLayout" name="horizontalLayout_9">
+   <layout class="QHBoxLayout">
     <item>
      <widget class="QPushButton" name="c_ok">
       <property name="text">

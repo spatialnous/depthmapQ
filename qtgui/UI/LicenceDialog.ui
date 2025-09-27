@@ -13,11 +13,11 @@
   <property name="windowTitle">
    <string>Licence</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_2">
+  <layout class="QVBoxLayout">
    <item>
-    <layout class="QVBoxLayout" name="verticalLayout">
+    <layout class="QVBoxLayout">
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout">
+      <layout class="QHBoxLayout">
        <item>
         <widget class="QLabel" name="c_message">
          <property name="text">
@@ -56,7 +56,7 @@
     </layout>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
+    <layout class="QHBoxLayout">
      <item>
       <spacer name="horizontalSpacer_2">
        <property name="orientation">
