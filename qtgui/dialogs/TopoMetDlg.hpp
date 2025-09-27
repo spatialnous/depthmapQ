@@ -26,4 +26,5 @@ class CTopoMetDlg : public QDialog, public Ui::CTopoMetDlg {
 
   private slots:
     void OnOK();
+    void OnCancel();
 };

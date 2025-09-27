@@ -51,6 +51,8 @@ void CTopoMetDlg::OnOK() {
     accept();
 }
 
+void CTopoMetDlg::OnCancel() { reject(); }
+
 void CTopoMetDlg::UpdateData(bool value) {
     if (value) {
         if (c_topological->isChecked())
