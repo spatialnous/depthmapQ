@@ -145,18 +145,10 @@ class CMSCommunicator : public Communicator {
 
     void runAnalysis(QGraphDoc &graphDoc);
 
-    void logError(const std::string &message) const override {
-        m_lastError = message;
-    }
-    void clearError() {
-        m_lastError = std::nullopt;
-    }
-    bool hasError() {
-        return m_lastError.has_value();
-    }
-    const std::string & getLastError(){
-        return *m_lastError;
-    }
+    void logError(const std::string &message) const override { m_lastError = message; }
+    void clearError() { m_lastError = std::nullopt; }
+    bool hasError() { return m_lastError.has_value(); }
+    const std::string &getLastError() { return *m_lastError; }
     void logWarning(const std::string &message) const override {
         std::cerr << message << std::endl;
     }

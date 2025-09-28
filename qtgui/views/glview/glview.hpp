@@ -6,9 +6,9 @@
 
 #include "gldynamicline.hpp"
 #include "gldynamicrect.hpp"
+#include "gllatticemap.hpp"
 #include "gllines.hpp"
 #include "gllinesuniform.hpp"
-#include "gllatticemap.hpp"
 #include "glshapegraph.hpp"
 
 #include "graphdoc.hpp"
