@@ -21,6 +21,7 @@ class CSegmentAnalysisDlg : public QDialog, public Ui::CSegmentAnalysisDlg {
     bool m_choice;
     bool m_weighted;
     int m_attribute;
+    bool m_selected_only;
     void UpdateData(bool value);
     void showEvent(QShowEvent *event);
 

@@ -96,6 +96,9 @@ void QGraphDoc::exceptionThrownInRenderThread(int type, std::string message) {
         message << "and select \"Calculate isovist properties\"";
         QMessageBox::warning(this, tr("Warning"), tr(message.str().c_str()), QMessageBox::Ok,
                              QMessageBox::Ok);
+    } else {
+        QMessageBox::warning(this, tr("Warning"), tr(message.c_str()), QMessageBox::Ok,
+                             QMessageBox::Ok);
     }
 }
 

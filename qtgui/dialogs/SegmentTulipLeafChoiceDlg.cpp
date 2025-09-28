@@ -16,6 +16,7 @@ CSegmentTulipLeafChoiceDlg::CSegmentTulipLeafChoiceDlg(MetaGraphDM *graph, QWidg
     m_radius_type = RadiusType::NONE;
     m_weighted = false;
     m_attribute = -1;
+    m_selected_only = false;
 
     m_meta_graph = graph;
     foreach (QWidget *widget, QApplication::topLevelWidgets()) {
@@ -41,6 +42,7 @@ CSegmentTulipLeafChoiceDlg::CSegmentTulipLeafChoiceDlg(MetaGraphDM *graph, QWidg
                 m_weighted = true;
                 m_attribute = 0;
             }
+            m_selected_only = mainWin->m_options.selOnly;
             break;
         }
     }
@@ -52,12 +54,14 @@ void CSegmentTulipLeafChoiceDlg::OnAnalysisTulip(bool value) {
     m_radius_type = RadiusType::ANGULAR;
     m_weighted = false;
     m_attribute = -1;
+    m_selected_only = false;
     UpdateData(false);
     c_tulip_bins->setEnabled(false);
     c_radius_type->setEnabled(false);
     radioButton->setEnabled(false);
     c_weighted->setEnabled(false);
     c_attribute->setEnabled(false);
+    c_selected_only->setEnabled(true);
 }
 
 void CSegmentTulipLeafChoiceDlg::OnUpdateRadius(QString text) {
@@ -179,6 +183,7 @@ void CSegmentTulipLeafChoiceDlg::OnOK() {
             } else {
                 mainWin->m_options.weightedMeasureCol = m_attribute;
             }
+            mainWin->m_options.selOnly = m_selected_only;
             break;
         }
     }
@@ -207,6 +212,11 @@ void CSegmentTulipLeafChoiceDlg::UpdateData(bool value) {
         else
             m_weighted = false;
         m_attribute = c_attribute->currentIndex();
+
+        if (c_selected_only->checkState())
+            m_selected_only = true;
+        else
+            m_selected_only = false;
     } else {
         c_radius->setText(m_radius);
         c_tulip_bins->setText(QString("%1").arg(m_tulip_bins));
@@ -229,6 +239,10 @@ void CSegmentTulipLeafChoiceDlg::UpdateData(bool value) {
         else
             c_weighted->setCheckState(Qt::Unchecked);
         c_attribute->setCurrentIndex(m_attribute);
+        if (m_selected_only)
+            c_selected_only->setCheckState(Qt::Checked);
+        else
+            c_selected_only->setCheckState(Qt::Unchecked);
     }
 }
 
@@ -243,6 +257,7 @@ void CSegmentTulipLeafChoiceDlg::showEvent(QShowEvent *event) {
     c_radius_type->setEnabled(true);
     radioButton->setEnabled(true);
     c_weighted->setEnabled(true);
+    c_selected_only->setEnabled(true);
     if (m_weighted) {
         c_attribute->setEnabled(true);
         m_attribute = 0;

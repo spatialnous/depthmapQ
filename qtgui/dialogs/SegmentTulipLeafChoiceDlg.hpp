@@ -19,6 +19,7 @@ class CSegmentTulipLeafChoiceDlg : public QDialog, public Ui::CSegmentTulipLeafC
     RadiusType m_radius_type;
     bool m_weighted;
     int m_attribute;
+    bool m_selected_only;
     void UpdateData(bool value);
     void showEvent(QShowEvent *event);
 

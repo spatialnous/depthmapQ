@@ -11,6 +11,7 @@
 
 #include <QApplication>
 #include <QElapsedTimer>
+#include <QMessageBox>
 #include <QMutex>
 #include <QProgressDialog>
 #include <QSize>
@@ -144,7 +145,18 @@ class CMSCommunicator : public Communicator {
 
     void runAnalysis(QGraphDoc &graphDoc);
 
-    void logError(const std::string &message) const override { std::cerr << message << std::endl; }
+    void logError(const std::string &message) const override {
+        m_lastError = message;
+    }
+    void clearError() {
+        m_lastError = std::nullopt;
+    }
+    bool hasError() {
+        return m_lastError.has_value();
+    }
+    const std::string & getLastError(){
+        return *m_lastError;
+    }
     void logWarning(const std::string &message) const override {
         std::cerr << message << std::endl;
     }
@@ -166,6 +178,7 @@ class CMSCommunicator : public Communicator {
     int m_successRedrawFlagViewType;
     bool m_successRedrawFlag;
     int m_successRedrawReason;
+    mutable std::optional<std::string> m_lastError;
 };
 
 struct QFilePath {

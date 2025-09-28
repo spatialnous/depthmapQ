@@ -400,6 +400,8 @@ void RenderThread::run() {
                 false);
             if (ok) {
                 pDoc->SetUpdateFlag(QGraphDoc::NEW_DATA);
+            } else if (comm->hasError()) {
+                emit runtimeExceptionThrown(-1, comm->getLastError());
             }
             pDoc->SetRedrawFlag(QGraphDoc::VIEW_ALL, QGraphDoc::REDRAW_GRAPH, QGraphDoc::NEW_DATA);
             break;
@@ -412,6 +414,8 @@ void RenderThread::run() {
                 pMain->m_options.weightedMeasureCol2, pMain->m_options.routeweightCol, true, false);
             if (ok) {
                 pDoc->SetUpdateFlag(QGraphDoc::NEW_DATA);
+            } else if (comm->hasError()) {
+                emit runtimeExceptionThrown(-1, comm->getLastError());
             }
             pDoc->SetRedrawFlag(QGraphDoc::VIEW_ALL, QGraphDoc::REDRAW_GRAPH, QGraphDoc::NEW_DATA);
             break;

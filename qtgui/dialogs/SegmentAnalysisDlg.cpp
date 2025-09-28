@@ -17,6 +17,7 @@ CSegmentAnalysisDlg::CSegmentAnalysisDlg(MetaGraphDM *graph, QWidget *parent) : 
     m_choice = false;
     m_weighted = false;
     m_attribute = -1;
+    m_selected_only = false;
 
     m_meta_graph = graph;
     foreach (QWidget *widget, QApplication::topLevelWidgets()) {
@@ -45,6 +46,7 @@ CSegmentAnalysisDlg::CSegmentAnalysisDlg(MetaGraphDM *graph, QWidget *parent) : 
                 m_weighted = true;
                 m_attribute = 0;
             }
+            m_selected_only = mainWin->m_options.selOnly;
             break;
         }
     }
@@ -58,6 +60,7 @@ void CSegmentAnalysisDlg::OnAnalysisType(bool value) {
     radioButton->setEnabled(true);
     c_weighted->setEnabled(true);
     c_attribute->setEnabled(false);
+    c_selected_only->setEnabled(true);
 }
 
 void CSegmentAnalysisDlg::OnAnalysisTulip(bool value) {
@@ -68,6 +71,7 @@ void CSegmentAnalysisDlg::OnAnalysisTulip(bool value) {
     m_analysis_type = 1;
     m_weighted = false;
     m_attribute = -1;
+    m_selected_only = false;
     UpdateData(false);
     c_tulip_bins->setEnabled(false);
     c_choice->setEnabled(false);
@@ -75,6 +79,7 @@ void CSegmentAnalysisDlg::OnAnalysisTulip(bool value) {
     radioButton->setEnabled(false);
     c_weighted->setEnabled(false);
     c_attribute->setEnabled(false);
+    c_selected_only->setEnabled(false);
 }
 
 void CSegmentAnalysisDlg::OnUpdateRadius(QString text) {
@@ -201,6 +206,7 @@ void CSegmentAnalysisDlg::OnOK() {
             } else {
                 mainWin->m_options.weightedMeasureCol = m_attribute;
             }
+            mainWin->m_options.selOnly = m_selected_only;
             break;
         }
     }
@@ -241,6 +247,11 @@ void CSegmentAnalysisDlg::UpdateData(bool value) {
         else
             m_weighted = false;
         m_attribute = c_attribute->currentIndex();
+
+        if (c_selected_only->checkState())
+            m_selected_only = true;
+        else
+            m_selected_only = false;
     } else {
         switch (m_analysis_type) {
         case 0:
@@ -278,6 +289,10 @@ void CSegmentAnalysisDlg::UpdateData(bool value) {
         else
             c_weighted->setCheckState(Qt::Unchecked);
         c_attribute->setCurrentIndex(m_attribute);
+        if (m_selected_only)
+            c_selected_only->setCheckState(Qt::Checked);
+        else
+            c_selected_only->setCheckState(Qt::Unchecked);
     }
 }
 
@@ -299,6 +314,7 @@ void CSegmentAnalysisDlg::showEvent(QShowEvent *event) {
         radioButton->setEnabled(false);
         c_weighted->setEnabled(false);
         c_attribute->setEnabled(false);
+        c_selected_only->setEnabled(false);
     } else {
         c_tulip_bins->setEnabled(true);
         c_choice->setEnabled(true);
@@ -313,6 +329,7 @@ void CSegmentAnalysisDlg::showEvent(QShowEvent *event) {
             m_attribute = -1;
             c_attribute->setEnabled(false);
         }
+        c_selected_only->setEnabled(true);
     }
 
     UpdateData(false);
