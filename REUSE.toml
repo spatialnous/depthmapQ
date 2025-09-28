@@ -1,0 +1,75 @@
+version = 1
+SPDX-PackageName = "acanthis"
+SPDX-PackageSupplier = "Petros Koutsolampros <commits@pklampros.io>"
+SPDX-PackageDownloadLocation = "https://github.com/spatialnous/salalib"
+
+[[annotations]]
+path = [".clang-format", "resources/graph.grammar", ".gitmodules", ".mailmap", ".travis.yml",
+        ".github/**", ".clang-tidy"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "Petros Koutsolampros <commits@pklampros.io>"
+SPDX-License-Identifier = "GPL-3.0-or-later"
+
+[[annotations]]
+path = ["qtgui/images/**", "qtgui/icons/**", "qtgui/UI/**.ui", "qtgui/icons.rc", "qtgui/**.qrc",
+        "qtgui/resources/**/**.qrc", "qtgui/**/**.png", "qtgui/resources/Info.plist",
+        "tools/build_appimage/*", "tools/build_image/*"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "Depthmap authors"
+SPDX-License-Identifier = "GPL-3.0-or-later"
+
+[[annotations]]
+path = ["acanthis/images/**", "acanthis/dialogs/**.ui", "acanthis/dialogs/**/**.png",
+        "acanthis/resources/Info.plist", "acanthis/**/**.qrc", "acanthis/**.qrc"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "Petros Koutsolampros <commits@pklampros.io>"
+SPDX-License-Identifier = "GPL-3.0-or-later"
+
+[[annotations]]
+path = [".gitignore", "GuiUnitTest/.gitignore", "README.md", "ci/**", "tools/build-**/**.txt",
+        "tools/build-image/Dockerfile"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "Depthmap authors"
+SPDX-License-Identifier = "GPL-3.0-or-later"
+
+[[annotations]]
+path = ["dist/**", "docs/**.md"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "Depthmap authors"
+SPDX-License-Identifier = "GPL-3.0-or-later"
+
+[[annotations]]
+path = "testdata/**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "Public domain"
+SPDX-License-Identifier = "CC0-1.0"
+
+[[annotations]]
+path = "ThirdParty/Catch/**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "Catch2 Authors"
+SPDX-License-Identifier = "BSL-1.0"
+
+[[annotations]]
+path = "ThirdParty/FakeIt/**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "Eran Pe'er"
+SPDX-License-Identifier = "MIT"
+
+[[annotations]]
+path = "docs/Agents_Manual_Draft01_2012.pdf"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "Kinda Al_Sayed, Alasdair Turner"
+SPDX-License-Identifier = "GPL-3.0-or-later"
+
+[[annotations]]
+path = "docs/DepthmapManualForDummies-v13.pdf"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "Akkelies van Nes <a.vannes@tudelft.nl>, Chunyan Song"
+SPDX-License-Identifier = "CC0-1.0"
+
+[[annotations]]
+path = "docs/DepthmapManualForDummies_v20_short.pdf"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "Akkelies van Nes <avn@hvl.no>, Claudia Yamu, Chunyan Song, Abdelbaseer A. Mohamed"
+SPDX-License-Identifier = "CC0-1.0"
